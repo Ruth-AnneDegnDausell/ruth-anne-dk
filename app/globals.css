@@ -6,21 +6,21 @@
   --font-sans--font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 
   /* ─── Color palette (OKLCH) ──────────────────────────── */
-  --color-bg:          oklch(96% 0.008 75);
-  --color-surface:     oklch(98% 0.005 75);
-  --color-surface-2:   oklch(99% 0.003 75);
+  --color-bg:          oklch(95% 0 0);
+  --color-surface:     oklch(97.5% 0 0);
+  --color-surface-2:   oklch(99% 0 0);
 
-  --color-text:        oklch(11% 0.01 75);
-  --color-text-2:      oklch(42% 0.01 75);
-  --color-text-3:      oklch(65% 0.008 75);
+  --color-text:        oklch(12% 0 0);
+  --color-text-2:      oklch(44% 0 0);
+  --color-text-3:      oklch(66% 0 0);
 
-  --color-border:      oklch(87% 0.008 75);
-  --color-border-2:    oklch(80% 0.01 75);
+  --color-border:      oklch(87% 0 0);
+  --color-border-2:    oklch(78% 0 0);
 
-  /* Accent — burnished terrakotta */
-  --color-accent:      oklch(50% 0.14 28);
-  --color-accent-2:    oklch(60% 0.12 28);
-  --color-accent-bg:   oklch(94% 0.03 28);
+  /* Accent — near-black */
+  --color-accent:      oklch(18% 0 0);
+  --color-accent-2:    oklch(35% 0 0);
+  --color-accent-bg:   oklch(92% 0 0);
 
   /* ─── Radius ─────────────────────────────────────────── */
   --radius-sm:  6px;
