@@ -4,6 +4,8 @@ import { useRef, useState } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, ImageIcon, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/lib/lang-context'
+import { PROJECTS as ALL_PROJECTS } from '@/lib/projects'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -16,36 +18,61 @@ const fadeUp = {
   }),
 }
 
-const PROJECTS = [
-  { category: 'Branding', title: 'Nordisk Cykelklub · Visuel identitet', year: '2024' },
-  { category: 'Illustration', title: 'Tour de France · Etapeillustration serie', year: '2023' },
-  { category: 'UX · UI', title: 'Sportstracker app · Interface design', year: '2024' },
-]
+const FEATURED = ALL_PROJECTS.slice(0, 3)
 
-const SKILLS = [
-  {
-    title: 'Visuel identitet',
-    num: '01',
-    desc: 'Fra logo og farvepalette til typografi og brand guidelines. Sammenhængende identiteter der holder over tid og skiller sig ud i sit marked. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+const SKILLS = {
+  da: [
+    { title: 'Visuel identitet', num: '01', desc: 'Fra logo og farvepalette til typografi og brand guidelines. Sammenhængende identiteter der holder over tid og skiller sig ud i sit marked.' },
+    { title: 'Illustration', num: '02', desc: 'Håndtegnede og digitale illustrationer til print, web og sociale medier. Specialiseret i sportsillustration, portræt og editorial grafik.' },
+    { title: 'UX · UI design', num: '03', desc: 'Interface design med fokus på brugeroplevelse og tilgængelighed. Fra wireframes og prototyper til færdige UI-systemer klar til produktion.' },
+    { title: 'Art direction', num: '04', desc: 'Kreativ ledelse af visuelle projekter fra konceptudvikling til produktion. Arbejder tæt med fotografer, illustratorer og producenter.' },
+  ],
+  en: [
+    { title: 'Visual identity', num: '01', desc: 'From logo and colour palette to typography and brand guidelines. Coherent identities that hold up over time and stand out in their market.' },
+    { title: 'Illustration', num: '02', desc: 'Hand-drawn and digital illustrations for print, web, and social media. Specialised in sports illustration, portrait, and editorial graphics.' },
+    { title: 'UX · UI design', num: '03', desc: 'Interface design focused on user experience and accessibility. From wireframes and prototypes to finished UI systems ready for production.' },
+    { title: 'Art direction', num: '04', desc: 'Creative direction of visual projects from concept development to production. Works closely with photographers, illustrators, and producers.' },
+  ],
+}
+
+const T = {
+  da: {
+    tagline: 'Designer · Illustratør',
+    intro: 'Kreativt arbejde, gennemtænkt design og projekter der efterlader et varigt indtryk.',
+    seeProjects: 'Se projekter',
+    about: 'Om mig',
+    selectedWork: 'Udvalgte projekter',
+    seeAll: 'Se alle →',
+    aboutLabel: 'Om mig',
+    aboutHeading: 'Designer med øje for detaljen og passion for det håndgjorte udtryk.',
+    aboutBody1: 'Uddannet fra Designskolen Kolding med speciale i visuel kommunikation. Har i de seneste tre år arbejdet som freelance designer med kunder inden for sport, kultur og mode. Bor og arbejder i København.',
+    aboutBody2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+    readMore: 'Læs mere →',
+    imagePlaceholder: 'Indsæt portræt-billede her',
+    imageHint: 'Portræt · min. 1200 × 1600 px',
   },
-  {
-    title: 'Illustration',
-    num: '02',
-    desc: 'Håndtegnede og digitale illustrationer til print, web og sociale medier. Specialiseret i sportsillustration, portræt og editorial grafik.',
+  en: {
+    tagline: 'Designer · Illustrator',
+    intro: 'Creative work, considered design, and projects that leave a lasting impression.',
+    seeProjects: 'View projects',
+    about: 'About',
+    selectedWork: 'Selected projects',
+    seeAll: 'See all →',
+    aboutLabel: 'About',
+    aboutHeading: 'Designer with an eye for detail and a passion for handcrafted expression.',
+    aboutBody1: 'Graduated from Designskolen Kolding with a specialisation in visual communication. For the past three years has worked as a freelance designer for clients in sports, culture, and fashion. Lives and works in Copenhagen.',
+    aboutBody2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+    readMore: 'Read more →',
+    imagePlaceholder: 'Insert portrait image here',
+    imageHint: 'Portrait · min. 1200 × 1600 px',
   },
-  {
-    title: 'UX · UI design',
-    num: '03',
-    desc: 'Interface design med fokus på brugeroplevelse og tilgængelighed. Fra wireframes og prototyper til færdige UI-systemer klar til produktion.',
-  },
-  {
-    title: 'Art direction',
-    num: '04',
-    desc: 'Kreativ ledelse af visuelle projekter fra konceptudvikling til produktion. Arbejder tæt med fotografer, illustratorer og producenter.',
-  },
-]
+}
 
 export default function Home() {
+  const { lang } = useLang()
+  const t = T[lang]
+  const skills = SKILLS[lang]
+
   const heroRef = useRef<HTMLDivElement>(null)
   const [openSkill, setOpenSkill] = useState<number | null>(null)
 
@@ -62,7 +89,7 @@ export default function Home() {
       {/* ─── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex min-h-screen flex-col justify-between overflow-hidden px-8 pb-10 pt-14 sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
+        className="relative flex min-h-screen flex-col justify-between overflow-hidden px-8 pb-10 pt-8 sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
       >
         {/* Left — text */}
         <motion.div
@@ -74,7 +101,7 @@ export default function Home() {
               custom={0} variants={fadeUp} initial="hidden" animate="visible"
               className="mb-8 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3"
             >
-              Designer · Illustratør
+              {t.tagline}
             </motion.p>
 
             <motion.h1
@@ -88,7 +115,7 @@ export default function Home() {
               custom={2} variants={fadeUp} initial="hidden" animate="visible"
               className="mt-5 max-w-[260px] text-[12px]/[1.75] text-text-2"
             >
-              Kreativt arbejde, gennemtænkt design og projekter der efterlader et varigt indtryk.
+              {t.intro}
             </motion.p>
           </div>
 
@@ -100,14 +127,14 @@ export default function Home() {
               href="/projekter"
               className="group inline-flex w-fit items-center gap-1.5 text-[11px] font-medium tracking-wide text-text transition-opacity duration-150 hover:opacity-50"
             >
-              Se projekter
+              {t.seeProjects}
               <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
             </a>
             <a
               href="/om-mig/arbejde"
               className="inline-flex w-fit text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
             >
-              Om mig
+              {t.about}
             </a>
           </motion.div>
         </motion.div>
@@ -120,8 +147,8 @@ export default function Home() {
           <div className="flex h-full min-h-[60vw] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border-2 bg-surface text-center sm:min-h-0">
             <ImageIcon strokeWidth={1} size={24} className="text-text-3" />
             <div>
-              <p className="text-[11px] font-[450] text-text-2">Indsæt portræt-billede her</p>
-              <p className="mt-0.5 text-[10px] text-text-3">Anbefalet: portræt · min. 1200 × 1600 px</p>
+              <p className="text-[11px] font-[450] text-text-2">{t.imagePlaceholder}</p>
+              <p className="mt-0.5 text-[10px] text-text-3">{t.imageHint}</p>
             </div>
           </div>
         </motion.div>
@@ -129,7 +156,7 @@ export default function Home() {
         {/* Scroll hint */}
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
+          transition={{ delay: 1.6, duration: 0.6 }}
           className="absolute bottom-10 left-8 flex items-center gap-2 sm:left-14"
         >
           <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}>
@@ -142,17 +169,17 @@ export default function Home() {
       {/* ─── Udvalgte projekter ────────────────────────────────── */}
       <section className="px-8 py-28 sm:px-14">
         <div className="mb-10 flex items-center justify-between border-b border-border pb-5">
-          <h2 className="text-[10px] font-[500] tracking-[0.18em] uppercase text-text-3">Udvalgte projekter</h2>
+          <h2 className="text-[10px] font-[500] tracking-[0.18em] uppercase text-text-3">{t.selectedWork}</h2>
           <a href="/projekter" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">
-            Se alle →
+            {t.seeAll}
           </a>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {PROJECTS.map((project, i) => (
+          {FEATURED.map((project, i) => (
             <motion.a
-              key={project.title}
-              href="/projekter"
+              key={project.slug}
+              href={`/projekter/${project.slug}`}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
@@ -164,9 +191,11 @@ export default function Home() {
               </div>
               <div className="px-4 py-3.5">
                 <p className="text-[9px] tracking-[0.14em] uppercase text-text-3">
-                  {project.category} · {project.year}
+                  {lang === 'en' ? project.categoryLabelEn : project.categoryLabel} · {project.year}
                 </p>
-                <p className="mt-1 text-[12px]/[1.5] font-[430] text-text">{project.title}</p>
+                <p className="mt-1 text-[12px]/[1.5] font-[430] text-text">
+                  {lang === 'en' ? project.titleEn : project.title}
+                </p>
               </div>
             </motion.a>
           ))}
@@ -177,33 +206,24 @@ export default function Home() {
       <section className="border-t border-border px-8 py-28 sm:px-14">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
 
-          {/* Text */}
           <div>
-            <p className="mb-3 text-[10px] font-medium tracking-[0.2em] uppercase text-text-3">Om mig</p>
+            <p className="mb-3 text-[10px] font-medium tracking-[0.2em] uppercase text-text-3">{t.aboutLabel}</p>
             <h2 className="mb-5 text-[13px]/[1.5] font-[450] tracking-tight text-text">
-              Designer med øje for detaljen og passion for det håndgjorte udtryk.
+              {t.aboutHeading}
             </h2>
-            <p className="max-w-sm text-[12px]/[1.8] text-text-2">
-              Uddannet fra Designskolen Kolding med speciale i visuel kommunikation.
-              Har i de seneste tre år arbejdet som freelance designer med kunder
-              inden for sport, kultur og mode. Bor og arbejder i København.
-            </p>
-            <p className="mt-4 max-w-sm text-[12px]/[1.8] text-text-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-              quis nostrud exercitation.
-            </p>
+            <p className="max-w-sm text-[12px]/[1.8] text-text-2">{t.aboutBody1}</p>
+            <p className="mt-4 max-w-sm text-[12px]/[1.8] text-text-2">{t.aboutBody2}</p>
             <a
               href="/om-mig/arbejde"
               className="mt-7 inline-flex items-center gap-1.5 text-[11px] font-medium text-text transition-opacity duration-150 hover:opacity-50"
             >
-              Læs mere →
+              {t.readMore}
             </a>
           </div>
 
           {/* Skills accordion */}
           <div className="divide-y divide-border border-t border-border">
-            {SKILLS.map((skill, i) => (
+            {skills.map((skill, i) => (
               <div key={skill.title}>
                 <button
                   onClick={() => setOpenSkill(openSkill === i ? null : i)}

@@ -3,14 +3,11 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const NAME = 'Ruth-Anne'
-const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
-
 export function Loader() {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(false), 2400)
+    const t = setTimeout(() => setVisible(false), 1400)
     return () => clearTimeout(t)
   }, [])
 
@@ -21,36 +18,26 @@ export function Loader() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease }}
-          className="fixed inset-0 z-[9998] flex items-center justify-center bg-bg"
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-bg"
         >
-          <div className="overflow-hidden">
-            <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.9, ease }}
-              className="flex gap-[0.04em]"
-            >
-              {NAME.split('').map((char, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + i * 0.04, ease }}
-                  className="text-4xl/none font-[300] tracking-[-0.02em] text-text sm:text-6xl/none"
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </motion.div>
-          </div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25 }}
+            className="mb-4 text-[10px] font-[650] tracking-[0.3em] uppercase text-text"
+          >
+            Ruth-Anne
+          </motion.p>
 
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.4, delay: 0.6, ease }}
-            className="absolute bottom-10 left-10 right-10 h-px origin-left bg-border"
-          />
+          {/* Indeterminate animated bar */}
+          <div className="h-[1.5px] w-20 overflow-hidden rounded-full bg-border">
+            <motion.div
+              className="h-full w-1/2 rounded-full bg-text"
+              animate={{ x: ['-100%', '300%'] }}
+              transition={{ duration: 0.85, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
