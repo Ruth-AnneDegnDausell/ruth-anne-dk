@@ -1,245 +1,266 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowDown } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { ArrowDown, ImageIcon, ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 16 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease },
+    transition: { duration: 0.6, delay: i * 0.1, ease },
   }),
 }
 
 const PROJECTS = [
+  { category: 'Branding', title: 'Nordisk Cykelklub · Visuel identitet', year: '2024' },
+  { category: 'Illustration', title: 'Tour de France · Etapeillustration serie', year: '2023' },
+  { category: 'UX · UI', title: 'Sportstracker app · Interface design', year: '2024' },
+]
+
+const SKILLS = [
   {
-    category: 'Branding',
-    title: 'Nordisk Cykelklub — Visuel identitet',
-    year: '2024',
+    title: 'Visuel identitet',
+    num: '01',
+    desc: 'Fra logo og farvepalette til typografi og brand guidelines. Sammenhængende identiteter der holder over tid og skiller sig ud i sit marked. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
   {
-    category: 'Illustration',
-    title: 'Tour de France — Etapeillustration serie',
-    year: '2023',
+    title: 'Illustration',
+    num: '02',
+    desc: 'Håndtegnede og digitale illustrationer til print, web og sociale medier. Specialiseret i sportsillustration, portræt og editorial grafik.',
   },
   {
-    category: 'UX / UI',
-    title: 'Sportstracker app — Interface design',
-    year: '2024',
+    title: 'UX · UI design',
+    num: '03',
+    desc: 'Interface design med fokus på brugeroplevelse og tilgængelighed. Fra wireframes og prototyper til færdige UI-systemer klar til produktion.',
+  },
+  {
+    title: 'Art direction',
+    num: '04',
+    desc: 'Kreativ ledelse af visuelle projekter fra konceptudvikling til produktion. Arbejder tæt med fotografer, illustratorer og producenter.',
   },
 ]
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null)
+  const [openSkill, setOpenSkill] = useState<number | null>(null)
+
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   })
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
 
   return (
     <main className="min-h-screen">
-      {/* ─── Hero ──────────────────────────────────────────────── */}
+
+      {/* ─── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex min-h-screen items-end overflow-hidden pb-16 pl-10 pr-8 pt-24 sm:pb-28 sm:pl-20"
+        className="relative flex min-h-screen flex-col justify-between overflow-hidden px-8 pb-10 pt-14 sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
       >
-        <motion.div style={{ y: heroY }} className="absolute inset-0 z-0">
-          <div className="h-full w-full bg-gradient-to-br from-[oklch(92%_0_0)] via-[oklch(94%_0_0)] to-[oklch(90%_0_0)]" />
-        </motion.div>
+        {/* Left — text */}
+        <motion.div
+          style={{ opacity: heroOpacity }}
+          className="relative z-10 flex flex-col justify-between py-4 sm:w-[42%]"
+        >
+          <div>
+            <motion.p
+              custom={0} variants={fadeUp} initial="hidden" animate="visible"
+              className="mb-8 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3"
+            >
+              Designer · Illustratør
+            </motion.p>
 
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-2xl">
-          <motion.p
-            custom={0}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="mb-6 text-[11px] font-medium tracking-[0.2em] uppercase text-text-3"
-          >
-            Designer &amp; Illustratør ™
-          </motion.p>
+            <motion.h1
+              custom={1} variants={fadeUp} initial="hidden" animate="visible"
+              className="text-[clamp(0.95rem,1.4vw,1.1rem)]/[1.15] font-[300] tracking-[-0.01em] text-text"
+            >
+              Ruth-Anne Dausell
+            </motion.h1>
 
-          <motion.h1
-            custom={1}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="mb-8 text-6xl/[0.95] font-[300] tracking-[-0.03em] text-text sm:text-8xl/[0.92]"
-          >
-            Ruth-Anne
-            <br />
-            <span className="text-text-2">Dausell</span>
-          </motion.h1>
-
-          <motion.p
-            custom={2}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="max-w-sm text-base/7 font-[350] text-text-2"
-          >
-            Kreativt arbejde, gennemtænkt design
-            og projekter der efterlader et varigt indtryk.
-          </motion.p>
+            <motion.p
+              custom={2} variants={fadeUp} initial="hidden" animate="visible"
+              className="mt-5 max-w-[260px] text-[12px]/[1.75] text-text-2"
+            >
+              Kreativt arbejde, gennemtænkt design og projekter der efterlader et varigt indtryk.
+            </motion.p>
+          </div>
 
           <motion.div
-            custom={3}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="mt-10 flex items-center gap-6"
+            custom={3} variants={fadeUp} initial="hidden" animate="visible"
+            className="flex flex-col gap-3"
           >
             <a
               href="/projekter"
-              className="group flex items-center gap-2 text-sm/5 font-medium text-text transition-opacity duration-150 hover:opacity-50"
+              className="group inline-flex w-fit items-center gap-1.5 text-[11px] font-medium tracking-wide text-text transition-opacity duration-150 hover:opacity-50"
             >
               Se projekter
-              <span className="inline-block transition-transform duration-150 group-hover:translate-x-1">
-                →
-              </span>
+              <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
             </a>
-            <span className="h-px w-8 bg-border" />
             <a
               href="/om-mig/arbejde"
-              className="text-sm/5 text-text-2 transition-opacity duration-150 hover:opacity-50"
+              className="inline-flex w-fit text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
             >
               Om mig
             </a>
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Right — hero image placeholder */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
-          className="absolute bottom-10 right-10 flex flex-col items-center gap-2"
+          style={{ y: imageY }}
+          className="relative z-10 mt-8 overflow-hidden rounded-2xl sm:mt-0 sm:w-[54%]"
         >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          >
-            <ArrowDown strokeWidth={1.5} size={15} className="text-text-3" />
+          <div className="flex h-full min-h-[60vw] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border-2 bg-surface text-center sm:min-h-0">
+            <ImageIcon strokeWidth={1} size={24} className="text-text-3" />
+            <div>
+              <p className="text-[11px] font-[450] text-text-2">Indsæt portræt-billede her</p>
+              <p className="mt-0.5 text-[10px] text-text-3">Anbefalet: portræt · min. 1200 × 1600 px</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Scroll hint */}
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ delay: 1.8, duration: 0.6 }}
+          className="absolute bottom-10 left-8 flex items-center gap-2 sm:left-14"
+        >
+          <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}>
+            <ArrowDown strokeWidth={1.5} size={12} className="text-text-3" />
           </motion.div>
-          <p className="[writing-mode:vertical-rl] text-[9px] tracking-[0.2em] uppercase text-text-3">
-            Scroll
-          </p>
+          <p className="text-[9px] tracking-[0.22em] uppercase text-text-3">Scroll</p>
         </motion.div>
       </section>
 
-      {/* ─── Selected work ─────────────────────────────────────── */}
-      <section className="px-8 py-24 sm:px-20">
-        <div className="mb-14 flex items-end justify-between border-b border-border pb-6">
-          <h2 className="text-2xl/[1.1] font-[300] tracking-tight text-text">
-            Udvalgte projekter
-          </h2>
-          <a
-            href="/projekter"
-            className="text-sm/5 text-text-3 transition-opacity duration-150 hover:opacity-50"
-          >
+      {/* ─── Udvalgte projekter ────────────────────────────────── */}
+      <section className="px-8 py-28 sm:px-14">
+        <div className="mb-10 flex items-center justify-between border-b border-border pb-5">
+          <h2 className="text-[10px] font-[500] tracking-[0.18em] uppercase text-text-3">Udvalgte projekter</h2>
+          <a href="/projekter" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">
             Se alle →
           </a>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PROJECTS.map((project, i) => (
             <motion.a
               key={project.title}
               href="/projekter"
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6, delay: i * 0.1, ease }}
-              className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_8px_28px_rgba(0,0,0,0.05)]"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.55, delay: i * 0.08, ease }}
+              className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05),0_6px_20px_rgba(0,0,0,0.04)]"
             >
               <div className="aspect-[4/3] overflow-hidden bg-[oklch(92%_0_0)]">
-                <div className="h-full w-full bg-gradient-to-br from-[oklch(91%_0_0)] to-[oklch(88%_0_0)] transition-transform duration-500 group-hover:scale-[1.03]" />
+                <div className="h-full w-full bg-[oklch(91%_0_0)] transition-transform duration-500 group-hover:scale-[1.03]" />
               </div>
-              <div className="p-5">
-                <p className="text-[10px] font-medium tracking-[0.15em] uppercase text-text-3">
+              <div className="px-4 py-3.5">
+                <p className="text-[9px] tracking-[0.14em] uppercase text-text-3">
                   {project.category} · {project.year}
                 </p>
-                <p className="mt-1.5 text-sm/5 font-[450] text-text">
-                  {project.title}
-                </p>
+                <p className="mt-1 text-[12px]/[1.5] font-[430] text-text">{project.title}</p>
               </div>
             </motion.a>
           ))}
         </div>
       </section>
 
-      {/* ─── Om mig teaser ─────────────────────────────────────── */}
-      <section className="border-t border-border px-8 py-24 sm:px-20">
+      {/* ─── Om mig ───────────────────────────────────────────── */}
+      <section className="border-t border-border px-8 py-28 sm:px-14">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
+
+          {/* Text */}
           <div>
-            <p className="mb-4 text-[11px] font-medium tracking-[0.18em] uppercase text-text-3">
-              Om mig
-            </p>
-            <h2 className="mb-6 text-3xl/[1.1] font-[300] tracking-tight text-text">
+            <p className="mb-3 text-[10px] font-medium tracking-[0.2em] uppercase text-text-3">Om mig</p>
+            <h2 className="mb-5 text-[13px]/[1.5] font-[450] tracking-tight text-text">
               Designer med øje for detaljen og passion for det håndgjorte udtryk.
             </h2>
-            <p className="max-w-prose text-base/7 text-text-2">
+            <p className="max-w-sm text-[12px]/[1.8] text-text-2">
               Uddannet fra Designskolen Kolding med speciale i visuel kommunikation.
               Har i de seneste tre år arbejdet som freelance designer med kunder
               inden for sport, kultur og mode. Bor og arbejder i København.
             </p>
+            <p className="mt-4 max-w-sm text-[12px]/[1.8] text-text-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation.
+            </p>
             <a
               href="/om-mig/arbejde"
-              className="mt-8 inline-flex items-center gap-2 text-sm/5 font-medium text-text transition-opacity duration-150 hover:opacity-50"
+              className="mt-7 inline-flex items-center gap-1.5 text-[11px] font-medium text-text transition-opacity duration-150 hover:opacity-50"
             >
-              Læs mere om mig →
+              Læs mere →
             </a>
           </div>
 
-          <div className="flex flex-col gap-4">
-            {['Visuel identitet', 'Illustration', 'UX / UI design', 'Art direction'].map(
-              (skill, i) => (
-                <motion.div
-                  key={skill}
-                  initial={{ opacity: 0, x: 12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.08, ease }}
-                  className="flex items-center justify-between rounded-xl border border-border bg-surface px-5 py-4"
+          {/* Skills accordion */}
+          <div className="divide-y divide-border border-t border-border">
+            {SKILLS.map((skill, i) => (
+              <div key={skill.title}>
+                <button
+                  onClick={() => setOpenSkill(openSkill === i ? null : i)}
+                  className="flex w-full items-center justify-between py-4 text-left"
                 >
-                  <span className="text-sm/5 text-text">{skill}</span>
-                  <span className="text-[10px] tracking-[0.12em] uppercase text-text-3">
-                    0{i + 1}
-                  </span>
-                </motion.div>
-              ),
-            )}
+                  <span className="text-[12px] text-text">{skill.title}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[9px] tracking-[0.14em] text-text-3">{skill.num}</span>
+                    <ChevronDown
+                      size={11}
+                      strokeWidth={1.5}
+                      className={cn(
+                        'text-text-3 transition-transform duration-200',
+                        openSkill === i && 'rotate-180'
+                      )}
+                    />
+                  </div>
+                </button>
+                <AnimatePresence>
+                  {openSkill === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.28, ease }}
+                      className="overflow-hidden"
+                    >
+                      <p className="pb-4 text-[11px]/[1.7] text-text-2">{skill.desc}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
+
         </div>
       </section>
 
-      {/* ─── Footer ────────────────────────────────────────────── */}
-      <footer className="border-t border-border px-8 py-10 sm:px-20">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs/5 text-text-3">© Ruth-Anne Dausell</p>
-          <div className="flex items-center gap-6">
+      {/* ─── Footer ──────────────────────────────────────────── */}
+      <footer className="border-t border-border px-8 py-8 sm:px-14">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[10px] text-text-3">© Ruth-Anne Dausell</p>
+          <div className="flex items-center gap-5">
             <a
               href="https://www.instagram.com/ruthannedausell"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs/5 text-text-3 transition-opacity duration-150 hover:opacity-50"
+              className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50"
             >
               Instagram ↗
             </a>
-            <a href="/cv" className="text-xs/5 text-text-3 transition-opacity duration-150 hover:opacity-50">
-              CV
-            </a>
-            <a href="/kontakt" className="text-xs/5 text-text-3 transition-opacity duration-150 hover:opacity-50">
-              Kontakt
-            </a>
+            <a href="/cv" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">CV</a>
+            <a href="/kontakt" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">Kontakt</a>
           </div>
         </div>
       </footer>
+
     </main>
   )
 }

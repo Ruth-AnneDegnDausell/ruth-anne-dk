@@ -12,6 +12,8 @@ import {
   FileText,
   Mail,
   ChevronRight,
+  Menu,
+  X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -41,7 +43,7 @@ const NAV: NavItem[] = [
       { label: 'Alle projekter', href: '/projekter' },
       { label: 'Branding', href: '/projekter/branding' },
       { label: 'Illustration', href: '/projekter/illustration' },
-      { label: 'UX / UI', href: '/projekter/ux-ui' },
+      { label: 'UX · UI', href: '/projekter/ux-ui' },
     ],
   },
   {
@@ -66,8 +68,11 @@ const subVariants = {
 export function Sidebar() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [pinned, setPinned] = useState(false)
   const [activeGroup, setActiveGroup] = useState<string | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const isOpen = pinned || open
 
   const handleMouseEnterZone = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -75,27 +80,59 @@ export function Sidebar() {
   }, [])
 
   const handleMouseLeave = useCallback(() => {
+    if (pinned) return
     closeTimer.current = setTimeout(() => {
       setOpen(false)
       setActiveGroup(null)
     }, 200)
-  }, [])
+  }, [pinned])
 
   const handleMouseEnterSidebar = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
   }, [])
 
+  const handleTogglePin = () => {
+    if (pinned) {
+      setPinned(false)
+      setOpen(false)
+      setActiveGroup(null)
+    } else {
+      setPinned(true)
+      setOpen(true)
+    }
+  }
+
   return (
     <>
-      {/* Invisible hover trigger zone — left edge */}
-      <div
-        className="fixed left-0 top-0 z-[200] h-full w-6"
-        onMouseEnter={handleMouseEnterZone}
-        onMouseLeave={handleMouseLeave}
-      />
+      {/* Always-visible menu icon — hints at hidden sidebar, click to pin */}
+      <button
+        onClick={handleTogglePin}
+        aria-label={pinned ? 'Luk menu' : 'Åbn menu'}
+        className={cn(
+          'fixed left-4 top-4 z-[202] flex h-7 w-7 items-center justify-center rounded-md transition-colors duration-150',
+          pinned
+            ? 'text-text hover:text-text-2'
+            : 'text-text-3 hover:text-text-2'
+        )}
+      >
+        {pinned ? (
+          <X strokeWidth={1.5} size={14} />
+        ) : (
+          <Menu strokeWidth={1.5} size={14} />
+        )}
+      </button>
+
+      {/* Hover trigger zone — wider than the old 24px so sidebar appears earlier */}
+      {!isOpen && (
+        <div
+          className="fixed left-0 top-0 z-[200] h-full w-20"
+          onMouseEnter={handleMouseEnterZone}
+          onMouseLeave={handleMouseLeave}
+        />
+      )}
 
       <AnimatePresence>
-        {open && (
+        {isOpen && (
           <motion.nav
             key="sidebar"
             variants={sidebarVariants}
@@ -152,7 +189,7 @@ export function Sidebar() {
                       ) : (
                         <Link
                           href={item.href!}
-                          onClick={() => setOpen(false)}
+                          onClick={() => { setOpen(false); if (!pinned) setActiveGroup(null) }}
                           className={cn(
                             'flex items-center gap-2.5 rounded-[--radius-sm] px-3 py-2 text-sm/5 transition-colors duration-[--duration-fast]',
                             isActive

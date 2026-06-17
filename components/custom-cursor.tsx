@@ -26,7 +26,7 @@ export function CustomCursor() {
     }
 
     const animate = () => {
-      cursor.style.transform = `translate(${x - 6}px, ${y - 6}px)`
+      cursor.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`
       raf = requestAnimationFrame(animate)
     }
 
@@ -44,12 +44,10 @@ export function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-[oklch(12%_0_0)] mix-blend-difference transition-[width,height] duration-150"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-white mix-blend-difference transition-[width,height] duration-150"
       style={{
-        width: hovering ? 28 : 12,
-        height: hovering ? 28 : 12,
-        marginLeft: hovering ? -8 : 0,
-        marginTop: hovering ? -8 : 0,
+        width: hovering ? 32 : 14,
+        height: hovering ? 32 : 14,
       }}
     />
   )
