@@ -46,8 +46,8 @@ export function CustomCursor() {
       ref={cursorRef}
       className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-white mix-blend-difference transition-[width,height] duration-150"
       style={{
-        width: hovering ? 32 : 14,
-        height: hovering ? 32 : 14,
+        width: hovering ? 22 : 14,
+        height: hovering ? 22 : 14,
       }}
     />
   )

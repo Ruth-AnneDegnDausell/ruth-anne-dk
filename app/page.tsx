@@ -89,7 +89,7 @@ export default function Home() {
       {/* ─── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex min-h-screen flex-col justify-between overflow-hidden px-8 pb-10 pt-8 sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
+        className="relative flex min-h-screen flex-col justify-between overflow-hidden px-8 pb-10 pt-14 sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
       >
         {/* Left — text */}
         <motion.div

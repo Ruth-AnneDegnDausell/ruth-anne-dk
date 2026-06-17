@@ -4,7 +4,6 @@ import { LangProvider } from '@/lib/lang-context'
 import { CustomCursor } from '@/components/custom-cursor'
 import { Loader } from '@/components/loader'
 import { Sidebar } from '@/components/sidebar'
-import { Header } from '@/components/header'
 
 export const metadata: Metadata = {
   title: { default: 'Ruth-Anne Dausell', template: '%s — Ruth-Anne Dausell' },
@@ -19,8 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Loader />
           <CustomCursor />
           <Sidebar />
-          <Header />
-          <div className="pl-12 pt-10">
+          <div className="pl-12">
             {children}
           </div>
         </LangProvider>

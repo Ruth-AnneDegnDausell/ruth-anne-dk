@@ -14,6 +14,7 @@ import {
   PanelLeft,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/lib/lang-context'
 
 type SubItem = { label: string; labelEn: string; href: string }
 type NavItem = {
@@ -42,7 +43,6 @@ const NAV: NavItem[] = [
     href: '/projekter',
     icon: <FolderOpen strokeWidth={1.5} size={16} />,
     sub: [
-      { label: 'Alle projekter', labelEn: 'All projects', href: '/projekter' },
       { label: 'Branding', labelEn: 'Branding', href: '/projekter/branding' },
       { label: 'Illustration', labelEn: 'Illustration', href: '/projekter/illustration' },
       { label: 'UX · UI', labelEn: 'UX · UI', href: '/projekter/ux-ui' },
@@ -60,6 +60,7 @@ const NAV: NavItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const { lang, setLang } = useLang()
   const [panelOpen, setPanelOpen] = useState(false)
   const [pinned, setPinned] = useState(false)
   const [activeGroup, setActiveGroup] = useState<string | null>(null)
@@ -67,7 +68,6 @@ export function Sidebar() {
 
   const panelVisible = pinned || panelOpen
 
-  // Auto-unpin when navigating
   useEffect(() => {
     setPinned(false)
     setPanelOpen(false)
@@ -87,11 +87,6 @@ export function Sidebar() {
     if (closeTimer.current) clearTimeout(closeTimer.current)
   }, [])
 
-  const handleRailEnter = useCallback(() => {
-    cancelClose()
-    setPanelOpen(true)
-  }, [cancelClose])
-
   const togglePin = () => {
     if (pinned) {
       setPinned(false)
@@ -110,20 +105,23 @@ export function Sidebar() {
     }
   }, [pinned])
 
+  const getLabel = (item: NavItem | SubItem) =>
+    lang === 'en' ? item.labelEn : item.label
+
   return (
     <>
       {/* ─── Icon rail — always visible ──────────────────────── */}
       <div
         className="fixed left-0 top-0 z-[199] flex h-full w-12 flex-col border-r border-border bg-surface/95 backdrop-blur-sm"
-        onMouseEnter={handleRailEnter}
+        onMouseEnter={() => { cancelClose(); setPanelOpen(true) }}
         onMouseLeave={scheduleClose}
       >
-        {/* Panel toggle — aligns with header height */}
+        {/* Panel toggle */}
         <button
           onClick={togglePin}
           title={pinned ? 'Luk sidebar' : 'Fastgør sidebar'}
           className={cn(
-            'flex h-10 w-full shrink-0 items-center justify-center border-b border-border transition-colors duration-150',
+            'flex h-11 w-full shrink-0 items-center justify-center border-b border-border transition-colors duration-150',
             pinned ? 'text-text' : 'text-text-3 hover:text-text-2'
           )}
         >
@@ -139,7 +137,7 @@ export function Sidebar() {
               <Link
                 key={item.label}
                 href={item.href}
-                title={item.label}
+                title={getLabel(item)}
                 className={cn(
                   'flex h-9 w-full items-center justify-center rounded-md transition-colors duration-150',
                   isActive ? 'text-text' : 'text-text-3 hover:text-text-2'
@@ -152,7 +150,7 @@ export function Sidebar() {
         </nav>
       </div>
 
-      {/* ─── Full panel — slides in on hover or when pinned ── */}
+      {/* ─── Full panel ───────────────────────────────────────── */}
       <AnimatePresence>
         {panelVisible && (
           <motion.nav
@@ -163,13 +161,13 @@ export function Sidebar() {
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={cancelClose}
             onMouseLeave={scheduleClose}
-            className="fixed left-12 top-10 z-[199] flex h-[calc(100vh-40px)] w-52 flex-col border-r border-border bg-surface/95 py-5 backdrop-blur-sm"
+            className="fixed left-12 top-0 z-[199] flex h-full w-52 flex-col border-r border-border bg-surface/95 py-5 backdrop-blur-sm"
           >
             {/* Ruth-Anne home link */}
             <Link
               href="/"
               onClick={closePanel}
-              className="mb-5 px-4 text-[10px] font-[500] tracking-[0.18em] uppercase text-text-2 transition-colors duration-150 hover:text-text"
+              className="mb-6 px-4 text-[10px] font-[500] tracking-[0.18em] uppercase text-text-2 transition-colors duration-150 hover:text-text"
             >
               Ruth-Anne
             </Link>
@@ -187,13 +185,18 @@ export function Sidebar() {
                       onMouseEnter={() => setActiveGroup(item.label)}
                       onMouseLeave={() => setActiveGroup(null)}
                     >
-                      <div className={cn(
-                        'flex items-center gap-2.5 px-2 py-2 text-[13px]/5 transition-colors duration-150',
-                        isActive ? 'text-text' : 'text-text-2 hover:text-text'
-                      )}>
+                      {/* Group label is a real link */}
+                      <Link
+                        href={item.href}
+                        onClick={closePanel}
+                        className={cn(
+                          'flex items-center gap-2.5 px-2 py-2 text-[13px]/5 transition-colors duration-150',
+                          isActive ? 'text-text' : 'text-text-2 hover:text-text'
+                        )}
+                      >
                         {item.icon}
-                        {item.label}
-                      </div>
+                        {getLabel(item)}
+                      </Link>
 
                       <AnimatePresence>
                         {activeGroup === item.label && (
@@ -201,7 +204,7 @@ export function Sidebar() {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
                             className="overflow-hidden"
                           >
                             {item.sub.map((sub) => (
@@ -214,7 +217,7 @@ export function Sidebar() {
                                     pathname === sub.href ? 'text-text' : 'text-text-2 hover:text-text'
                                   )}
                                 >
-                                  {sub.label}
+                                  {getLabel(sub)}
                                 </Link>
                               </li>
                             ))}
@@ -236,14 +239,36 @@ export function Sidebar() {
                       )}
                     >
                       {item.icon}
-                      {item.label}
+                      {getLabel(item)}
                     </Link>
                   </li>
                 )
               })}
             </ul>
 
-            <div className="mt-auto border-t border-border px-4 pt-5">
+            {/* Bottom: lang toggle + copyright */}
+            <div className="mt-auto border-t border-border px-4 pt-4">
+              <div className="mb-3 flex items-center gap-1.5">
+                <button
+                  onClick={() => setLang('da')}
+                  className={cn(
+                    'text-[9px] tracking-[0.14em] uppercase transition-colors duration-150',
+                    lang === 'da' ? 'text-text' : 'text-text-3 hover:text-text-2'
+                  )}
+                >
+                  DA
+                </button>
+                <span className="text-[9px] text-text-3">·</span>
+                <button
+                  onClick={() => setLang('en')}
+                  className={cn(
+                    'text-[9px] tracking-[0.14em] uppercase transition-colors duration-150',
+                    lang === 'en' ? 'text-text' : 'text-text-3 hover:text-text-2'
+                  )}
+                >
+                  EN
+                </button>
+              </div>
               <p className="text-[10px] text-text-3">© Ruth-Anne Dausell</p>
             </div>
           </motion.nav>

@@ -32,7 +32,7 @@ export default function ProjectPage() {
   const body = lang === 'en' ? project.bodyEn : project.body
 
   return (
-    <main className="min-h-screen px-8 pb-28 pt-10 sm:px-14">
+    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
 
       {/* Back link */}
       <motion.div
@@ -69,7 +69,7 @@ export default function ProjectPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.1, ease }}
-        className="mb-12 aspect-[16/9] overflow-hidden rounded-2xl border border-dashed border-border-2 bg-surface"
+        className="mb-12 aspect-[16/9] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]"
       />
 
       {/* Body text */}
@@ -96,7 +96,7 @@ export default function ProjectPage() {
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="aspect-square overflow-hidden rounded-xl border border-dashed border-border-2 bg-surface"
+            className="aspect-square overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
           />
         ))}
       </motion.div>
