@@ -18,12 +18,12 @@ const T = {
     intro: 'Har du et projekt du vil drøfte, eller vil du bare sige hej? Skriv til mig.',
     channelsLabel: 'Find mig her',
     channels: [
-      { title: 'E-mail', value: 'hej@ruth-anne.dk', href: 'mailto:hej@ruth-anne.dk' },
-      { title: 'LinkedIn', value: 'linkedin.com/in/ruth-anne-dausell', href: 'https://linkedin.com/in/ruth-anne-dausell' },
-      { title: 'Instagram', value: '@ruthannedesign', href: 'https://instagram.com/ruthannedesign' },
+      { title: 'E-mail', value: 'annedegndausell@gmail.com', href: 'mailto:annedegndausell@gmail.com' },
+      { title: 'Telefon', value: '51 50 85 70', href: 'tel:+4551508570' },
+      { title: 'LinkedIn', value: 'linkedin.com/in/ruthannedausell', href: 'https://linkedin.com/in/ruthannedausell' },
     ],
     availabilityLabel: 'Tilgængelighed',
-    availability: 'Tager i øjeblikket nye projekter fra august 2025.',
+    availability: 'Åben for nye projekter og samarbejder. Skriv til mig, så finder vi ud af det.',
   },
   en: {
     label: 'Contact',
@@ -31,12 +31,12 @@ const T = {
     intro: 'Have a project you want to discuss, or just want to say hello? Write to me.',
     channelsLabel: 'Find me here',
     channels: [
-      { title: 'Email', value: 'hej@ruth-anne.dk', href: 'mailto:hej@ruth-anne.dk' },
-      { title: 'LinkedIn', value: 'linkedin.com/in/ruth-anne-dausell', href: 'https://linkedin.com/in/ruth-anne-dausell' },
-      { title: 'Instagram', value: '@ruthannedesign', href: 'https://instagram.com/ruthannedesign' },
+      { title: 'Email', value: 'annedegndausell@gmail.com', href: 'mailto:annedegndausell@gmail.com' },
+      { title: 'Phone', value: '51 50 85 70', href: 'tel:+4551508570' },
+      { title: 'LinkedIn', value: 'linkedin.com/in/ruthannedausell', href: 'https://linkedin.com/in/ruthannedausell' },
     ],
     availabilityLabel: 'Availability',
-    availability: 'Currently accepting new projects from August 2025.',
+    availability: 'Open to new projects and collaborations. Get in touch and we\'ll figure something out.',
   },
 }
 
