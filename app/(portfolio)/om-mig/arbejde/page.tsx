@@ -15,8 +15,8 @@ const fadeUp = (delay = 0) => ({
 
 const T = {
   da: {
-    bio1: 'Designer med baggrund i to designuddannelser: en bachelor i kommunikationsdesign fra Designskolen Kolding og en designteknologuddannelse i møbeldesign fra TEKO. Kombinationen giver mig en forståelse for både det analoge og det digitale — fra håndtegnet skitse til færdigt visuelt system.',
-    bio2: 'Jeg har arbejdet med visuel identitet, illustration, art direction og videoproduktion for kunder inden for sportsernæring, kultur, medier og livsstil. Bl.a. hos Flaneur og et dansk sportsernæringsmærke, og tidligere som Junior Art Director hos Vid&Sans, hvor jeg var med til at bygge det grafiske udtryk fra bunden. Min tilgang er præcis og konceptdrevet — og jeg trives bedst, når der er kortere fra brief til produkt.',
+    bio1: 'Designer med baggrund i to designuddannelser: en bachelor i kommunikationsdesign fra Designskolen Kolding og en designteknologuddannelse i møbeldesign fra TEKO. Kombinationen giver mig en forståelse for både det analoge og det digitale, fra håndtegnet skitse til færdigt visuelt system.',
+    bio2: 'Jeg har arbejdet med visuel identitet, illustration, art direction og videoproduktion for kunder inden for sportsernæring, kultur, medier og livsstil. Bl.a. hos Flaneur og et dansk sportsernæringsmærke, og tidligere som Junior Art Director hos Vid&Sans, hvor jeg var med til at bygge det grafiske udtryk fra bunden. Min tilgang er præcis og konceptdrevet, og jeg trives bedst, når der er kortere fra brief til produkt.',
     servicesLabel: 'Hvad jeg laver',
     services: [
       { title: 'Visuel identitet', desc: 'Logo, farvepalette, typografi og brand guidelines.' },
@@ -33,8 +33,8 @@ const T = {
     portraitHint: 'Portræt · min. 1200 × 1600 px',
   },
   en: {
-    bio1: 'Designer with two design degrees: a BA in Communication Design from Designskolen Kolding and a Design Technologist degree in furniture design from TEKO. The combination gives me an understanding of both the analogue and the digital — from hand-drawn sketch to finished visual system.',
-    bio2: 'I have worked with visual identity, illustration, art direction, and video production for clients in sports nutrition, culture, media, and lifestyle — including at Flaneur and a Danish sports nutrition brand, and previously as Junior Art Director at Vid&Sans, where I helped build the visual identity from scratch. My approach is precise and concept-driven, and I work best when the distance from brief to finished product is short.',
+    bio1: 'Designer with two design degrees: a BA in Communication Design from Designskolen Kolding and a Design Technologist degree in furniture design from TEKO. The combination gives me an understanding of both the analogue and the digital, from hand-drawn sketch to finished visual system.',
+    bio2: 'I have worked with visual identity, illustration, art direction, and video production for clients in sports nutrition, culture, media, and lifestyle, including at Flaneur and a Danish sports nutrition brand, and previously as Junior Art Director at Vid&Sans, where I helped build the visual identity from scratch. My approach is precise and concept-driven, and I work best when the distance from brief to finished product is short.',
     servicesLabel: 'What I do',
     services: [
       { title: 'Visual identity', desc: 'Logo, colour palette, typography, and brand guidelines.' },
