@@ -1,8 +1,9 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import { ArrowDown, ImageIcon, ChevronDown } from 'lucide-react'
+import { ArrowDown, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useLang } from '@/lib/lang-context'
 import { PROJECTS as ALL_PROJECTS } from '@/lib/projects'
@@ -45,8 +46,8 @@ const T = {
     seeAll: 'Se alle →',
     aboutLabel: 'Om mig',
     aboutHeading: 'Designer med øje for detaljen og passion for det håndgjorte udtryk.',
-    aboutBody1: 'Uddannet fra Designskolen Kolding med speciale i visuel kommunikation. Har i de seneste tre år arbejdet som freelance designer med kunder inden for sport, kultur og mode. Bor og arbejder i København.',
-    aboutBody2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+    aboutBody1: 'Uddannet fra Designskolen Kolding med speciale i visuel kommunikation. Har arbejdet med visuel identitet, illustration og videoproduktion for kunder inden for sport, kultur og livsstil.',
+    aboutBody2: 'Baseret nord for Aarhus, arbejder jeg tæt med kunder fra første brief til færdigt produkt. Med to designuddannelser bag mig er min tilgang præcis og konceptdrevet.',
     readMore: 'Læs mere →',
     imagePlaceholder: 'Indsæt portræt-billede her',
     imageHint: 'Portræt · min. 1200 × 1600 px',
@@ -60,8 +61,8 @@ const T = {
     seeAll: 'See all →',
     aboutLabel: 'About',
     aboutHeading: 'Designer with an eye for detail and a passion for handcrafted expression.',
-    aboutBody1: 'Graduated from Designskolen Kolding with a specialisation in visual communication. For the past three years has worked as a freelance designer for clients in sports, culture, and fashion. Lives and works in Copenhagen.',
-    aboutBody2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+    aboutBody1: 'Graduated from Designskolen Kolding with a specialisation in visual communication. Has worked on visual identity, illustration, and video production for clients in sports, culture, and lifestyle.',
+    aboutBody2: 'Based north of Aarhus, I work closely with clients from first brief to finished product. With two design degrees behind me, my approach is precise and concept-driven.',
     readMore: 'Read more →',
     imagePlaceholder: 'Insert portrait image here',
     imageHint: 'Portrait · min. 1200 × 1600 px',
@@ -139,17 +140,20 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Right — hero image placeholder */}
+        {/* Right — hero image */}
         <motion.div
           style={{ y: imageY }}
           className="relative z-10 mt-8 overflow-hidden rounded-2xl sm:mt-0 sm:w-[54%]"
         >
-          <div className="flex h-full min-h-[60vw] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border-2 bg-surface text-center sm:min-h-0">
-            <ImageIcon strokeWidth={1} size={24} className="text-text-3" />
-            <div>
-              <p className="text-[11px] font-[450] text-text-2">{t.imagePlaceholder}</p>
-              <p className="mt-0.5 text-[10px] text-text-3">{t.imageHint}</p>
-            </div>
+          <div className="relative h-full min-h-[60vw] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)] sm:min-h-0">
+            <Image
+              src="/mig/Forside.JPG"
+              alt="Ruth-Anne Dausell"
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 100vw, 54vw"
+              priority
+            />
           </div>
         </motion.div>
 

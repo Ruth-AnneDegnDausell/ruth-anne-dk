@@ -1,8 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import Link from 'next/link'
-import { ImageIcon } from 'lucide-react'
 import { useLang } from '@/lib/lang-context'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
@@ -110,12 +110,14 @@ export default function Arbejde() {
         transition={{ duration: 0.6, delay: 0.08, ease }}
         className="order-first lg:order-last"
       >
-        <div className="flex aspect-[3/4] w-full max-w-[320px] flex-col items-center justify-center gap-3 rounded-2xl bg-[oklch(91%_0_0)] text-center">
-          <ImageIcon strokeWidth={1} size={22} className="text-text-3" />
-          <div>
-            <p className="text-[11px] font-[450] text-text-2">{t.portraitAlt}</p>
-            <p className="mt-0.5 text-[10px] text-text-3">{t.portraitHint}</p>
-          </div>
+        <div className="relative aspect-[3/2] w-full max-w-[380px] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
+          <Image
+            src="/mig/Arbejde.JPG"
+            alt="Ruth-Anne Dausell"
+            fill
+            className="object-cover"
+            sizes="380px"
+          />
         </div>
       </motion.div>
 

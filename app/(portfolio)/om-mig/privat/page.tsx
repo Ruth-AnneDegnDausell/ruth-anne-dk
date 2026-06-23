@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ImageIcon } from 'lucide-react'
+import Image from 'next/image'
 import { useLang } from '@/lib/lang-context'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
@@ -86,17 +86,24 @@ export default function Privat() {
         transition={{ duration: 0.6, delay: 0.08, ease }}
         className="flex flex-col gap-4"
       >
-        <div className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-3 rounded-2xl bg-[oklch(91%_0_0)] text-center">
-          <ImageIcon strokeWidth={1} size={22} className="text-text-3" />
-          <div>
-            <p className="text-[11px] font-[450] text-text-2">{t.photoAlt}</p>
-            <p className="mt-0.5 text-[10px] text-text-3">{t.photoHint}</p>
-          </div>
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
+          <Image
+            src="/mig/Privat.JPG"
+            alt="Ruth-Anne Dausell"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
         </div>
 
-        {/* Second smaller photo */}
-        <div className="flex aspect-[3/2] w-full items-center justify-center rounded-2xl bg-[oklch(93%_0_0)]">
-          <ImageIcon strokeWidth={1} size={18} className="text-text-3" />
+        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[oklch(93%_0_0)]">
+          <Image
+            src="/mig/Privat2.JPG"
+            alt="Ruth-Anne Dausell"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
         </div>
       </motion.div>
 
