@@ -45,7 +45,7 @@ const NAV: NavItem[] = [
     icon: <FolderOpen strokeWidth={1.5} size={16} />,
     sub: [
       { label: 'Branding', labelEn: 'Branding', href: '/projekter/branding' },
-      { label: 'Illustration', labelEn: 'Illustration', href: '/projekter/illustration' },
+      { label: 'Illustration', labelEn: 'Illustration', href: '/illustrationer' },
       { label: 'UX · UI', labelEn: 'UX · UI', href: '/projekter/ux-ui' },
     ],
   },
@@ -61,7 +61,16 @@ const NAV: NavItem[] = [
     href: '/fotografier',
     icon: <Camera strokeWidth={1.5} size={16} />,
   },
-  { label: 'CV', labelEn: 'CV', href: '/cv', icon: <FileText strokeWidth={1.5} size={16} /> },
+  {
+    label: 'CV',
+    labelEn: 'CV',
+    href: '/cv',
+    icon: <FileText strokeWidth={1.5} size={16} />,
+    sub: [
+      { label: 'CV', labelEn: 'CV', href: '/cv' },
+      { label: 'Udtalelser', labelEn: 'References', href: '/cv/udtalelser' },
+    ],
+  },
   { label: 'Kontakt', labelEn: 'Contact', href: '/kontakt', icon: <Mail strokeWidth={1.5} size={16} /> },
 ]
 

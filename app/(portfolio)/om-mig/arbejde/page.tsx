@@ -57,7 +57,7 @@ export default function Arbejde() {
   const t = T[lang]
 
   return (
-    <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1fr_320px]">
+    <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
 
       {/* ─── Left: text content ───────────────────────────── */}
       <div>
@@ -110,13 +110,13 @@ export default function Arbejde() {
         transition={{ duration: 0.6, delay: 0.08, ease }}
         className="order-first lg:order-last"
       >
-        <div className="relative aspect-[3/2] w-full max-w-[380px] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
+        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
           <Image
             src="/mig/Arbejde.JPG"
             alt="Ruth-Anne Dausell"
             fill
-            className="object-cover"
-            sizes="380px"
+            className="object-cover object-center"
+            sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </div>
       </motion.div>
