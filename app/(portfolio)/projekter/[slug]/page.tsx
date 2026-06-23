@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { PROJECTS } from '@/lib/projects'
@@ -64,13 +65,24 @@ export default function ProjectPage() {
         </h1>
       </motion.div>
 
-      {/* Hero image placeholder */}
+      {/* Hero image */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.1, ease }}
-        className="mb-12 aspect-[16/9] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]"
-      />
+        className="relative mb-12 aspect-[16/9] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]"
+      >
+        {project.cover && (
+          <Image
+            src={project.cover}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1280px) 100vw, 900px"
+            priority
+          />
+        )}
+      </motion.div>
 
       {/* Body text */}
       <motion.div
@@ -86,20 +98,27 @@ export default function ProjectPage() {
         ))}
       </motion.div>
 
-      {/* Image gallery placeholders */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2, ease }}
-        className="mb-20 grid grid-cols-2 gap-4 sm:grid-cols-3"
-      >
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="aspect-square overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
-          />
-        ))}
-      </motion.div>
+      {/* Image gallery */}
+      {(project.images?.length ?? 0) > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2, ease }}
+          className="mb-20 grid grid-cols-2 gap-4 sm:grid-cols-3"
+        >
+          {project.images!.map((src, i) => (
+            <div key={i} className="relative aspect-square overflow-hidden rounded-xl bg-[oklch(91%_0_0)]">
+              <Image
+                src={src}
+                alt={`${title} ${i + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 50vw, 33vw"
+              />
+            </div>
+          ))}
+        </motion.div>
+      )}
 
       {/* Prev / Next navigation */}
       <div className="border-t border-border pt-8">

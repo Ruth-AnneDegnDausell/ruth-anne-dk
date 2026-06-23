@@ -1,8 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { ImageIcon } from 'lucide-react'
 import { useLang } from '@/lib/lang-context'
+import { ILLUSTRATIONER } from '@/lib/gallery'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -18,17 +20,6 @@ const T = {
     intro: 'A selection of illustrations, sketches, and drawings from projects and spare time.',
   },
 }
-
-const ITEMS = [
-  { id: 1, cols: 'col-span-1', aspect: 'aspect-[3/4]' },
-  { id: 2, cols: 'col-span-1', aspect: 'aspect-[3/4]' },
-  { id: 3, cols: 'col-span-1', aspect: 'aspect-square' },
-  { id: 4, cols: 'col-span-1', aspect: 'aspect-[2/3]' },
-  { id: 5, cols: 'col-span-1', aspect: 'aspect-[3/4]' },
-  { id: 6, cols: 'col-span-1', aspect: 'aspect-square' },
-  { id: 7, cols: 'col-span-1', aspect: 'aspect-[2/3]' },
-  { id: 8, cols: 'col-span-1', aspect: 'aspect-[3/4]' },
-]
 
 export default function IllustrationerPage() {
   const { lang } = useLang()
@@ -52,13 +43,22 @@ export default function IllustrationerPage() {
         transition={{ duration: 0.5, ease }}
         className="columns-2 gap-3 sm:columns-3"
       >
-        {ITEMS.map((item, i) => (
-          <div key={item.id} className="mb-3 break-inside-avoid">
-            <div
-              className={`${item.aspect} w-full overflow-hidden rounded-xl bg-[oklch(91%_0_0)] flex items-center justify-center transition-opacity duration-200 hover:opacity-80`}
-              style={{ transitionDelay: `${i * 30}ms` }}
-            >
-              <ImageIcon strokeWidth={1} size={18} className="text-text-3" />
+        {ILLUSTRATIONER.map((item, i) => (
+          <div key={i} className="mb-3 break-inside-avoid">
+            <div className={`${item.aspect} relative w-full overflow-hidden rounded-xl bg-[oklch(91%_0_0)]`}>
+              {item.src ? (
+                <Image
+                  src={item.src}
+                  alt={item.alt ?? ''}
+                  fill
+                  className="object-cover transition-opacity duration-200 hover:opacity-80"
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <ImageIcon strokeWidth={1} size={18} className="text-text-3" />
+                </div>
+              )}
             </div>
           </div>
         ))}

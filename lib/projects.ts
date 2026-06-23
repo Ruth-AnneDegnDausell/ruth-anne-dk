@@ -13,6 +13,8 @@ export interface Project {
   descEn: string
   body: string[]
   bodyEn: string[]
+  cover?: string
+  images?: string[]
 }
 
 export const PROJECTS: Project[] = [

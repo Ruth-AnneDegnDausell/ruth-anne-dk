@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PROJECTS } from '@/lib/projects'
 import { useLang } from '@/lib/lang-context'
@@ -77,8 +78,18 @@ export default function Projekter() {
               transition={{ duration: 0.4, delay: i * 0.06, ease }}
               className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05),0_6px_20px_rgba(0,0,0,0.04)]"
             >
-              <div className="aspect-[4/3] overflow-hidden">
-                <div className="h-full w-full bg-[oklch(91%_0_0)] transition-transform duration-500 group-hover:scale-[1.03]" />
+              <div className="relative aspect-[4/3] overflow-hidden">
+                {project.cover ? (
+                  <Image
+                    src={project.cover}
+                    alt={lang === 'en' ? project.titleEn : project.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-[oklch(91%_0_0)] transition-transform duration-500 group-hover:scale-[1.03]" />
+                )}
               </div>
               <div className="px-4 py-4">
                 <p className="text-[9px] tracking-[0.14em] uppercase text-text-3">
