@@ -30,7 +30,11 @@ export default function FotografierPage() {
 
   const filtered = active === 'alle'
     ? FOTOGRAFIER
-    : FOTOGRAFIER.filter((item) => item.category === active)
+    : FOTOGRAFIER.filter((item) => {
+        if (!item.category) return false
+        if (Array.isArray(item.category)) return item.category.includes(active)
+        return item.category === active
+      })
 
   return (
     <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">

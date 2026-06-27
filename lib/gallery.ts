@@ -2,14 +2,14 @@ export interface GalleryItem {
   src?: string
   aspect: string
   alt?: string
-  category?: string
+  category?: string | string[]
 }
 
 export const ILLUSTRATIONER: GalleryItem[] = [
   // Cykel
   { src: '/illustrationer/Cykel/jonas_vuelta.webp', aspect: 'aspect-[7/5]', alt: 'Jonas Vingegaard', category: 'cykel' },
-  { src: '/illustrationer/Cykel/Mads P plakat.webp', aspect: 'aspect-[2/3]', alt: 'Mads Pedersen', category: 'cykel' },
-  { src: '/illustrationer/Cykel/Cort.webp', aspect: 'aspect-[2/3]', alt: 'Cort', category: 'cykel' },
+  { src: '/illustrationer/Cykel/Mads P plakat.webp', aspect: 'aspect-[2/3]', alt: 'Mads Pedersen', category: ['cykel', 'portræt'] },
+  { src: '/illustrationer/Cykel/Cort.webp', aspect: 'aspect-[2/3]', alt: 'Cort', category: ['cykel', 'portræt'] },
   { src: '/illustrationer/Cykel/1.webp', aspect: 'aspect-[7/5]', category: 'cykel' },
   { src: '/illustrationer/Cykel/3.webp', aspect: 'aspect-[7/5]', category: 'cykel' },
   { src: '/illustrationer/Cykel/4.webp', aspect: 'aspect-[7/5]', category: 'cykel' },
@@ -22,15 +22,15 @@ export const ILLUSTRATIONER: GalleryItem[] = [
   { src: '/illustrationer/Cykel/Skitse13.webp', aspect: 'aspect-[7/5]', alt: 'Skitse', category: 'cykel' },
   { src: '/illustrationer/Cykel/Untitled_Artwork.webp', aspect: 'aspect-[2/3]', category: 'cykel' },
 
-  // Potrætter
+  // Potrætter (unique to this folder)
   { src: '/illustrationer/Potrætter/ronja.webp', aspect: 'aspect-[2/3]', alt: 'Ronja', category: 'portræt' },
   { src: '/illustrationer/Potrætter/Hartmut Rosa.webp', aspect: 'aspect-[5/7]', alt: 'Hartmut Rosa', category: 'portræt' },
-  { src: '/illustrationer/Potrætter/Cykel tilprint.webp', aspect: 'aspect-[5/7]', alt: 'Cykel', category: 'portræt' },
+  { src: '/illustrationer/Potrætter/Cykel tilprint.webp', aspect: 'aspect-[5/7]', alt: 'Cykel', category: ['portræt', 'cykel'] },
   { src: '/illustrationer/Potrætter/Fodbold fra Google Drev.webp', aspect: 'aspect-[5/7]', alt: 'Fodbold', category: 'portræt' },
 
   // Vid og Sans
-  { src: '/illustrationer/Vid og Sans/filosof.webp', aspect: 'aspect-[2/3]', alt: 'Filosof', category: 'vidsans' },
-  { src: '/illustrationer/Vid og Sans/Pirre.webp', aspect: 'aspect-[5/7]', alt: 'Pirre', category: 'vidsans' },
+  { src: '/illustrationer/Vid og Sans/filosof.webp', aspect: 'aspect-[2/3]', alt: 'Filosof', category: ['vidsans', 'portræt'] },
+  { src: '/illustrationer/Vid og Sans/Pirre.webp', aspect: 'aspect-[5/7]', alt: 'Pirre', category: ['vidsans', 'portræt'] },
   { src: '/illustrationer/Vid og Sans/Knud rasmussen.webp', aspect: 'aspect-[2/3]', alt: 'Knud Rasmussen', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/lev.webp', aspect: 'aspect-[2/3]', alt: 'Lev', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/platon.webp', aspect: 'aspect-[2/3]', alt: 'Platon', category: 'vidsans' },
