@@ -19,6 +19,7 @@ export interface Project {
   videos?: string[]
   externalLink?: string
   testimonialRef?: { label: string; labelEn: string; href: string }
+  galleryLinks?: Array<{ label: string; labelEn: string; href: string }>
 }
 
 export const PROJECTS: Project[] = [
@@ -56,6 +57,10 @@ export const PROJECTS: Project[] = [
       '/projekter/Flaneur/3.webp',
       '/projekter/Flaneur/4.webp',
       '/projekter/Flaneur/6.webp',
+    ],
+    galleryLinks: [
+      { label: 'Se fotografier →', labelEn: 'See photographs →', href: '/fotografier?cat=flaneur' },
+      { label: 'Se illustrationer →', labelEn: 'See illustrations →', href: '/illustrationer' },
     ],
   },
   {
@@ -260,6 +265,9 @@ export const PROJECTS: Project[] = [
       '/projekter/Digitale Illustrationer/portfolio-3.webp',
       '/projekter/Digitale Illustrationer/portfolio-4.webp',
     ],
+    galleryLinks: [
+      { label: 'Se illustrationer →', labelEn: 'See illustrations →', href: '/illustrationer' },
+    ],
   },
   {
     id: 15,
@@ -289,6 +297,9 @@ export const PROJECTS: Project[] = [
       '/projekter/Vid&Sans/filosof.webp',
       '/projekter/Vid&Sans/Pirre.webp',
       '/projekter/Vid&Sans/portfolio-1.webp',
+    ],
+    galleryLinks: [
+      { label: 'Se illustrationer →', labelEn: 'See illustrations →', href: '/illustrationer?cat=vidsans' },
     ],
   },
   {
@@ -423,7 +434,7 @@ export const PROJECTS: Project[] = [
     year: '2024',
     desc: 'Månedlige illustrationer til cykelmagasin med portræt og editorial karakter.',
     descEn: 'Monthly illustrations for a cycling magazine, with a portrait and editorial character.',
-    cover: '/projekter/VeloMore Magazine/Cort.webp',
+    cover: '/projekter/VeloMore Magazine/Lund.webp',
     body: [
       'En løbende serie af editorial-illustrationer produceret til et nichebladet om cykelkultur. Serien spænder over portræt, reportage og konceptuelle illustrationer og dækker både velkendte profiler fra professionel cykelsport og stemningsbilleder fra kulturen rundt om sporten.',
       'Illustrationerne kombinerer håndtegnet karakter med digital finish og er designet til at fungere som selvstændige billedarbeider i sammenhæng med den redaktionelle tekst. Hvert motiv er tilpasset det aktuelle nummers tema og den givne produktionstidsramme.',
@@ -435,6 +446,10 @@ export const PROJECTS: Project[] = [
     images: [
       '/projekter/VeloMore Magazine/Cort.webp',
       '/projekter/VeloMore Magazine/Lund.webp',
+    ],
+    galleryLinks: [
+      { label: 'Se fotografier →', labelEn: 'See photographs →', href: '/fotografier?cat=velomore' },
+      { label: 'Se illustrationer →', labelEn: 'See illustrations →', href: '/illustrationer?cat=cykel' },
     ],
   },
   {
@@ -575,5 +590,8 @@ export const PROJECTS: Project[] = [
     cover: '/projekter/BookLab/portfolio-1.webp',
     images: ['/projekter/BookLab/portfolio-1.webp'],
     videos: ['/projekter/BookLab/download.mp4'],
+    galleryLinks: [
+      { label: 'Se fotografier →', labelEn: 'See photographs →', href: '/fotografier?cat=booklab' },
+    ],
   },
 ]

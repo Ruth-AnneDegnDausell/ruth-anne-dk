@@ -124,6 +124,15 @@ export default function ProjectPage() {
                 {lang === 'en' ? project.testimonialRef.labelEn : project.testimonialRef.label}
               </Link>
             )}
+            {project.galleryLinks?.map((link, i) => (
+              <Link
+                key={i}
+                href={link.href}
+                className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+              >
+                {lang === 'en' ? link.labelEn : link.label}
+              </Link>
+            ))}
           </div>
         </div>
 

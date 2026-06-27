@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -23,10 +24,14 @@ const T = {
   en: { label: 'Photography', heading: 'Photography', intro: 'Analogue and digital photography. Everyday images, nature, and moments.', aiLink: 'See AI-generated photographs →' },
 }
 
-export default function FotografierPage() {
+function FotografierContent() {
   const { lang } = useLang()
   const t = T[lang]
-  const [active, setActive] = useState('alle')
+  const searchParams = useSearchParams()
+  const [active, setActive] = useState(() => {
+    const cat = searchParams.get('cat')
+    return CATS.some(c => c.id === cat) ? cat! : 'alle'
+  })
 
   const filtered = active === 'alle'
     ? FOTOGRAFIER
@@ -97,5 +102,13 @@ export default function FotografierPage() {
         </motion.div>
       </AnimatePresence>
     </main>
+  )
+}
+
+export default function FotografierPage() {
+  return (
+    <Suspense>
+      <FotografierContent />
+    </Suspense>
   )
 }

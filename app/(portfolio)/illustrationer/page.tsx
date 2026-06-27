@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useLang } from '@/lib/lang-context'
@@ -22,10 +23,14 @@ const T = {
   en: { label: 'Illustrations', heading: 'Drawings and illustrations', intro: 'A selection of illustrations, sketches, and drawings from projects and spare time.' },
 }
 
-export default function IllustrationerPage() {
+function IllustrationerContent() {
   const { lang } = useLang()
   const t = T[lang]
-  const [active, setActive] = useState('alle')
+  const searchParams = useSearchParams()
+  const [active, setActive] = useState(() => {
+    const cat = searchParams.get('cat')
+    return CATS.some(c => c.id === cat) ? cat! : 'alle'
+  })
 
   const filtered = active === 'alle'
     ? ILLUSTRATIONER
@@ -90,5 +95,13 @@ export default function IllustrationerPage() {
         </motion.div>
       </AnimatePresence>
     </main>
+  )
+}
+
+export default function IllustrationerPage() {
+  return (
+    <Suspense>
+      <IllustrationerContent />
+    </Suspense>
   )
 }
