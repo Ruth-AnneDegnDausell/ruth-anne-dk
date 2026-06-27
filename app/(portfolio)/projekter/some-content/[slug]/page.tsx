@@ -31,7 +31,7 @@ export default function SomeProjectPage() {
   const body = lang === 'en' ? project.bodyEn : project.body
 
   return (
-    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pt-14 sm:px-14">
 
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease }}>
         <Link href="/projekter/some-content" className="mb-10 inline-flex items-center gap-1.5 text-[11px] text-text-3 transition-colors duration-150 hover:text-text">

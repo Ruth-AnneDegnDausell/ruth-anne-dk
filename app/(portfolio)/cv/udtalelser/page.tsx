@@ -50,7 +50,7 @@ export default function UdtalelserPage() {
   const doc = DOCS[index]
 
   return (
-    <main className="min-h-screen px-4 pb-28 pt-14 sm:px-8">
+    <main className="min-h-screen px-4 pt-14 sm:px-8">
 
       {/* Back link — left side, more visible */}
       <div className="mb-8 px-2 sm:px-4">

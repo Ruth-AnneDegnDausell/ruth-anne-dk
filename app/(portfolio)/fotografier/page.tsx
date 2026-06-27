@@ -24,6 +24,12 @@ const T = {
   en: { label: 'Photography', heading: 'Photography', intro: 'Analogue and digital photography. Everyday images, nature, and moments.', aiLink: 'See AI-generated photographs →' },
 }
 
+const PROJECT_LINKS: Record<string, { da: string; en: string; href: string }> = {
+  flaneur:  { da: 'Se Flâneur projektet →',  en: 'See Flâneur project →',  href: '/projekter/flaneur' },
+  velomore: { da: 'Se VeloMore projektet →', en: 'See VeloMore project →', href: '/projekter/velo-magazine' },
+  booklab:  { da: 'Se BookLab projektet →',  en: 'See BookLab project →',  href: '/projekter/booklab' },
+}
+
 function FotografierContent() {
   const { lang } = useLang()
   const t = T[lang]
@@ -42,7 +48,7 @@ function FotografierContent() {
       })
 
   return (
-    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pt-14 sm:px-14">
       <div className="mb-8">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">
           {t.label}
@@ -73,6 +79,17 @@ function FotografierContent() {
             </button>
           ))}
         </div>
+
+        {PROJECT_LINKS[active] && (
+          <div className="mt-3">
+            <Link
+              href={PROJECT_LINKS[active].href}
+              className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+            >
+              {lang === 'en' ? PROJECT_LINKS[active].en : PROJECT_LINKS[active].da}
+            </Link>
+          </div>
+        )}
       </div>
 
       <AnimatePresence mode="wait">

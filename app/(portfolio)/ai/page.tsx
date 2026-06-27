@@ -164,7 +164,7 @@ export default function AiFotografierPage() {
   const nextIdx = (idx + 1) % IMAGES.length
 
   return (
-    <main className="flex min-h-screen flex-col pb-28 pt-14">
+    <main className="flex min-h-screen flex-col pt-14">
 
       {/* Header */}
       <motion.div

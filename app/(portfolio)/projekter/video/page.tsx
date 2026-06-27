@@ -141,7 +141,7 @@ export default function VideoPage() {
   const t = T[lang]
 
   return (
-    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pt-14 sm:px-14">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

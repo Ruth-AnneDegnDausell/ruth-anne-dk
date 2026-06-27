@@ -61,7 +61,7 @@ export default function ProjectPage() {
   const galleryImages = project.images?.filter((src) => src !== project.cover) ?? []
 
   return (
-    <main className="min-h-screen pb-28 pt-14">
+    <main className="min-h-screen pt-14">
 
       {/* Back link */}
       <motion.div

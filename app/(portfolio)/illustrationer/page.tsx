@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
 import { ILLUSTRATIONER } from '@/lib/gallery'
 
@@ -21,6 +22,12 @@ const CATS = [
 const T = {
   da: { label: 'Illustrationer', heading: 'Tegninger og illustrationer', intro: 'Et udvalg af illustrationer, skitser og tegninger fra projekter og fritid.' },
   en: { label: 'Illustrations', heading: 'Drawings and illustrations', intro: 'A selection of illustrations, sketches, and drawings from projects and spare time.' },
+}
+
+const PROJECT_LINKS: Record<string, { da: string; en: string; href: string }> = {
+  cykel:   { da: 'Se VeloMore projektet →',   en: 'See VeloMore project →',   href: '/projekter/velo-magazine' },
+  vidsans: { da: 'Se Vid & Sans projektet →', en: 'See Vid & Sans project →', href: '/projekter/vid-sans' },
+  kfum:    { da: 'Se KFUM&KFUK projektet →', en: 'See KFUM&KFUK project →', href: '/projekter/kfum-kfuk' },
 }
 
 function IllustrationerContent() {
@@ -41,7 +48,7 @@ function IllustrationerContent() {
       })
 
   return (
-    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pt-14 sm:px-14">
       <div className="mb-8">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">
           {t.label}
@@ -66,6 +73,17 @@ function IllustrationerContent() {
             </button>
           ))}
         </div>
+
+        {PROJECT_LINKS[active] && (
+          <div className="mt-3">
+            <Link
+              href={PROJECT_LINKS[active].href}
+              className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+            >
+              {lang === 'en' ? PROJECT_LINKS[active].en : PROJECT_LINKS[active].da}
+            </Link>
+          </div>
+        )}
       </div>
 
       <AnimatePresence mode="wait">

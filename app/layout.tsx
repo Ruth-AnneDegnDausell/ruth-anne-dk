@@ -4,6 +4,7 @@ import { LangProvider } from '@/lib/lang-context'
 import { CustomCursor } from '@/components/custom-cursor'
 import { Loader } from '@/components/loader'
 import { Sidebar } from '@/components/sidebar'
+import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
   title: { default: 'Ruth-Anne Dausell', template: '%s — Ruth-Anne Dausell' },
@@ -18,8 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Loader />
           <CustomCursor />
           <Sidebar />
-          <div className="pl-12">
-            {children}
+          <div className="flex min-h-screen flex-col pl-12">
+            <div className="flex-1">{children}</div>
+            <Footer />
           </div>
         </LangProvider>
       </body>

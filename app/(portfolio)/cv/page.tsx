@@ -139,7 +139,7 @@ export default function CVPage() {
   const t = T[lang]
 
   return (
-    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pt-14 sm:px-14">
       <div className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">
           {t.label}
