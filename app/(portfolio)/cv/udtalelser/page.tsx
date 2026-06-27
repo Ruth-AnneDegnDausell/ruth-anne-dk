@@ -52,19 +52,22 @@ export default function UdtalelserPage() {
   return (
     <main className="min-h-screen px-4 pb-28 pt-14 sm:px-8">
 
+      {/* Back link — left side, more visible */}
+      <div className="mb-8 px-2 sm:px-4">
+        <Link
+          href="/cv"
+          className="inline-flex items-center gap-1.5 text-[11px] font-medium text-text-2 transition-colors duration-150 hover:text-text"
+        >
+          <ArrowLeft size={11} strokeWidth={1.5} />
+          {t.backToCV}
+        </Link>
+      </div>
+
       <div className="mb-10 px-2 sm:px-4">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">
           {t.eyebrow}
         </p>
-        <div className="flex items-baseline justify-between gap-4">
-          <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
-          <Link
-            href="/cv"
-            className="shrink-0 text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
-          >
-            {t.backToCV} →
-          </Link>
-        </div>
+        <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
       </div>
 
       {/* Carousel */}
@@ -96,15 +99,15 @@ export default function UdtalelserPage() {
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2, ease }}
               >
-                {/* Document */}
-                <div className="overflow-hidden rounded-2xl">
+                {/* Document — bg-white prevents any dark bleed around the PDF */}
+                <div className="overflow-hidden rounded-2xl bg-white">
                   {doc.type === 'pdf' ? (
                     <iframe
                       key={doc.pdf}
-                      src={`${doc.pdf}#toolbar=0&navpanes=0&scrollbar=0`}
+                      src={`${doc.pdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
                       title={doc.source}
-                      className="block w-full border-0 outline-none"
-                      style={{ height: `${DOC_HEIGHT}vh`, minHeight: DOC_MIN, border: 'none', outline: 'none' }}
+                      className="block w-full"
+                      style={{ height: `${DOC_HEIGHT}vh`, minHeight: DOC_MIN, border: 'none', outline: 'none', display: 'block' }}
                     />
                   ) : (
                     <Image
@@ -117,7 +120,7 @@ export default function UdtalelserPage() {
                   )}
                 </div>
 
-                {/* Source info below — no links */}
+                {/* Source info */}
                 <div className="mt-4 px-1">
                   <p className="text-[10px] font-medium tracking-[0.16em] uppercase text-text-3">
                     {doc.source} · {doc.year}

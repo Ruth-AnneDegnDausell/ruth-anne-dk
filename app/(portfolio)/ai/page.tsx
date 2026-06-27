@@ -149,6 +149,17 @@ export default function AiFotografierPage() {
     return () => window.removeEventListener('keydown', handler)
   }, [prev, next])
 
+  // Preload adjacent images
+  useEffect(() => {
+    const preload = (src: string) => {
+      const img = new window.Image()
+      img.src = src
+    }
+    preload(IMAGES[(idx + 1) % IMAGES.length])
+    preload(IMAGES[(idx - 1 + IMAGES.length) % IMAGES.length])
+    preload(IMAGES[(idx + 2) % IMAGES.length])
+  }, [idx])
+
   const prevIdx = (idx - 1 + IMAGES.length) % IMAGES.length
   const nextIdx = (idx + 1) % IMAGES.length
 
@@ -168,7 +179,7 @@ export default function AiFotografierPage() {
         <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
       </motion.div>
 
-      {/* Carousel with side thumbnails */}
+      {/* Carousel */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -188,16 +199,13 @@ export default function AiFotografierPage() {
               src={IMAGES[prevIdx]}
               fill
               alt="Forrige billede"
-              className="object-cover opacity-60 transition-opacity duration-150 hover:opacity-90"
+              className="object-cover opacity-50 transition-opacity duration-150 hover:opacity-80"
               sizes="72px"
             />
           </button>
 
-          {/* Main carousel */}
-          <div
-            className="relative flex-1 overflow-hidden rounded-xl bg-[oklch(93%_0_0)]"
-            style={{ aspectRatio: '4/3' }}
-          >
+          {/* Main card — natural aspect ratio per image */}
+          <div className="relative min-w-0 flex-1 overflow-hidden rounded-xl bg-[oklch(93%_0_0)]">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={idx}
@@ -205,31 +213,31 @@ export default function AiFotografierPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: dir * -40 }}
                 transition={{ duration: 0.32, ease }}
-                className="absolute inset-0"
               >
                 <Image
                   src={IMAGES[idx]}
-                  fill
+                  width={0}
+                  height={0}
                   alt={`AI billede ${idx + 1}`}
-                  className="object-contain"
+                  className="h-auto w-full max-h-[82vh]"
                   sizes="(max-width: 640px) calc(100vw - 4rem), min(calc(100vw - 7rem - 168px), 48rem)"
                   priority
                 />
               </motion.div>
             </AnimatePresence>
 
-            {/* Arrow buttons (mobile fallback) */}
+            {/* Arrow buttons — always visible, overlaid */}
             <button
               onClick={prev}
               aria-label="Forrige"
-              className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/20 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/30 sm:hidden"
+              className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/25 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/40"
             >
               <ArrowLeft size={12} strokeWidth={1.5} />
             </button>
             <button
               onClick={next}
               aria-label="Næste"
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/20 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/30 sm:hidden"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/25 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/40"
             >
               <ArrowRight size={12} strokeWidth={1.5} />
             </button>
@@ -257,7 +265,7 @@ export default function AiFotografierPage() {
               src={IMAGES[nextIdx]}
               fill
               alt="Næste billede"
-              className="object-cover opacity-60 transition-opacity duration-150 hover:opacity-90"
+              className="object-cover opacity-50 transition-opacity duration-150 hover:opacity-80"
               sizes="72px"
             />
           </button>

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
 import { FOTOGRAFIER } from '@/lib/gallery'
 
@@ -18,8 +19,8 @@ const CATS = [
 ]
 
 const T = {
-  da: { label: 'Fotografier', heading: 'Fotografier', intro: 'Analog og digital fotografering. Hverdagsbilleder, natur og øjeblikke.' },
-  en: { label: 'Photography', heading: 'Photography', intro: 'Analogue and digital photography. Everyday images, nature, and moments.' },
+  da: { label: 'Fotografier', heading: 'Fotografier', intro: 'Analog og digital fotografering. Hverdagsbilleder, natur og øjeblikke.', aiLink: 'Se AI-genererede fotografier →' },
+  en: { label: 'Photography', heading: 'Photography', intro: 'Analogue and digital photography. Everyday images, nature, and moments.', aiLink: 'See AI-generated photographs →' },
 }
 
 export default function FotografierPage() {
@@ -40,7 +41,13 @@ export default function FotografierPage() {
         <h1 className="mb-3 text-[13px] font-[450] tracking-tight text-text">
           {t.heading}
         </h1>
-        <p className="mb-7 text-[12px]/[1.85] text-text-2">{t.intro}</p>
+        <p className="mb-3 text-[12px]/[1.85] text-text-2">{t.intro}</p>
+        <Link
+          href="/ai"
+          className="mb-7 inline-flex items-center text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+        >
+          {t.aiLink}
+        </Link>
 
         <div className="flex flex-wrap gap-1.5">
           {CATS.map((cat) => (
