@@ -78,7 +78,7 @@ export const PROJECTS: Project[] = [
       'The book\'s identity is built around a coherent formal language that runs throughout the publication from cover to back. The overall design treats the book as an autonomous object with a unified visual narrative.',
     ],
     cover: '/projekter/BA afgangs-eksamen/Bogen-foto.webp',
-    coverPosition: 'object-[center_33%]',
+    coverPosition: 'object-[center_23%]',
     images: [
       '/projekter/BA afgangs-eksamen/Bogen-foto.webp',
       '/projekter/BA afgangs-eksamen/Bogen depositum omslaget.webp',
