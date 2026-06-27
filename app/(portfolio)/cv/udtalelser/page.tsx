@@ -38,6 +38,15 @@ export default function UdtalelserPage() {
     if (!isNaN(i) && i >= 0 && i < DOCS.length) setIndex(i)
   }, [])
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') setIndex(i => Math.max(0, i - 1))
+      else if (e.key === 'ArrowRight') setIndex(i => Math.min(DOCS.length - 1, i + 1))
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
   const doc = DOCS[index]
 
   return (
@@ -88,7 +97,7 @@ export default function UdtalelserPage() {
                 transition={{ duration: 0.2, ease }}
               >
                 {/* Document */}
-                <div className="overflow-hidden rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.07),0_1px_3px_rgba(0,0,0,0.03)]">
+                <div className="overflow-hidden rounded-2xl">
                   {doc.type === 'pdf' ? (
                     <iframe
                       key={doc.pdf}

@@ -129,7 +129,7 @@ export default function AiFotografierPage() {
     goTo((idx + 1) % IMAGES.length, 1)
   }, [idx, goTo])
 
-  // Auto-advance — restarts whenever idx changes (so manual nav resets the clock)
+  // Auto-advance
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current)
     timerRef.current = setInterval(() => {
@@ -138,6 +138,16 @@ export default function AiFotografierPage() {
     }, INTERVAL_MS)
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [idx])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') prev()
+      else if (e.key === 'ArrowRight') next()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [prev, next])
 
   const prevIdx = (idx - 1 + IMAGES.length) % IMAGES.length
   const nextIdx = (idx + 1) % IMAGES.length
@@ -158,59 +168,100 @@ export default function AiFotografierPage() {
         <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
       </motion.div>
 
-      {/* Carousel */}
+      {/* Carousel with side thumbnails */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.06, ease }}
-        className="relative overflow-hidden rounded-xl bg-[oklch(93%_0_0)] mx-8 sm:mx-14"
-        style={{ aspectRatio: '4/3' }}
+        className="px-8 sm:px-14"
       >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, x: dir * 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: dir * -40 }}
-            transition={{ duration: 0.32, ease }}
-            className="absolute inset-0"
+        <div className="mx-auto flex max-w-3xl items-center gap-3">
+
+          {/* Prev thumbnail */}
+          <button
+            onClick={prev}
+            aria-label="Forrige"
+            className="relative hidden shrink-0 overflow-hidden rounded-lg sm:block"
+            style={{ width: 72, height: 54 }}
           >
             <Image
-              src={IMAGES[idx]}
+              src={IMAGES[prevIdx]}
               fill
-              alt={`AI billede ${idx + 1}`}
-              className="object-cover"
-              sizes="(max-width: 640px) calc(100vw - 4rem), calc(100vw - 7rem)"
-              priority
+              alt="Forrige billede"
+              className="object-cover opacity-60 transition-opacity duration-150 hover:opacity-90"
+              sizes="72px"
             />
-          </motion.div>
-        </AnimatePresence>
+          </button>
 
-        {/* Arrow buttons */}
-        <button
-          onClick={prev}
-          aria-label="Forrige"
-          className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/20 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/30"
-        >
-          <ArrowLeft size={12} strokeWidth={1.5} />
-        </button>
-        <button
-          onClick={next}
-          aria-label="Næste"
-          className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/20 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/30"
-        >
-          <ArrowRight size={12} strokeWidth={1.5} />
-        </button>
+          {/* Main carousel */}
+          <div
+            className="relative flex-1 overflow-hidden rounded-xl bg-[oklch(93%_0_0)]"
+            style={{ aspectRatio: '4/3' }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: dir * 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: dir * -40 }}
+                transition={{ duration: 0.32, ease }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={IMAGES[idx]}
+                  fill
+                  alt={`AI billede ${idx + 1}`}
+                  className="object-contain"
+                  sizes="(max-width: 640px) calc(100vw - 4rem), min(calc(100vw - 7rem - 168px), 48rem)"
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
 
-        {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/20">
-          <motion.div
-            key={`bar-${idx}`}
-            className="h-full bg-white/60"
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ duration: INTERVAL_MS / 1000, ease: 'linear' }}
-          />
+            {/* Arrow buttons (mobile fallback) */}
+            <button
+              onClick={prev}
+              aria-label="Forrige"
+              className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/20 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/30 sm:hidden"
+            >
+              <ArrowLeft size={12} strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={next}
+              aria-label="Næste"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/20 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/30 sm:hidden"
+            >
+              <ArrowRight size={12} strokeWidth={1.5} />
+            </button>
+
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/20">
+              <motion.div
+                key={`bar-${idx}`}
+                className="h-full bg-white/60"
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: INTERVAL_MS / 1000, ease: 'linear' }}
+              />
+            </div>
+          </div>
+
+          {/* Next thumbnail */}
+          <button
+            onClick={next}
+            aria-label="Næste"
+            className="relative hidden shrink-0 overflow-hidden rounded-lg sm:block"
+            style={{ width: 72, height: 54 }}
+          >
+            <Image
+              src={IMAGES[nextIdx]}
+              fill
+              alt="Næste billede"
+              className="object-cover opacity-60 transition-opacity duration-150 hover:opacity-90"
+              sizes="72px"
+            />
+          </button>
+
         </div>
       </motion.div>
 

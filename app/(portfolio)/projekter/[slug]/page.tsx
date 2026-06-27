@@ -1,25 +1,29 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { PROJECTS } from '@/lib/projects'
 import { useLang } from '@/lib/lang-context'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 const T = {
-  da: { back: 'Alle projekter', prev: 'Forrige', next: 'Næste', visitSite: 'Besøg website' },
-  en: { back: 'All projects', prev: 'Previous', next: 'Next', visitSite: 'Visit website' },
+  da: { back: 'Alle projekter', backHome: 'Forside', backCv: 'CV', prev: 'Forrige', next: 'Næste', visitSite: 'Besøg website' },
+  en: { back: 'All projects', backHome: 'Home', backCv: 'CV', prev: 'Previous', next: 'Next', visitSite: 'Visit website' },
 }
 
 export default function ProjectPage() {
   const { slug } = useParams<{ slug: string }>()
+  const searchParams = useSearchParams()
+  const from = searchParams.get('from')
   const { lang } = useLang()
   const t = T[lang]
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
   const idx = PROJECTS.findIndex((p) => p.slug === slug)
   if (idx === -1) notFound()
@@ -31,6 +35,27 @@ export default function ProjectPage() {
   const title = lang === 'en' ? project.titleEn : project.title
   const categoryLabel = lang === 'en' ? project.categoryLabelEn : project.categoryLabel
   const body = lang === 'en' ? project.bodyEn : project.body
+
+  const backHref = from === 'home' ? '/' : from === 'cv' ? '/cv' : '/projekter'
+  const backLabel = from === 'home' ? t.backHome : from === 'cv' ? t.backCv : t.back
+
+  // IntersectionObserver autoplay for videos
+  useEffect(() => {
+    const observers: IntersectionObserver[] = []
+    videoRefs.current.forEach((video) => {
+      if (!video) return
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) video.play().catch(() => {})
+          else { video.pause(); video.currentTime = 0 }
+        },
+        { threshold: 0.5 }
+      )
+      obs.observe(video)
+      observers.push(obs)
+    })
+    return () => observers.forEach((obs) => obs.disconnect())
+  }, [project.videos])
 
   // Skip first gallery image if it's the same as the cover
   const galleryImages = project.images?.filter((src) => src !== project.cover) ?? []
@@ -46,11 +71,11 @@ export default function ProjectPage() {
         className="mb-10 px-8 sm:px-14"
       >
         <Link
-          href="/projekter"
+          href={backHref}
           className="inline-flex items-center gap-1.5 text-[11px] text-text-3 transition-colors duration-150 hover:text-text"
         >
           <ArrowLeft size={11} strokeWidth={1.5} />
-          {t.back}
+          {backLabel}
         </Link>
       </motion.div>
 
@@ -129,17 +154,16 @@ export default function ProjectPage() {
           {project.videos!.map((src, i) => (
             <video
               key={i}
+              ref={(el) => { videoRefs.current[i] = el }}
               src={encodeURI(src)}
-              controls
+              loop
+              muted
               playsInline
               className="w-full rounded-xl bg-[oklch(91%_0_0)]"
             />
           ))}
         </motion.div>
       )}
-
-      {/* Cover shown large on its own row if no other gallery images */}
-      {galleryImages.length === 0 && !project.videos?.length && project.cover && null}
 
       {/* Image gallery */}
       {galleryImages.length > 0 && (

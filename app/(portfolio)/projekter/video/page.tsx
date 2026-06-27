@@ -1,25 +1,139 @@
 'use client'
 
+import { useRef, useState, useCallback } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Play } from 'lucide-react'
 import { useLang } from '@/lib/lang-context'
-import { VIDEOS } from '@/lib/videos'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
+
+type VideoEntry = {
+  src: string
+  title: string
+  titleEn: string
+  client: string
+  slug: string
+}
+
+const VIDEOS: VideoEntry[] = [
+  {
+    src: '/projekter/SUHN io/Video design Suhn IO_final.mp4',
+    title: 'SUHN IO · Video design',
+    titleEn: 'SUHN IO · Video design',
+    client: 'SUHN IO',
+    slug: 'suhn-io',
+  },
+  {
+    src: '/projekter/SUHN io/Visuel præsentation SUHN IO (1).mp4',
+    title: 'SUHN IO · Visuel præsentation',
+    titleEn: 'SUHN IO · Visual presentation',
+    client: 'SUHN IO',
+    slug: 'suhn-io',
+  },
+  {
+    src: '/projekter/Substrate/Færdig Mobile Video.mp4',
+    title: 'Substrate · Mobile video',
+    titleEn: 'Substrate · Mobile video',
+    client: 'Substrate',
+    slug: 'substrate',
+  },
+  {
+    src: '/projekter/BookLab/download.mp4',
+    title: 'BookLab · Bogfotografering',
+    titleEn: 'BookLab · Book photography',
+    client: 'BookLab',
+    slug: 'booklab',
+  },
+  {
+    src: '/projekter/piba/Video design.mp4',
+    title: 'PIBA · Video design',
+    titleEn: 'PIBA · Video design',
+    client: 'PIBA',
+    slug: 'piba',
+  },
+]
 
 const T = {
   da: {
     label: 'Projekter',
     heading: 'Video',
     intro: 'Videoproduktioner og motion content. Kortfilm, kampagnevideo og reklamecontent.',
-    empty: 'Videoer er på vej.',
+    seeProject: 'Se',
+    project: 'projekt',
   },
   en: {
     label: 'Projects',
     heading: 'Video',
     intro: 'Video productions and motion content. Short films, campaign videos, and advertising content.',
-    empty: 'Videos coming soon.',
+    seeProject: 'See',
+    project: 'project',
   },
+}
+
+function VideoCard({ video, lang }: { video: VideoEntry; lang: 'da' | 'en' }) {
+  const t = T[lang]
+  const ref = useRef<HTMLVideoElement>(null)
+  const [pinned, setPinned] = useState(false)
+
+  const handleMouseEnter = useCallback(() => {
+    if (!pinned) ref.current?.play().catch(() => {})
+  }, [pinned])
+
+  const handleMouseLeave = useCallback(() => {
+    if (!pinned && ref.current) {
+      ref.current.pause()
+      ref.current.currentTime = 0
+    }
+  }, [pinned])
+
+  const handleClick = useCallback(() => {
+    const video = ref.current
+    if (!video) return
+    if (pinned) {
+      setPinned(false)
+      video.pause()
+      video.currentTime = 0
+    } else {
+      setPinned(true)
+      video.play().catch(() => {})
+    }
+  }, [pinned])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease }}
+    >
+      <div
+        className="relative cursor-pointer overflow-hidden rounded-2xl border border-border bg-[oklch(91%_0_0)]"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+        style={{ aspectRatio: '16/9' }}
+      >
+        <video
+          ref={ref}
+          src={encodeURI(video.src)}
+          muted
+          loop
+          playsInline
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="mt-3 flex items-center justify-between gap-4">
+        <p className="text-[11px] font-[430] text-text">
+          {lang === 'en' ? video.titleEn : video.title}
+        </p>
+        <Link
+          href={`/projekter/${video.slug}`}
+          className="shrink-0 text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+        >
+          {t.seeProject} {video.client} {t.project} →
+        </Link>
+      </div>
+    </motion.div>
+  )
 }
 
 export default function VideoPage() {
@@ -41,57 +155,11 @@ export default function VideoPage() {
         <p className="text-[12px]/[1.85] text-text-2">{t.intro}</p>
       </motion.div>
 
-      {VIDEOS.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.1, ease }}
-          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="flex aspect-video items-center justify-center rounded-2xl border border-border bg-surface"
-            >
-              <Play strokeWidth={1} size={22} className="text-text-3" />
-            </div>
-          ))}
-        </motion.div>
-      ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {VIDEOS.map((v, i) => (
-            <motion.div
-              key={v.slug}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.06, ease }}
-              className="overflow-hidden rounded-2xl border border-border bg-surface"
-            >
-              <div className="aspect-video overflow-hidden rounded-t-2xl bg-[oklch(91%_0_0)]">
-                <iframe
-                  src={v.embed}
-                  title={lang === 'en' ? v.titleEn : v.title}
-                  className="h-full w-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ border: 'none' }}
-                />
-              </div>
-              <div className="px-4 py-4">
-                <p className="text-[9px] tracking-[0.14em] uppercase text-text-3">
-                  {v.client} · {v.year}
-                </p>
-                <p className="mt-1.5 text-[12px]/[1.4] font-[430] text-text">
-                  {lang === 'en' ? v.titleEn : v.title}
-                </p>
-                <p className="mt-2 text-[11px]/[1.65] text-text-2">
-                  {lang === 'en' ? v.descEn : v.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {VIDEOS.map((video, i) => (
+          <VideoCard key={i} video={video} lang={lang} />
+        ))}
+      </div>
     </main>
   )
 }

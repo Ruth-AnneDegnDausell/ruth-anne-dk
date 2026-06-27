@@ -134,9 +134,9 @@ export default function Home() {
             </a>
             <a
               href="/om-mig/arbejde"
-              className="inline-flex w-fit text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+              className="inline-flex w-fit items-center gap-1 text-[11px] text-text-2 transition-opacity duration-150 hover:opacity-50"
             >
-              {t.about}
+              {t.about} →
             </a>
           </motion.div>
         </motion.div>
@@ -184,7 +184,7 @@ export default function Home() {
           {FEATURED.map((project, i) => (
             <motion.a
               key={project.slug}
-              href={`/projekter/${project.slug}`}
+              href={`/projekter/${project.slug}?from=home`}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}

@@ -48,6 +48,7 @@ const NAV: NavItem[] = [
     href: '/projekter',
     icon: <FolderOpen strokeWidth={1.5} size={16} />,
     sub: [
+      { label: 'Projekter', labelEn: 'Projects', href: '/projekter' },
       { label: 'Branding', labelEn: 'Branding', href: '/projekter/branding' },
       { label: 'UX · UI', labelEn: 'UX · UI', href: '/projekter/ux-ui' },
       { label: 'Video', labelEn: 'Video', href: '/projekter/video' },
