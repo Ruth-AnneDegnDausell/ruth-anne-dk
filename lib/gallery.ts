@@ -20,6 +20,7 @@ export const ILLUSTRATIONER: GalleryItem[] = [
   { src: '/illustrationer/Cykel/15.webp', aspect: 'aspect-[7/5]', category: 'cykel' },
   { src: '/illustrationer/Cykel/Skitse11.webp', aspect: 'aspect-[7/5]', alt: 'Skitse', category: 'cykel' },
   { src: '/illustrationer/Cykel/Skitse13.webp', aspect: 'aspect-[7/5]', alt: 'Skitse', category: 'cykel' },
+  { src: '/illustrationer/Cykel/Untitled_Artwork.webp', aspect: 'aspect-[2/3]', category: 'cykel' },
 
   // Potrætter
   { src: '/illustrationer/Potrætter/ronja.webp', aspect: 'aspect-[2/3]', alt: 'Ronja', category: 'portræt' },
@@ -27,9 +28,16 @@ export const ILLUSTRATIONER: GalleryItem[] = [
   { src: '/illustrationer/Potrætter/Hartmut Rosa.webp', aspect: 'aspect-[5/7]', alt: 'Hartmut Rosa', category: 'portræt' },
   { src: '/illustrationer/Potrætter/Cykel tilprint.webp', aspect: 'aspect-[5/7]', alt: 'Cykel', category: 'portræt' },
   { src: '/illustrationer/Potrætter/Fodbold fra Google Drev.webp', aspect: 'aspect-[5/7]', alt: 'Fodbold', category: 'portræt' },
+  { src: '/illustrationer/Potrætter/Cort.webp', aspect: 'aspect-[2/3]', alt: 'Cort', category: 'portræt' },
+  { src: '/illustrationer/Potrætter/Mads P plakat.webp', aspect: 'aspect-[2/3]', alt: 'Mads Pedersen', category: 'portræt' },
+  { src: '/illustrationer/Potrætter/Pirre.webp', aspect: 'aspect-[5/7]', alt: 'Pirre', category: 'portræt' },
 
   // Vid og Sans
   { src: '/illustrationer/Vid og Sans/Pirre.webp', aspect: 'aspect-[5/7]', alt: 'Pirre', category: 'vidsans' },
+  { src: '/illustrationer/Vid og Sans/filosof.webp', aspect: 'aspect-[2/3]', alt: 'Filosof', category: 'vidsans' },
+  { src: '/illustrationer/Vid og Sans/Knud rasmussen.webp', aspect: 'aspect-[2/3]', alt: 'Knud Rasmussen', category: 'vidsans' },
+  { src: '/illustrationer/Vid og Sans/lev.webp', aspect: 'aspect-[2/3]', alt: 'Lev', category: 'vidsans' },
+  { src: '/illustrationer/Vid og Sans/platon.webp', aspect: 'aspect-[2/3]', alt: 'Platon', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/Atomfrygt_rigtigformat.webp', aspect: 'aspect-[2/3]', alt: 'Atomfrygt', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/Koedaedere_rigtigformat.webp', aspect: 'aspect-[2/3]', alt: 'Kødædere', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/PanikNu_RigtigFormat.webp', aspect: 'aspect-[2/3]', alt: 'Panik Nu', category: 'vidsans' },
@@ -41,6 +49,7 @@ export const ILLUSTRATIONER: GalleryItem[] = [
   { src: '/illustrationer/Vid og Sans/Solkongens-bord_SoMe.webp', aspect: 'aspect-square', alt: 'Solkongens bord', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/Vegane_SoMe.webp', aspect: 'aspect-square', alt: 'Vegane', category: 'vidsans' },
   { src: '/illustrationer/Vid og Sans/Zen_SoMe.webp', aspect: 'aspect-square', alt: 'Zen', category: 'vidsans' },
+  { src: '/illustrationer/Vid og Sans/Untitled_Artwork 25.webp', aspect: 'aspect-[2/3]', category: 'vidsans' },
 
   // KFUM
   { src: '/illustrationer/KFUM/KFUM KFUK Vision 35.webp', aspect: 'aspect-[5/7]', alt: 'KFUM KFUK', category: 'kfum' },
@@ -74,6 +83,8 @@ export const FOTOGRAFIER: GalleryItem[] = [
   { src: '/fotografier/VeloMore/S-Work 1. prioritet (5).webp', aspect: 'aspect-[3/2]', alt: 'S-Work', category: 'velomore' },
 
   // BookLab
+  { src: '/fotografier/BookLab/bøger.webp', aspect: 'aspect-[3/2]', alt: 'Bøger', category: 'booklab' },
+  { src: '/fotografier/BookLab/Mig.webp', aspect: 'aspect-[2/3]', category: 'booklab' },
   { src: '/fotografier/BookLab/Praktikrapport.webp', aspect: 'aspect-[3/4]', category: 'booklab' },
   { src: '/fotografier/BookLab/OleC SoMe praktikrapport.webp', aspect: 'aspect-[3/2]', category: 'booklab' },
   { src: '/fotografier/BookLab/Praktik rapport Jens Juul.webp', aspect: 'aspect-[3/2]', category: 'booklab' },
@@ -82,6 +93,8 @@ export const FOTOGRAFIER: GalleryItem[] = [
   { src: '/fotografier/BookLab/Huset redigeret praktikrapport.webp', aspect: 'aspect-[3/2]', category: 'booklab' },
   { src: '/fotografier/BookLab/Praktikrapport Finnstorgaard.webp', aspect: 'aspect-[3/2]', category: 'booklab' },
   { src: '/fotografier/BookLab/Praktik rapport redigering.webp', aspect: 'aspect-[2/3]', category: 'booklab' },
+  { src: '/fotografier/BookLab/Skærmbillede 2022-10-13 kl. 19.56.19.webp', aspect: 'aspect-[3/2]', category: 'booklab' },
+  { src: '/fotografier/BookLab/24db7e42-9039-4734-972d-e31c7d3b32db.webp', aspect: 'aspect-[3/2]', category: 'booklab' },
 
   // Flâneur
   { src: '/fotografier/Flâneur/A7402106-2.webp', aspect: 'aspect-[3/2]', category: 'flaneur' },
