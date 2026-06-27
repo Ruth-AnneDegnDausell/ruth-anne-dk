@@ -84,7 +84,7 @@ export default function Projekter() {
                     src={project.cover}
                     alt={lang === 'en' ? project.titleEn : project.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${project.coverPosition ?? 'object-top'}`}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (

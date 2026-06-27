@@ -88,7 +88,7 @@ export default function Privat() {
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
           <Image
-            src="/mig/Privat.JPG"
+            src="/mig/Privat.webp"
             alt="Ruth-Anne Dausell"
             fill
             className="object-cover"
@@ -98,7 +98,7 @@ export default function Privat() {
 
         <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[oklch(93%_0_0)]">
           <Image
-            src="/mig/Privat2.JPG"
+            src="/mig/Privat2.webp"
             alt="Ruth-Anne Dausell"
             fill
             className="object-cover"

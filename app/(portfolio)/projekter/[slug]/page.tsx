@@ -5,15 +5,15 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
 import { PROJECTS } from '@/lib/projects'
 import { useLang } from '@/lib/lang-context'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 const T = {
-  da: { back: 'Alle projekter', prev: 'Forrige', next: 'Næste' },
-  en: { back: 'All projects', prev: 'Previous', next: 'Next' },
+  da: { back: 'Alle projekter', prev: 'Forrige', next: 'Næste', visitSite: 'Besøg website' },
+  en: { back: 'All projects', prev: 'Previous', next: 'Next', visitSite: 'Visit website' },
 }
 
 export default function ProjectPage() {
@@ -32,88 +32,133 @@ export default function ProjectPage() {
   const categoryLabel = lang === 'en' ? project.categoryLabelEn : project.categoryLabel
   const body = lang === 'en' ? project.bodyEn : project.body
 
+  // Skip first gallery image if it's the same as the cover
+  const galleryImages = project.images?.filter((src) => src !== project.cover) ?? []
+
   return (
-    <main className="min-h-screen px-8 pb-28 pt-14 sm:px-14">
+    <main className="min-h-screen pb-28 pt-14">
 
       {/* Back link */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease }}
+        className="mb-10 px-8 sm:px-14"
       >
         <Link
           href="/projekter"
-          className="mb-10 inline-flex items-center gap-1.5 text-[11px] text-text-3 transition-colors duration-150 hover:text-text"
+          className="inline-flex items-center gap-1.5 text-[11px] text-text-3 transition-colors duration-150 hover:text-text"
         >
           <ArrowLeft size={11} strokeWidth={1.5} />
           {t.back}
         </Link>
       </motion.div>
 
-      {/* Header */}
+      {/* Header: metadata + title left, cover right */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.05, ease }}
-        className="mb-12"
+        className="mb-16 grid grid-cols-1 gap-10 px-8 sm:px-14 lg:grid-cols-[1fr_44%]"
       >
-        <p className="mb-3 text-[9px] tracking-[0.18em] uppercase text-text-3">
-          {categoryLabel} · {project.year}
-        </p>
-        <h1 className="text-[clamp(0.9rem,1.3vw,1.05rem)]/[1.2] font-[300] tracking-tight text-text">
-          {title}
-        </h1>
-      </motion.div>
+        {/* Left: text */}
+        <div className="flex flex-col justify-between">
+          <div>
+            <p className="mb-3 text-[9px] tracking-[0.18em] uppercase text-text-3">
+              {categoryLabel} · {project.year}
+            </p>
+            <h1 className="mb-7 text-[clamp(0.9rem,1.4vw,1.15rem)]/[1.25] font-[300] tracking-tight text-text">
+              {title}
+            </h1>
+            <div className="max-w-lg space-y-5">
+              {body.map((paragraph, i) => (
+                <p key={i} className="text-[12px]/[1.85] text-text-2">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
 
-      {/* Hero image */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.1, ease }}
-        className="relative mb-12 aspect-[16/9] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]"
-      >
+          <div className="mt-8 flex flex-wrap items-center gap-5">
+            {project.externalLink && (
+              <a
+                href={project.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[11px] font-medium text-text transition-opacity duration-150 hover:opacity-50"
+              >
+                {t.visitSite}
+                <ExternalLink size={11} strokeWidth={1.5} />
+              </a>
+            )}
+            {project.testimonialRef && (
+              <Link
+                href={project.testimonialRef.href}
+                className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+              >
+                {lang === 'en' ? project.testimonialRef.labelEn : project.testimonialRef.label}
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Right: cover image */}
         {project.cover && (
-          <Image
-            src={project.cover}
-            alt={title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1280px) 100vw, 900px"
-            priority
-          />
+          <div className="overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
+            <Image
+              src={project.cover}
+              alt={title}
+              width={0}
+              height={0}
+              sizes="(max-width: 1024px) 100vw, 44vw"
+              className={`h-auto w-full ${project.coverPosition ?? 'object-top'}`}
+              priority
+            />
+          </div>
         )}
       </motion.div>
 
-      {/* Body text */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.15, ease }}
-        className="mb-14 max-w-xl"
-      >
-        {body.map((paragraph, i) => (
-          <p key={i} className={`text-[12px]/[1.85] text-text-2 ${i > 0 ? 'mt-5' : ''}`}>
-            {paragraph}
-          </p>
-        ))}
-      </motion.div>
-
-      {/* Image gallery */}
-      {(project.images?.length ?? 0) > 0 && (
+      {/* Video gallery */}
+      {(project.videos?.length ?? 0) > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2, ease }}
-          className="mb-20 grid grid-cols-2 gap-4 sm:grid-cols-3"
+          transition={{ duration: 0.5, delay: 0.1, ease }}
+          className="mb-10 space-y-4 px-8 sm:px-14"
         >
-          {project.images!.map((src, i) => (
-            <div key={i} className="relative aspect-square overflow-hidden rounded-xl bg-[oklch(91%_0_0)]">
+          {project.videos!.map((src, i) => (
+            <video
+              key={i}
+              src={encodeURI(src)}
+              controls
+              playsInline
+              className="w-full rounded-xl bg-[oklch(91%_0_0)]"
+            />
+          ))}
+        </motion.div>
+      )}
+
+      {/* Cover shown large on its own row if no other gallery images */}
+      {galleryImages.length === 0 && !project.videos?.length && project.cover && null}
+
+      {/* Image gallery */}
+      {galleryImages.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.12, ease }}
+          className="mb-20 columns-2 gap-3 px-8 sm:px-14"
+        >
+          {galleryImages.map((src, i) => (
+            <div key={i} className="mb-3 break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]">
               <Image
                 src={src}
                 alt={`${title} ${i + 1}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 50vw, 33vw"
+                width={0}
+                height={0}
+                sizes="(max-width: 640px) 50vw, 40vw"
+                className="h-auto w-full block"
+                loading="lazy"
               />
             </div>
           ))}
@@ -121,7 +166,7 @@ export default function ProjectPage() {
       )}
 
       {/* Prev / Next navigation */}
-      <div className="border-t border-border pt-8">
+      <div className="border-t border-border px-8 pt-8 sm:px-14">
         <div className="flex items-center justify-between gap-4">
           {prev ? (
             <Link

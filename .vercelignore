@@ -1,0 +1,8 @@
+# Exclude large non-web source files from Vercel deployment
+*.psd
+*.ai
+public/projekter/Tour Tegninger/*.pdf
+public/illustrationer/Cykel/*.pdf
+# Large videos excluded from deployment (91MB + 44MB — too big for Vercel Hobby)
+public/projekter/Substrate/Færdig Mobile Video.mp4
+public/projekter/SUHN io/Visuel præsentation SUHN IO (1).mp4

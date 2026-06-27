@@ -13,6 +13,10 @@ import {
   FileText,
   Mail,
   PanelLeft,
+  Heart,
+  Play,
+  Share2,
+  Sparkles,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useLang } from '@/lib/lang-context'
@@ -45,8 +49,10 @@ const NAV: NavItem[] = [
     icon: <FolderOpen strokeWidth={1.5} size={16} />,
     sub: [
       { label: 'Branding', labelEn: 'Branding', href: '/projekter/branding' },
-      { label: 'Illustration', labelEn: 'Illustration', href: '/illustrationer' },
       { label: 'UX · UI', labelEn: 'UX · UI', href: '/projekter/ux-ui' },
+      { label: 'Video', labelEn: 'Video', href: '/projekter/video' },
+      { label: 'SoMe Content', labelEn: 'Social Media', href: '/projekter/some-content' },
+      { label: 'AI Fotografier', labelEn: 'AI Photography', href: '/ai' },
     ],
   },
   {
@@ -69,6 +75,16 @@ const NAV: NavItem[] = [
     sub: [
       { label: 'CV', labelEn: 'CV', href: '/cv' },
       { label: 'Udtalelser', labelEn: 'References', href: '/cv/udtalelser' },
+    ],
+  },
+  {
+    label: 'Fleksjob',
+    labelEn: 'Flex job',
+    href: '/fleksjob',
+    icon: <Heart strokeWidth={1.5} size={16} />,
+    sub: [
+      { label: 'Mit fleksjob', labelEn: 'My flex job', href: '/fleksjob' },
+      { label: 'Generelt om fleksjob', labelEn: 'About flex jobs', href: '/fleksjob/ordningen' },
     ],
   },
   { label: 'Kontakt', labelEn: 'Contact', href: '/kontakt', icon: <Mail strokeWidth={1.5} size={16} /> },

@@ -101,6 +101,16 @@ export default function Arbejde() {
             {t.ctaText}
           </Link>
         </motion.div>
+
+        {/* Quick links */}
+        <motion.div {...fadeUp(0.18)} className="mt-8 flex flex-wrap gap-4 border-t border-border pt-6">
+          <Link href="/cv" className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50">
+            {lang === 'en' ? 'Full CV →' : 'Fuldt CV →'}
+          </Link>
+          <Link href="/fleksjob" className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50">
+            {lang === 'en' ? 'About my flex job →' : 'Om mit fleksjob →'}
+          </Link>
+        </motion.div>
       </div>
 
       {/* ─── Right: portrait ──────────────────────────────── */}
@@ -112,7 +122,7 @@ export default function Arbejde() {
       >
         <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
           <Image
-            src="/mig/Arbejde.JPG"
+            src="/mig/Arbejde.webp"
             alt="Ruth-Anne Dausell"
             fill
             className="object-cover object-center"

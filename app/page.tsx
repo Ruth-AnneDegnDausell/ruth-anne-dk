@@ -19,7 +19,8 @@ const fadeUp = {
   }),
 }
 
-const FEATURED = ALL_PROJECTS.slice(0, 3)
+const FEATURED_SLUGS = ['flaneur', 'ba-afgangs-eksamen', 'gobik']
+const FEATURED = FEATURED_SLUGS.map(s => ALL_PROJECTS.find(p => p.slug === s)!).filter(Boolean)
 
 const SKILLS = {
   da: [
@@ -147,7 +148,7 @@ export default function Home() {
         >
           <div className="relative h-full min-h-[60vw] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)] sm:min-h-0">
             <Image
-              src="/mig/Forside.JPG"
+              src="/mig/Forside.webp"
               alt="Ruth-Anne Dausell"
               fill
               className="object-cover"
@@ -190,8 +191,18 @@ export default function Home() {
               transition={{ duration: 0.55, delay: i * 0.08, ease }}
               className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05),0_6px_20px_rgba(0,0,0,0.04)]"
             >
-              <div className="aspect-[4/3] overflow-hidden bg-[oklch(92%_0_0)]">
-                <div className="h-full w-full bg-[oklch(91%_0_0)] transition-transform duration-500 group-hover:scale-[1.03]" />
+              <div className="relative aspect-[4/3] overflow-hidden bg-[oklch(92%_0_0)]">
+                {project.cover ? (
+                  <Image
+                    src={project.cover}
+                    alt={lang === 'en' ? project.titleEn : project.title}
+                    fill
+                    className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${project.coverPosition ?? 'object-top'}`}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-[oklch(91%_0_0)] transition-transform duration-500 group-hover:scale-[1.03]" />
+                )}
               </div>
               <div className="px-4 py-3.5">
                 <p className="text-[9px] tracking-[0.14em] uppercase text-text-3">
