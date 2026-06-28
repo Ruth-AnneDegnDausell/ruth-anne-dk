@@ -95,22 +95,21 @@ function FotografierContent() {
       <AnimatePresence mode="wait">
         <motion.div
           key={active}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 6 }}
-          transition={{ duration: 0.25, ease }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease }}
           className="columns-2 gap-3 sm:columns-3"
         >
           {filtered.map((item, i) => (
             item.src ? (
-              <div key={i} className="mb-3 break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]">
+              <div key={i} className={`relative mb-3 break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)] ${item.aspect ?? ''}`}>
                 <Image
                   src={item.src}
                   alt={item.alt ?? ''}
-                  width={0}
-                  height={0}
+                  fill
                   sizes="(max-width: 640px) 50vw, 33vw"
-                  className="h-auto w-full block transition-transform duration-500 hover:scale-[1.04]"
+                  className="object-cover transition-transform duration-500 hover:scale-[1.04]"
                   loading="lazy"
                 />
               </div>

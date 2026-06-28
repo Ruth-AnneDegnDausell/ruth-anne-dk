@@ -18,8 +18,8 @@ export function Footer() {
   const t = T[lang]
 
   return (
-    <footer className="border-t border-border px-8 py-4 sm:px-14">
-      <p className="mb-1 text-[10px] text-text-3">{t.built}</p>
+    <footer className="border-t border-border px-8 py-5 sm:px-14">
+      <p className="mb-3 text-[10px] text-text-3">{t.built}</p>
       <p className="text-[10px] text-text-3">{t.stack}</p>
     </footer>
   )
