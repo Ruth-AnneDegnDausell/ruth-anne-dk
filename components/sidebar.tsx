@@ -262,7 +262,7 @@ export function Sidebar() {
       </ul>
 
       {/* ─── Bottom: lang toggle + copyright ─────────────── */}
-      <div className="mt-auto border-t border-border px-4 py-4">
+      <div className="mt-auto px-4 py-4">
         <div
           className="mb-3 flex items-center gap-1.5 transition-opacity duration-150"
           style={labelStyle}

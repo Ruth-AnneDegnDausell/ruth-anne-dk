@@ -1,4 +1,7 @@
 import { defineField, defineType } from 'sanity'
+import React from 'react'
+import { CoverPathInput } from '../components/cover-path-input'
+import { GalleryInput } from '../components/gallery-input'
 
 export const projectSchema = defineType({
   name: 'project',
@@ -73,20 +76,89 @@ export const projectSchema = defineType({
         marks: { decorators: [], annotations: [] },
       }],
     }),
+
+    // ── Billeder ──────────────────────────────────────────────────────────
+    defineField({
+      name: 'coverPath',
+      title: 'Nuværende forsidebillede',
+      description: 'Automatisk udfyldt fra koden. Upload i feltet nedenfor for at erstatte.',
+      type: 'string',
+      group: 'billeder',
+      readOnly: true,
+      components: { input: CoverPathInput },
+    }),
     defineField({
       name: 'cover',
-      title: 'Forsidebillede',
+      title: 'Nyt forsidebillede (upload)',
+      description: 'Upload her for at erstatte det nuværende billede.',
       type: 'image',
       group: 'billeder',
       options: { hotspot: true },
     }),
     defineField({
-      name: 'images',
+      name: 'gallery',
       title: 'Galleribilleder',
+      description: 'Klik "Gør til thumbnail" på et billede for at bruge det som forsidebillede · Træk for at ændre rækkefølge · Klik skraldespand for at slette · Klik + for at uploade nyt',
       type: 'array',
       group: 'billeder',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      components: { input: GalleryInput },
+      of: [
+        {
+          type: 'object',
+          name: 'galleryItem',
+          title: 'Billede',
+          preview: {
+            select: { path: 'path', image: 'image' },
+            prepare({ path, image }: { path?: string; image?: unknown }) {
+              if (image) {
+                return { title: 'Uploadet billede', media: image as any }
+              }
+              return {
+                title: path?.split('/').pop() ?? '',
+                media: path
+                  ? React.createElement('img', {
+                      src: `https://ruth-anne.dk${path}`,
+                      style: { width: '100%', height: '100%', objectFit: 'cover' },
+                    })
+                  : undefined,
+              }
+            },
+          },
+          fields: [
+            defineField({
+              name: 'path',
+              type: 'string',
+              title: 'Sti (automatisk)',
+              readOnly: true,
+              hidden: true,
+            }),
+            defineField({
+              name: 'image',
+              type: 'image',
+              title: 'Billede',
+              options: { hotspot: true },
+            }),
+            defineField({
+              name: 'rotation',
+              title: 'Rotation',
+              type: 'number',
+              initialValue: 0,
+              options: {
+                list: [
+                  { title: '0°', value: 0 },
+                  { title: '90°', value: 90 },
+                  { title: '180°', value: 180 },
+                  { title: '270°', value: 270 },
+                ],
+                layout: 'radio',
+                direction: 'horizontal',
+              },
+            }),
+          ],
+        },
+      ],
     }),
+
     defineField({
       name: 'externalLink',
       title: 'Link til website',
@@ -101,6 +173,17 @@ export const projectSchema = defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'year', media: 'cover' },
+    select: { title: 'title', subtitle: 'year', cover: 'cover', path: 'coverPath' },
+    prepare({ title, subtitle, cover, path }) {
+      const media = cover
+        ? cover
+        : path
+        ? React.createElement('img', {
+            src: `https://ruth-anne.dk${path}`,
+            style: { width: '100%', height: '100%', objectFit: 'cover' },
+          })
+        : undefined
+      return { title, subtitle, media }
+    },
   },
 })
