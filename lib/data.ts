@@ -32,7 +32,7 @@ function fromSanity(raw: any): Project {
     descEn: raw.descEn ?? raw.desc ?? '',
     body: extractBody(raw.body),
     bodyEn: extractBody(raw.bodyEn),
-    cover: raw.cover ? urlFor(raw.cover).width(1600).url() : undefined,
+    cover: raw.cover ? urlFor(raw.cover).width(1600).url() : raw.coverPath ?? undefined,
     coverPosition: raw.coverPosition ?? 'object-top',
     images: raw.images?.map((img: any) => urlFor(img).width(1600).url()) ?? [],
     externalLink: raw.externalLink,
@@ -61,6 +61,7 @@ const slugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
   category, year,
   body, bodyEn,
   cover{ asset, hotspot, crop },
+  coverPath,
   coverPosition,
   gallery[]{
     _key, _type,
@@ -78,7 +79,7 @@ const allQuery = groq`*[_type == "project"] | order(sortOrder asc){
   category, year,
   desc, descEn,
   featured,
-  cover{ asset, hotspot, crop }, coverPosition,
+  cover{ asset, hotspot, crop }, coverPath, coverPosition,
   sortOrder,
 }`
 
@@ -101,7 +102,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
       return {
         ...fromSanity(raw),
-        cover: raw.cover ? urlFor(raw.cover).width(1600).url() : staticProject?.cover,
+        cover: raw.cover ? urlFor(raw.cover).width(1600).url() : raw.coverPath ?? staticProject?.cover,
         images: galleryImages,
         coverPosition: raw.coverPosition ?? staticProject?.coverPosition,
         videos: staticProject?.videos,
