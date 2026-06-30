@@ -18,6 +18,7 @@ export interface Project {
   images?: string[]
   videos?: string[]
   externalLink?: string
+  featured?: boolean
   testimonialRef?: { label: string; labelEn: string; href: string }
   galleryLinks?: Array<{ label: string; labelEn: string; href: string }>
 }
@@ -26,6 +27,7 @@ export const PROJECTS: Project[] = [
   {
     id: 7,
     slug: 'flaneur',
+    featured: true,
     category: 'branding',
     categoryLabel: 'Branding',
     categoryLabelEn: 'Branding',
@@ -66,6 +68,7 @@ export const PROJECTS: Project[] = [
   {
     id: 8,
     slug: 'ba-afgangs-eksamen',
+    featured: true,
     category: 'branding',
     categoryLabel: 'Branding',
     categoryLabelEn: 'Branding',
@@ -545,6 +548,7 @@ export const PROJECTS: Project[] = [
   {
     id: 25,
     slug: 'gobik',
+    featured: true,
     category: 'branding',
     categoryLabel: 'Illustration',
     categoryLabelEn: 'Illustration',

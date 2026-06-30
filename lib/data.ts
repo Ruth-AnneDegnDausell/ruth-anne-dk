@@ -18,23 +18,25 @@ function extractBody(blocks: unknown[]): string[] {
 }
 
 function fromSanity(raw: any): Project {
+  const catLabel = raw.category === 'ux-ui' ? 'UX · UI' : raw.category === 'illustration' ? 'Illustration' : 'Branding'
   return {
     id: raw.sortOrder ?? 0,
     slug: raw.slug,
     category: raw.category ?? 'branding',
-    categoryLabel: raw.category === 'ux-ui' ? 'UX · UI' : raw.category === 'illustration' ? 'Illustration' : 'Branding',
-    categoryLabelEn: raw.category === 'ux-ui' ? 'UX · UI' : raw.category === 'illustration' ? 'Illustration' : 'Branding',
+    categoryLabel: catLabel,
+    categoryLabelEn: catLabel,
     title: raw.title ?? '',
     titleEn: raw.titleEn ?? raw.title ?? '',
     year: raw.year ?? '',
-    desc: raw.title ?? '',
-    descEn: raw.titleEn ?? raw.title ?? '',
+    desc: raw.desc ?? '',
+    descEn: raw.descEn ?? raw.desc ?? '',
     body: extractBody(raw.body),
     bodyEn: extractBody(raw.bodyEn),
     cover: raw.cover ? urlFor(raw.cover).width(1600).url() : undefined,
-    coverPosition: raw.coverPosition,
+    coverPosition: raw.coverPosition ?? 'object-top',
     images: raw.images?.map((img: any) => urlFor(img).width(1600).url()) ?? [],
     externalLink: raw.externalLink,
+    featured: raw.featured ?? false,
   }
 }
 
@@ -74,7 +76,9 @@ const allQuery = groq`*[_type == "project"] | order(sortOrder asc){
   title, titleEn,
   "slug": slug.current,
   category, year,
-  cover, coverPosition,
+  desc, descEn,
+  featured,
+  cover{ asset, hotspot, crop }, coverPosition,
   sortOrder,
 }`
 
