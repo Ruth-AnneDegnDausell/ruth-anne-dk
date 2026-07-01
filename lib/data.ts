@@ -91,17 +91,20 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const raw = await sanityClient.fetch(slugQuery, { slug }, { next: { revalidate: 60 } })
     if (raw) {
       const staticProject = PROJECTS.find(p => p.slug === slug)
-      const galleryImages: string[] = raw.gallery?.length
-        ? raw.gallery.map((item: any) => {
-            if (item.image?.asset) {
-              let b = urlFor(item.image)
-              if (item.rotation) b = b.orientation(rotationToOrientation(item.rotation) as any)
-              return b.url()
-            }
-            if (item.path) return item.path as string
-            return null
-          }).filter(Boolean)
-        : (staticProject?.images ?? [])
+      const sanityGalleryItems = (raw.gallery ?? []).map((item: any) => {
+        if (item.image?.asset) {
+          let b = urlFor(item.image)
+          if (item.rotation) b = b.orientation(rotationToOrientation(item.rotation) as any)
+          return b.url()
+        }
+        if (item.path) return item.path as string
+        return null
+      }).filter(Boolean) as string[]
+
+      // Append static images not already covered by the Sanity gallery
+      const sanityPaths = new Set(raw.gallery?.map((i: any) => i.path).filter(Boolean) ?? [])
+      const extraStatic = (staticProject?.images ?? []).filter(p => !sanityPaths.has(p))
+      const galleryImages = [...sanityGalleryItems, ...extraStatic]
 
       const sanityImage = raw.cover ?? null
       return {
