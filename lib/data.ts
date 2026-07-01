@@ -17,14 +17,9 @@ function extractBody(blocks: unknown[]): string[] {
     .filter(Boolean)
 }
 
-function hotspotToPosition(cover: any): string | undefined {
-  const h = cover?.hotspot
-  if (!h) return undefined
-  return `${(h.x * 100).toFixed(0)}% ${(h.y * 100).toFixed(0)}%`
-}
-
 function fromSanity(raw: any): Project {
   const catLabel = raw.category === 'ux-ui' ? 'UX · UI' : raw.category === 'illustration' ? 'Illustration' : 'Branding'
+  const sanityImage = raw.cover ?? null
   return {
     id: raw.sortOrder ?? 0,
     slug: raw.slug,
@@ -38,8 +33,9 @@ function fromSanity(raw: any): Project {
     descEn: raw.descEn ?? raw.desc ?? '',
     body: extractBody(raw.body),
     bodyEn: extractBody(raw.bodyEn),
-    cover: raw.cover ? urlFor(raw.cover).width(1600).url() : raw.coverPath ?? undefined,
-    coverPosition: hotspotToPosition(raw.cover) ?? raw.coverPosition ?? undefined,
+    cover: sanityImage ? urlFor(sanityImage).width(1600).url() : raw.coverPath ?? undefined,
+    coverThumb: sanityImage ? urlFor(sanityImage).width(800).height(600).fit('crop').url() : undefined,
+    coverPosition: raw.coverPosition ?? undefined,
     images: raw.images?.map((img: any) => urlFor(img).width(1600).url()) ?? [],
     externalLink: raw.externalLink,
     featured: raw.featured ?? false,
@@ -107,11 +103,13 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
           }).filter(Boolean)
         : (staticProject?.images ?? [])
 
+      const sanityImage = raw.cover ?? null
       return {
         ...fromSanity(raw),
-        cover: raw.cover ? urlFor(raw.cover).width(1600).url() : raw.coverPath ?? staticProject?.cover,
+        cover: sanityImage ? urlFor(sanityImage).width(1600).url() : raw.coverPath ?? staticProject?.cover,
+        coverThumb: sanityImage ? urlFor(sanityImage).width(800).height(600).fit('crop').url() : undefined,
         images: galleryImages,
-        coverPosition: hotspotToPosition(raw.cover) ?? raw.coverPosition ?? staticProject?.coverPosition,
+        coverPosition: raw.coverPosition ?? staticProject?.coverPosition,
         videos: staticProject?.videos,
         testimonialRef: staticProject?.testimonialRef,
         galleryLinks: staticProject?.galleryLinks,

@@ -14,6 +14,7 @@ export interface Project {
   body: string[]
   bodyEn: string[]
   cover?: string
+  coverThumb?: string
   coverPosition?: string
   images?: string[]
   videos?: string[]

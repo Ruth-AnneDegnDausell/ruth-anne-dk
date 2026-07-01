@@ -182,13 +182,13 @@ export function HomeClient({ featured }: { featured: Project[] }) {
               className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05),0_6px_20px_rgba(0,0,0,0.04)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-[oklch(92%_0_0)]">
-                {project.cover ? (
+                {(project.coverThumb ?? project.cover) ? (
                   <Image
-                    src={project.cover}
+                    src={project.coverThumb ?? project.cover!}
                     alt={lang === 'en' ? project.titleEn : project.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    style={{ objectPosition: project.coverPosition ?? '50% 0%' }}
+                    style={project.coverThumb ? undefined : { objectPosition: project.coverPosition ?? '50% 0%' }}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (

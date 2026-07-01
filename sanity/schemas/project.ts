@@ -81,7 +81,7 @@ export const projectSchema = defineType({
     defineField({
       name: 'cover',
       title: 'Forsidebillede',
-      description: 'Vises på projektkortet og øverst på projektsiden. Klik "Gør til thumbnail" i galleriet nedenfor for at bruge et galleribillede som forside.',
+      description: 'Upload billede → klik derefter på det uploadede billede → vælg "Edit hotspot & crop" → træk den hvide cirkel til det vigtigste element (f.eks. produktet). Thumbnails beskæres automatisk til 4:3 centreret på dette punkt.',
       type: 'image',
       group: 'billeder',
       options: { hotspot: true },
