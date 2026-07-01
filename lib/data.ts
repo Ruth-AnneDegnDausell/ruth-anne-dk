@@ -60,7 +60,7 @@ const slugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
   "slug": slug.current,
   category, year,
   body, bodyEn,
-  cover{ asset, hotspot, crop },
+  "cover": select(defined(cover.asset->) => cover{ asset, hotspot, crop }, null),
   coverPath,
   coverPosition,
   gallery[]{
@@ -79,7 +79,8 @@ const allQuery = groq`*[_type == "project"] | order(sortOrder asc){
   category, year,
   desc, descEn,
   featured,
-  cover{ asset, hotspot, crop }, coverPath, coverPosition,
+  "cover": select(defined(cover.asset->) => cover{ asset, hotspot, crop }, null),
+  coverPath, coverPosition,
   sortOrder,
 }`
 

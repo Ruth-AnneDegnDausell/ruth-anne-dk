@@ -8,8 +8,8 @@ export const projectSchema = defineType({
   title: 'Projekt',
   type: 'document',
   groups: [
-    { name: 'tekst', title: 'Tekst', default: true },
-    { name: 'billeder', title: 'Billeder' },
+    { name: 'tekst', title: 'Tekst' },
+    { name: 'billeder', title: 'Billeder', default: true },
     { name: 'links', title: 'Links' },
   ],
   fields: [
@@ -79,21 +79,21 @@ export const projectSchema = defineType({
 
     // ── Billeder ──────────────────────────────────────────────────────────
     defineField({
+      name: 'cover',
+      title: 'Forsidebillede',
+      description: 'Vises på projektkortet og øverst på projektsiden. Klik "Gør til thumbnail" i galleriet nedenfor for at bruge et galleribillede som forside.',
+      type: 'image',
+      group: 'billeder',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'coverPath',
-      title: 'Nuværende forsidebillede',
-      description: 'Automatisk udfyldt fra koden. Upload i feltet nedenfor for at erstatte.',
+      title: 'Standard forsidebillede (fra kode)',
+      description: 'Automatisk fallback fra hjemmesidens filer — bruges kun hvis intet billede er uploadet ovenfor.',
       type: 'string',
       group: 'billeder',
       readOnly: true,
       components: { input: CoverPathInput },
-    }),
-    defineField({
-      name: 'cover',
-      title: 'Nyt forsidebillede (upload)',
-      description: 'Upload her for at erstatte det nuværende billede.',
-      type: 'image',
-      group: 'billeder',
-      options: { hotspot: true },
     }),
     defineField({
       name: 'gallery',
