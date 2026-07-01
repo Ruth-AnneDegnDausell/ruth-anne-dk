@@ -455,6 +455,11 @@ export const PROJECTS: Project[] = [
     images: [
       '/projekter/VeloMore Magazine/Cort.webp',
       '/projekter/VeloMore Magazine/Lund.webp',
+      '/projekter/VeloMore Magazine/IMG_9468.webp',
+      '/projekter/VeloMore Magazine/IMG_9452.webp',
+    ],
+    videos: [
+      '/projekter/VeloMore Magazine/IMG_9487.mp4',
     ],
     galleryLinks: [
       { label: 'Se fotografier →', labelEn: 'See photographs →', href: '/fotografier?cat=velomore' },
