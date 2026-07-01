@@ -158,6 +158,31 @@ export async function getCV() {
   return fetchSingleton<any>('cv')
 }
 
+// ── Udtalelser ────────────────────────────────────────────────────────────────
+
+export type UdtalelseDoc = {
+  source: string
+  author: string
+  role: string
+  year: string
+  fileUrl: string
+  mimeType: string
+}
+
+export async function getUdtalelser(): Promise<UdtalelseDoc[] | null> {
+  try {
+    const raw = await sanityClient.fetch(
+      groq`*[_type == "udtalelser" && _id == "udtalelser"][0]{
+        items[]{ source, author, role, year, "fileUrl": file.asset->url, "mimeType": file.asset->mimeType }
+      }`,
+      {},
+      { next: { revalidate: 60 } },
+    )
+    if (raw?.items?.length) return raw.items as UdtalelseDoc[]
+  } catch {}
+  return null
+}
+
 // ── Gallery ───────────────────────────────────────────────────────────────────
 
 function sanityItemToGallery(item: any): GalleryItem {

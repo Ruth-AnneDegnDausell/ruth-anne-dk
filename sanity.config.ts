@@ -37,6 +37,7 @@ export default defineConfig({
             singleton(S, 'kontakt', 'Kontakt', 'kontakt'),
             singleton(S, 'fleksjob', 'Fleksjob', 'fleksjob'),
             singleton(S, 'cv', 'CV', 'cv'),
+            singleton(S, 'udtalelser', 'Udtalelser', 'udtalelser'),
           ]),
       defaultDocumentNode: (S, { schemaType }) => {
         if (schemaType === 'project') {

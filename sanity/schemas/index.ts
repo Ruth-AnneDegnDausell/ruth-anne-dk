@@ -4,6 +4,7 @@ import { aboutPrivatSchema } from './about-privat'
 import { kontaktSchema } from './kontakt'
 import { fleksjobSchema } from './fleksjob'
 import { cvSchema } from './cv'
+import { udtalelserSchema } from './udtalelser'
 import { fotografiItemSchema } from './fotografi-item'
 import { illustrationItemSchema } from './illustration-item'
 
@@ -14,6 +15,7 @@ export const schemas = [
   kontaktSchema,
   fleksjobSchema,
   cvSchema,
+  udtalelserSchema,
   fotografiItemSchema,
   illustrationItemSchema,
 ]
