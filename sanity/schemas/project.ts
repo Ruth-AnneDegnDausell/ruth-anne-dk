@@ -188,20 +188,11 @@ export const projectSchema = defineType({
     }),
     defineField({
       name: 'coverPosition',
-      title: 'Billedplacering',
-      description: 'Hvor i billedet skal fokus være på kortvisning.',
+      title: 'Fokuspunkt (statisk billede)',
+      description: 'Kun relevant hvis billedet ovenfor IKKE er uploadet. Skriv "X% Y%" — f.eks. "50% 0%" = top, "50% 50%" = midt, "50% 80%" = næsten bunden. For uploadede billeder sættes fokuspunktet ved at klikke på billedet ovenfor (hotspot).',
       type: 'string',
       group: 'billeder',
-      options: {
-        list: [
-          { title: 'Top', value: 'object-top' },
-          { title: 'Midt', value: 'object-center' },
-          { title: 'Bund', value: 'object-bottom' },
-        ],
-        layout: 'radio',
-        direction: 'horizontal',
-      },
-      initialValue: 'object-top',
+      placeholder: '50% 0%',
     }),
     defineField({
       name: 'sortOrder',

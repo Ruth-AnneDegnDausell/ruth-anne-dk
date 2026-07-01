@@ -187,7 +187,8 @@ export function HomeClient({ featured }: { featured: Project[] }) {
                     src={project.cover}
                     alt={lang === 'en' ? project.titleEn : project.title}
                     fill
-                    className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${project.coverPosition ?? 'object-top'}`}
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    style={{ objectPosition: project.coverPosition ?? '50% 0%' }}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (

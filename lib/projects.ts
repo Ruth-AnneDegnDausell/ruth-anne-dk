@@ -86,7 +86,7 @@ export const PROJECTS: Project[] = [
       'The book\'s identity is built around a coherent formal language that runs throughout the publication from cover to back. The overall design treats the book as an autonomous object with a unified visual narrative.',
     ],
     cover: '/projekter/BA afgangs-eksamen/Bogen-foto.webp',
-    coverPosition: 'object-[center_58%]',
+    coverPosition: '50% 58%',
     images: [
       '/projekter/BA afgangs-eksamen/Bogen-foto.webp',
       '/projekter/BA afgangs-eksamen/Bogen depositum omslaget.webp',
@@ -119,7 +119,7 @@ export const PROJECTS: Project[] = [
       'Visual identity and presentation material for PIBA. The project covered the design of presentation slides and graphic materials for use in communication and marketing.',
     ],
     cover: '/projekter/piba/2.webp',
-    coverPosition: 'object-[center_33%]',
+    coverPosition: '50% 33%',
     images: [
       '/projekter/piba/2.webp',
       '/projekter/piba/3.webp',

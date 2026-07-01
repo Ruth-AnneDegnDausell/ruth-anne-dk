@@ -134,7 +134,7 @@ function ProjectContent({ project, prev, next }: {
               width={0}
               height={0}
               sizes="(max-width: 1024px) 100vw, 44vw"
-              className={`h-auto w-full ${project.coverPosition ?? 'object-top'}`}
+              className="h-auto w-full"
               priority
             />
           </div>
