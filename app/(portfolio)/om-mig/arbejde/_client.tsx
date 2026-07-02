@@ -119,7 +119,7 @@ export function ArbejdeClient({ sanityData }: { sanityData: any }) {
           </Link>
         </motion.div>
 
-        <motion.div {...fadeUp(0.18)} className="mt-8 flex flex-wrap gap-4 border-t border-border pt-6">
+        <motion.div {...fadeUp(0.18)} className="mt-8 flex flex-wrap gap-4 pt-6">
           <Link href="/cv" className="text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50">
             {lang === 'en' ? 'Full CV →' : 'Fuldt CV →'}
           </Link>

@@ -185,7 +185,7 @@ function ProjectContent({ project, prev, next }: {
         </motion.div>
       )}
 
-      <div className="border-t border-border px-8 pt-8 sm:px-14">
+      <div className="px-8 pt-8 sm:px-14">
         <div className="flex items-center justify-between gap-4">
           {prev ? (
             <Link

@@ -1,12 +1,12 @@
 import { Suspense } from 'react'
-import { getFotografier } from '@/lib/data'
+import { getFotografierGallery } from '@/lib/data'
 import { FotografierContent } from './_client'
 
 export default async function FotografierPage() {
-  const items = await getFotografier()
+  const gallery = await getFotografierGallery()
   return (
     <Suspense>
-      <FotografierContent items={items} />
+      <FotografierContent gallery={gallery} />
     </Suspense>
   )
 }

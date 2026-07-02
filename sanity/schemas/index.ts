@@ -7,6 +7,8 @@ import { cvSchema } from './cv'
 import { udtalelserSchema } from './udtalelser'
 import { fotografiItemSchema } from './fotografi-item'
 import { illustrationItemSchema } from './illustration-item'
+import { fotografierGallerySchema } from './fotografier-gallery'
+import { illustrationerGallerySchema } from './illustrationer-gallery'
 
 export const schemas = [
   projectSchema,
@@ -18,4 +20,6 @@ export const schemas = [
   udtalelserSchema,
   fotografiItemSchema,
   illustrationItemSchema,
+  fotografierGallerySchema,
+  illustrationerGallerySchema,
 ]

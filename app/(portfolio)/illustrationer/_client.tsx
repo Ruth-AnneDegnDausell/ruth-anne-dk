@@ -6,22 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
-import type { GalleryItem } from '@/lib/gallery'
+import type { GalleryData } from '@/lib/data'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
-const CATS = [
-  { id: 'alle',    da: 'Alle',       en: 'All' },
-  { id: 'cykel',   da: 'Cykel',      en: 'Cycling' },
-  { id: 'portræt', da: 'Portrætter', en: 'Portraits' },
-  { id: 'vidsans', da: 'Vid & Sans', en: 'Vid & Sans' },
-  { id: 'kfum',    da: 'KFUM&KFUK', en: 'KFUM&KFUK' },
-  { id: 'øvrige',  da: 'Øvrige',     en: 'Other' },
-]
-
 const T = {
-  da: { label: 'Illustrationer', heading: 'Tegninger og illustrationer', intro: 'Et udvalg af illustrationer, skitser og tegninger fra projekter og fritid.' },
-  en: { label: 'Illustrations', heading: 'Drawings and illustrations', intro: 'A selection of illustrations, sketches, and drawings from projects and spare time.' },
+  da: { all: 'Alle', label: 'Illustrationer', heading: 'Tegninger og illustrationer', intro: 'Et udvalg af illustrationer, skitser og tegninger fra projekter og fritid.' },
+  en: { all: 'All', label: 'Illustrations', heading: 'Drawings and illustrations', intro: 'A selection of illustrations, sketches, and drawings from projects and spare time.' },
 }
 
 const PROJECT_LINKS: Record<string, { da: string; en: string; href: string }> = {
@@ -30,29 +21,16 @@ const PROJECT_LINKS: Record<string, { da: string; en: string; href: string }> = 
   kfum:    { da: 'Se KFUM&KFUK projektet →', en: 'See KFUM&KFUK project →', href: '/projekter/kfum-kfuk' },
 }
 
-export function IllustrationerContent({ items }: { items: GalleryItem[] }) {
+export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
   const { lang } = useLang()
   const t = T[lang]
   const searchParams = useSearchParams()
   const [active, setActive] = useState(() => {
     const cat = searchParams.get('cat')
-    return CATS.some(c => c.id === cat) ? cat! : 'alle'
+    return gallery.categories.some(c => c.id === cat) ? cat! : 'alle'
   })
 
-  const base = active === 'alle'
-    ? items
-    : items.filter((item) => {
-        if (!item.category) return false
-        if (Array.isArray(item.category)) return item.category.includes(active)
-        return item.category === active
-      })
-
-  const filtered = active === 'alle'
-    ? [...base].sort((a, b) => {
-        const h = (s: string) => s.split('').reduce((acc, c, i) => (acc + c.charCodeAt(0) * (i + 1)) % 97, 0)
-        return h(a.src ?? '') - h(b.src ?? '')
-      })
-    : base
+  const filtered = active === 'alle' ? gallery.allItems : (gallery.byCategory[active] ?? [])
 
   return (
     <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
@@ -62,7 +40,17 @@ export function IllustrationerContent({ items }: { items: GalleryItem[] }) {
         <p className="mb-7 text-[12px]/[1.85] text-text-2">{t.intro}</p>
 
         <div className="flex flex-wrap gap-1.5">
-          {CATS.map((cat) => (
+          <button
+            onClick={() => setActive('alle')}
+            className={
+              active === 'alle'
+                ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
+                : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
+            }
+          >
+            {t.all}
+          </button>
+          {gallery.categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActive(cat.id)}

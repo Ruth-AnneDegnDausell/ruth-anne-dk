@@ -24,12 +24,8 @@ export default defineConfig({
               .title('Projekter')
               .child(S.documentTypeList('project').title('Projekter')),
             S.divider(),
-            S.listItem()
-              .title('Fotografier')
-              .child(S.documentTypeList('fotografiItem').title('Fotografier')),
-            S.listItem()
-              .title('Illustrationer')
-              .child(S.documentTypeList('illustrationItem').title('Illustrationer')),
+            singleton(S, 'fotografierGallery', 'Fotografier · Galleri', 'fotografierGallery'),
+            singleton(S, 'illustrationerGallery', 'Illustrationer · Galleri', 'illustrationerGallery'),
             S.divider(),
             singleton(S, 'about-arbejde', 'Om mig · Arbejde', 'aboutArbejde'),
             singleton(S, 'about-privat', 'Om mig · Privat', 'aboutPrivat'),

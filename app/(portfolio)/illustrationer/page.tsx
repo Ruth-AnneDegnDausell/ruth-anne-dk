@@ -1,12 +1,12 @@
 import { Suspense } from 'react'
-import { getIllustrationer } from '@/lib/data'
+import { getIllustrationerGallery } from '@/lib/data'
 import { IllustrationerContent } from './_client'
 
 export default async function IllustrationerPage() {
-  const items = await getIllustrationer()
+  const gallery = await getIllustrationerGallery()
   return (
     <Suspense>
-      <IllustrationerContent items={items} />
+      <IllustrationerContent gallery={gallery} />
     </Suspense>
   )
 }

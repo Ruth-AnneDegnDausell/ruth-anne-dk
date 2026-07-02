@@ -95,7 +95,7 @@ export default function SomeProjectPage() {
         </motion.div>
       )}
 
-      <div className="border-t border-border pt-8">
+      <div className="pt-8">
         <div className="flex items-center justify-between gap-4">
           {prev ? (
             <Link href={`/projekter/some-content/${prev.slug}`} className="group flex items-center gap-2 text-[11px] text-text-2 transition-colors duration-150 hover:text-text">

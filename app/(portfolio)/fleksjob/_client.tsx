@@ -74,7 +74,7 @@ export function FleksjobClient({ sanityData }: { sanityData: any }) {
   const t = sanityData ? buildT(sanityData)[lang] : DEFAULT[lang]
 
   return (
-    <main className="min-h-screen px-8 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
       <motion.div {...fadeUp(0)} className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{t.eyebrow}</p>
         <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>

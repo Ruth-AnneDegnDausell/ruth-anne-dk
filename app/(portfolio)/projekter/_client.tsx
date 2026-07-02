@@ -40,7 +40,7 @@ export function ProjekterClient({ projects }: { projects: Project[] }) {
       : projects.filter(p => p.category === active)
 
   return (
-    <main className="min-h-screen px-8 pt-14 sm:px-14">
+    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
       <div className="mb-12">
         <p className="mb-3 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{t.label}</p>
         <h1 className="mb-8 text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>

@@ -6,22 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
-import type { GalleryItem } from '@/lib/gallery'
+import type { GalleryData } from '@/lib/data'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
-const CATS = [
-  { id: 'alle',         da: 'Alle',                en: 'All' },
-  { id: 'velomore',     da: 'VeloMore',            en: 'VeloMore' },
-  { id: 'booklab',      da: 'BookLab',             en: 'BookLab' },
-  { id: 'flaneur',      da: 'Flâneur',             en: 'Flâneur' },
-  { id: 'konfirmation', da: 'Konfirmation',        en: 'Confirmation' },
-  { id: 'personlig',    da: 'Personlige projekter', en: 'Personal projects' },
-]
-
 const T = {
-  da: { label: 'Fotografier', heading: 'Fotografier', intro: 'Analog og digital fotografering. Hverdagsbilleder, natur og øjeblikke.', aiLink: 'Se AI-genererede fotografier →' },
-  en: { label: 'Photography', heading: 'Photography', intro: 'Analogue and digital photography. Everyday images, nature, and moments.', aiLink: 'See AI-generated photographs →' },
+  da: { all: 'Alle', label: 'Fotografier', heading: 'Fotografier', intro: 'Analog og digital fotografering. Hverdagsbilleder, natur og øjeblikke.', aiLink: 'Se AI-genererede fotografier →' },
+  en: { all: 'All', label: 'Photography', heading: 'Photography', intro: 'Analogue and digital photography. Everyday images, nature, and moments.', aiLink: 'See AI-generated photographs →' },
 }
 
 const PROJECT_LINKS: Record<string, { da: string; en: string; href: string }> = {
@@ -30,30 +21,16 @@ const PROJECT_LINKS: Record<string, { da: string; en: string; href: string }> = 
   booklab:  { da: 'Se BookLab projektet →',  en: 'See BookLab project →',  href: '/projekter/booklab' },
 }
 
-export function FotografierContent({ items }: { items: GalleryItem[] }) {
+export function FotografierContent({ gallery }: { gallery: GalleryData }) {
   const { lang } = useLang()
   const t = T[lang]
   const searchParams = useSearchParams()
   const [active, setActive] = useState(() => {
     const cat = searchParams.get('cat')
-    return CATS.some(c => c.id === cat) ? cat! : 'alle'
+    return gallery.categories.some(c => c.id === cat) ? cat! : 'alle'
   })
 
-  const base = active === 'alle'
-    ? items
-    : items.filter((item) => {
-        if (!item.category) return false
-        if (Array.isArray(item.category)) return item.category.includes(active)
-        return item.category === active
-      })
-
-  // Deterministic shuffle for "alle" — stable between server and client
-  const filtered = active === 'alle'
-    ? [...base].sort((a, b) => {
-        const h = (s: string) => s.split('').reduce((acc, c, i) => (acc + c.charCodeAt(0) * (i + 1)) % 97, 0)
-        return h(a.src ?? '') - h(b.src ?? '')
-      })
-    : base
+  const filtered = active === 'alle' ? gallery.allItems : (gallery.byCategory[active] ?? [])
 
   return (
     <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
@@ -66,7 +43,17 @@ export function FotografierContent({ items }: { items: GalleryItem[] }) {
         </Link>
 
         <div className="flex flex-wrap gap-1.5">
-          {CATS.map((cat) => (
+          <button
+            onClick={() => setActive('alle')}
+            className={
+              active === 'alle'
+                ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
+                : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
+            }
+          >
+            {t.all}
+          </button>
+          {gallery.categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActive(cat.id)}

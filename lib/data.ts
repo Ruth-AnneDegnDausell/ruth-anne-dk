@@ -185,46 +185,114 @@ export async function getUdtalelser(): Promise<UdtalelseDoc[] | null> {
 
 // ── Gallery ───────────────────────────────────────────────────────────────────
 
-function sanityItemToGallery(item: any): GalleryItem {
-  let src = item.src as string | undefined
-  if (item.imageAsset?.asset) {
-    let b = urlFor(item.imageAsset)
-    if (item.rotation) b = b.orientation(rotationToOrientation(item.rotation) as any)
+export type GalleryCategory = { id: string; da: string; en: string }
+export type GalleryData = {
+  categories: GalleryCategory[]
+  byCategory: Record<string, GalleryItem[]>
+  allItems: GalleryItem[]
+}
+
+function sanityGalleryItemToItem(raw: any, defaultAspect: string): GalleryItem {
+  const imageAsset = raw.image ?? raw.imageAsset
+  let src = raw.src as string | undefined
+  if (imageAsset?.asset) {
+    let b = urlFor(imageAsset)
+    if (raw.rotation) b = b.orientation(rotationToOrientation(raw.rotation) as any)
     src = b.url()
   }
   return {
     src,
-    aspect: item.aspect ?? 'aspect-[4/3]',
-    alt: item.alt || undefined,
-    category: item.categories?.length === 1 ? item.categories[0] : item.categories ?? undefined,
+    aspect: raw.aspect ?? defaultAspect,
+    alt: raw.alt || undefined,
   }
 }
 
-const galleryItemFields = groq`
-  src, aspect, alt, sortOrder, rotation, categories,
-  imageAsset{ asset, hotspot, crop }
-`
+function buildGalleryData(
+  sanityCategories: any[] | null,
+  staticItems: GalleryItem[],
+  staticCats: GalleryCategory[],
+  defaultAspect: string,
+): GalleryData {
+  if (sanityCategories?.length) {
+    const byCategory: Record<string, GalleryItem[]> = {}
+    const seenKeys = new Set<string>()
+    const allItems: GalleryItem[] = []
 
-export async function getFotografier(): Promise<GalleryItem[]> {
-  try {
-    const items = await sanityClient.fetch(
-      groq`*[_type == "fotografiItem"] | order(sortOrder asc){ ${galleryItemFields} }`,
-      {},
-      { next: { revalidate: 60 } },
-    )
-    if (items?.length) return items.map(sanityItemToGallery)
-  } catch {}
-  return FOTOGRAFIER
+    for (const cat of sanityCategories) {
+      const catItems: GalleryItem[] = []
+      for (const item of cat.items ?? []) {
+        const gi = sanityGalleryItemToItem(item, defaultAspect)
+        catItems.push(gi)
+        const key = item._key ?? gi.src ?? ''
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key)
+          allItems.push(gi)
+        }
+      }
+      byCategory[cat.slug] = catItems
+    }
+
+    return {
+      categories: sanityCategories.map(c => ({ id: c.slug, da: c.label ?? c.slug, en: c.labelEn ?? c.label ?? c.slug })),
+      byCategory,
+      allItems,
+    }
+  }
+
+  // Static fallback: group by category field on each item
+  const byCategory: Record<string, GalleryItem[]> = {}
+  for (const cat of staticCats) {
+    byCategory[cat.id] = staticItems.filter(item => {
+      if (!item.category) return false
+      return Array.isArray(item.category) ? item.category.includes(cat.id) : item.category === cat.id
+    })
+  }
+  return { categories: staticCats, byCategory, allItems: staticItems }
 }
 
-export async function getIllustrationer(): Promise<GalleryItem[]> {
+const FOTO_CATS: GalleryCategory[] = [
+  { id: 'velomore', da: 'VeloMore', en: 'VeloMore' },
+  { id: 'booklab', da: 'BookLab', en: 'BookLab' },
+  { id: 'flaneur', da: 'Flâneur', en: 'Flâneur' },
+  { id: 'konfirmation', da: 'Konfirmation', en: 'Confirmation' },
+  { id: 'personlig', da: 'Personlige projekter', en: 'Personal projects' },
+]
+
+const ILL_CATS: GalleryCategory[] = [
+  { id: 'cykel', da: 'Cykel', en: 'Cycling' },
+  { id: 'portræt', da: 'Portræt', en: 'Portrait' },
+  { id: 'vidsans', da: 'Vid & Sans', en: 'Vid & Sans' },
+  { id: 'kfum', da: 'KFUM & KFUK', en: 'KFUM & KFUK' },
+  { id: 'diverse', da: 'Diverse', en: 'Various' },
+]
+
+const gallerySingletonQuery = groq`
+  categories[]{
+    slug, label, labelEn,
+    items[]{ _key, image{ asset, hotspot, crop }, aspect, alt, rotation }
+  }
+`
+
+export async function getFotografierGallery(): Promise<GalleryData> {
   try {
-    const items = await sanityClient.fetch(
-      groq`*[_type == "illustrationItem"] | order(sortOrder asc){ ${galleryItemFields} }`,
+    const raw = await sanityClient.fetch(
+      groq`*[_type == "fotografierGallery"][0]{ ${gallerySingletonQuery} }`,
       {},
       { next: { revalidate: 60 } },
     )
-    if (items?.length) return items.map(sanityItemToGallery)
+    return buildGalleryData(raw?.categories ?? null, FOTOGRAFIER, FOTO_CATS, 'aspect-[4/3]')
   } catch {}
-  return ILLUSTRATIONER
+  return buildGalleryData(null, FOTOGRAFIER, FOTO_CATS, 'aspect-[4/3]')
+}
+
+export async function getIllustrationerGallery(): Promise<GalleryData> {
+  try {
+    const raw = await sanityClient.fetch(
+      groq`*[_type == "illustrationerGallery"][0]{ ${gallerySingletonQuery} }`,
+      {},
+      { next: { revalidate: 60 } },
+    )
+    return buildGalleryData(raw?.categories ?? null, ILLUSTRATIONER, ILL_CATS, 'aspect-[2/3]')
+  } catch {}
+  return buildGalleryData(null, ILLUSTRATIONER, ILL_CATS, 'aspect-[2/3]')
 }
