@@ -40,7 +40,12 @@ function ProjectContent({ project, prev, next }: {
     .map((src, i) => ({ src, full: project.imagesFull?.[i] ?? src }))
     .filter((p) => p.src !== project.cover)
   const galleryImages = galleryPairs.map((p) => p.src)
-  const lightboxItems = galleryPairs.map((p) => ({ src: p.src, full: p.full, aspect: '' }))
+  // Coveret er nr. 1 i lightboxen, derefter galleriets billeder
+  const lightboxItems = [
+    ...(project.cover ? [{ src: project.cover, full: project.cover, aspect: '' }] : []),
+    ...galleryPairs.map((p) => ({ src: p.src, full: p.full, aspect: '' })),
+  ]
+  const galleryOffset = project.cover ? 1 : 0
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   return (
@@ -117,7 +122,10 @@ function ProjectContent({ project, prev, next }: {
         </div>
 
         {project.cover && (
-          <div className="overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
+          <div
+            onClick={() => setLightboxIndex(0)}
+            className="cursor-zoom-in overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]"
+          >
             <Image
               src={project.cover}
               alt={title}
@@ -159,7 +167,7 @@ function ProjectContent({ project, prev, next }: {
           {galleryImages.map((src, i) => (
             <div
               key={i}
-              onClick={() => setLightboxIndex(i)}
+              onClick={() => setLightboxIndex(i + galleryOffset)}
               className="mb-3 cursor-zoom-in break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
             >
               <Image
