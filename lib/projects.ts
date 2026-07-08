@@ -15,6 +15,8 @@ export interface Project {
   body: string[]
   bodyEn: string[]
   cover?: string
+  /** Hotspot-beskåret 4:3-version af coveret (til projekter der ønsker det) */
+  coverCropped?: string
   coverThumb?: string
   coverPosition?: string
   images?: string[]

@@ -9,6 +9,11 @@ export function Loader() {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
+    // Spring introen over ved PDF-generering og print
+    if (new URLSearchParams(window.location.search).has('pdf')) {
+      setVisible(false)
+      return
+    }
     const t = setTimeout(() => setVisible(false), 1600)
     return () => clearTimeout(t)
   }, [])

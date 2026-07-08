@@ -128,4 +128,9 @@
   .sm\:pl-12 {
     padding-left: 0 !important;
   }
+  /* CV som PDF: skjul skaerm-links (Se projekt, Se udtalelse osv.) */
+  .cv-print a,
+  .cv-print button {
+    display: none !important;
+  }
 }

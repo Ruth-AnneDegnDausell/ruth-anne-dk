@@ -130,6 +130,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       return {
         ...fromSanity(raw),
         cover: sanityImage ? urlFor(sanityImage).width(1600).url() : raw.coverPath ?? staticProject?.cover,
+        coverCropped: sanityImage ? urlFor(sanityImage).width(1600).height(1200).fit('crop').url() : undefined,
         coverThumb: sanityImage ? urlFor(sanityImage).width(800).height(600).fit('crop').url() : undefined,
         images: galleryImages,
         imagesFull: galleryImagesFull,

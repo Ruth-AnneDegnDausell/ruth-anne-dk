@@ -31,7 +31,7 @@ const T = {
       },
       {
         title: 'Vil du vide mere?',
-        body: 'Jeg fortæller gerne mere om, hvordan det fungerer i praksis - og det samme gør min jobkonsulent ved Jobcenter Aarhus, som kan svare på det formelle omkring ordning, tilskud og aftale.',
+        body: 'Jeg fortæller gerne mere om, hvordan det fungerer i praksis - både det praktiske og det formelle omkring ordning, tilskud og aftale. Tag endelig fat i mig.',
       },
     ] as Section[],
     links: [
@@ -50,7 +50,7 @@ const T = {
       },
       {
         title: 'Want to know more?',
-        body: 'I am happy to explain how it works in practice - and so is my job consultant at Jobcenter Aarhus, who can answer the formal questions about the scheme, the supplement, and the agreement.',
+        body: 'I am happy to explain how it works in practice - both the practical side and the formal questions about the scheme, the supplement, and the agreement. Feel free to reach out to me.',
       },
     ] as Section[],
     links: [

@@ -43,6 +43,10 @@ function ProjectContent({ project, prev, next }: {
 
   // Projekter hvor videoerne ligger inde i selve galleriet i stedet for øverst
   const videosInGallery = ['piba', 'flaneur'].includes(project.slug)
+
+  // Projekter hvor coveret vises hotspot-beskåret i 4:3 (som på projektkortet)
+  const cropCover = ['ramtt'].includes(project.slug)
+  const coverSrc = cropCover ? (project.coverCropped ?? project.cover) : project.cover
   type GalleryEntry = { type: 'image'; src: string; imageIndex: number } | { type: 'video'; src: string }
   const galleryEntries: GalleryEntry[] = galleryImages.map((src, i) => ({ type: 'image', src, imageIndex: i }))
   if (videosInGallery && project.videos?.length) {
@@ -142,7 +146,7 @@ function ProjectContent({ project, prev, next }: {
             className="cursor-zoom-in overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]"
           >
             <Image
-              src={project.cover}
+              src={coverSrc!}
               alt={title}
               width={0}
               height={0}

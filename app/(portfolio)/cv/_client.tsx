@@ -173,7 +173,7 @@ export function CVClient({ sanityData }: { sanityData: any }) {
   }, [])
 
   return (
-    <main className="px-8 pt-14 sm:px-14">
+    <main className="cv-print px-8 pt-14 sm:px-14">
       <div className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{lang === 'da' ? 'CV' : 'CV'}</p>
         <h1 className="mb-5 text-[13px] font-[450] tracking-tight text-text">Ruth-Anne Dausell</h1>
