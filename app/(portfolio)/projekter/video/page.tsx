@@ -136,8 +136,16 @@ export default function VideoPage() {
         <p className="text-[12px]/[1.85] text-text-2">{t.intro}</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {VIDEOS.map((video, i) => (
+      {/* Horisontale videoer: 2 pr. raekke */}
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+        {VIDEOS.filter((v) => !v.vertical).map((video, i) => (
+          <VideoCard key={i} video={video} lang={lang} />
+        ))}
+      </div>
+
+      {/* Vertikale videoer: alle tre paa samme raekke */}
+      <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
+        {VIDEOS.filter((v) => v.vertical).map((video, i) => (
           <VideoCard key={i} video={video} lang={lang} />
         ))}
       </div>
