@@ -5,9 +5,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { useLang } from '@/lib/lang-context'
 import { ProjectVideo } from '@/components/project-video'
+import { Lightbox } from '@/components/lightbox'
 import type { Project } from '@/lib/projects'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
@@ -34,7 +35,13 @@ function ProjectContent({ project, prev, next }: {
   const backHref = from === 'home' ? '/' : from === 'cv' ? '/cv' : '/projekter'
   const backLabel = from === 'home' ? t.backHome : from === 'cv' ? t.backCv : t.back
 
-  const galleryImages = project.images?.filter((src) => src !== project.cover) ?? []
+  // Par af (vist billede, ubeskåret version) - coveret vises separat øverst
+  const galleryPairs = (project.images ?? [])
+    .map((src, i) => ({ src, full: project.imagesFull?.[i] ?? src }))
+    .filter((p) => p.src !== project.cover)
+  const galleryImages = galleryPairs.map((p) => p.src)
+  const lightboxItems = galleryPairs.map((p) => ({ src: p.src, full: p.full, aspect: '' }))
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   return (
     <main className="pt-14">
@@ -150,7 +157,11 @@ function ProjectContent({ project, prev, next }: {
           className="mb-20 columns-2 gap-3 px-8 sm:px-14"
         >
           {galleryImages.map((src, i) => (
-            <div key={i} className="mb-3 break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]">
+            <div
+              key={i}
+              onClick={() => setLightboxIndex(i)}
+              className="mb-3 cursor-zoom-in break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
+            >
               <Image
                 src={src}
                 alt={`${title} ${i + 1}`}
@@ -164,6 +175,13 @@ function ProjectContent({ project, prev, next }: {
           ))}
         </motion.div>
       )}
+
+      <Lightbox
+        items={lightboxItems}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
+      />
 
       <div className="px-8 pt-8 sm:px-14">
         <div className="flex items-center justify-between gap-4">

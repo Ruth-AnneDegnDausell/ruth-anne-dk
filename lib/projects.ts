@@ -18,6 +18,8 @@ export interface Project {
   coverThumb?: string
   coverPosition?: string
   images?: string[]
+  /** Ubeskårne versioner af images (samme rækkefølge) - bruges i lightbox */
+  imagesFull?: string[]
   videos?: string[]
   externalLink?: string
   featured?: boolean

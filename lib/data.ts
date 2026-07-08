@@ -100,7 +100,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     const raw = await sanityClient.fetch(slugQuery, { slug }, { next: { revalidate: 60 } })
     if (raw) {
       const staticProject = PROJECTS.find(p => p.slug === slug)
-      const sanityGalleryItems = (raw.gallery ?? []).map((item: any) => {
+      const sanityGalleryPairs = (raw.gallery ?? []).map((item: any) => {
         if (item.image?.asset) {
           let b = urlFor(item.image)
           // Valgfrit format: beskær fysisk via CDN så hotspottet respekteres
@@ -109,15 +109,22 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
           else if (item.aspect === 'square') b = b.width(1400).height(1400).fit('crop')
           else b = b.width(1600)
           b = withRotation(b, item.rotation)
-          return b.url()
+          // Ubeskåret fuld version til lightbox
+          const full = withRotation(urlFor(item.image).width(2000), item.rotation).url()
+          return { src: b.url(), full }
         }
-        if (item.path) return item.path as string
+        if (item.path) return { src: item.path as string, full: item.path as string }
         return null
-      }).filter(Boolean) as string[]
+      }).filter(Boolean) as Array<{ src: string; full: string }>
 
       // Sanity-galleriet er eneste sandhed: slettes et billede i Studio, forsvinder det
       // fra sitet. Statiske billeder bruges kun hvis projektet slet intet galleri har i Sanity.
-      const galleryImages = raw.gallery?.length ? sanityGalleryItems : (staticProject?.images ?? [])
+      const galleryImages = raw.gallery?.length
+        ? sanityGalleryPairs.map(p => p.src)
+        : (staticProject?.images ?? [])
+      const galleryImagesFull = raw.gallery?.length
+        ? sanityGalleryPairs.map(p => p.full)
+        : (staticProject?.images ?? [])
 
       const sanityImage = raw.cover ?? null
       return {
@@ -125,6 +132,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
         cover: sanityImage ? urlFor(sanityImage).width(1600).url() : raw.coverPath ?? staticProject?.cover,
         coverThumb: sanityImage ? urlFor(sanityImage).width(800).height(600).fit('crop').url() : undefined,
         images: galleryImages,
+        imagesFull: galleryImagesFull,
         coverPosition: raw.coverPosition ?? staticProject?.coverPosition,
         videos: staticProject?.videos,
         testimonialRef: staticProject?.testimonialRef,
