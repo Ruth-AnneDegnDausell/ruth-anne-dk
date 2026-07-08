@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
 import type { GalleryData } from '@/lib/data'
+import { Masonry, aspectRatioOf } from '@/components/masonry'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -33,7 +34,7 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
   const filtered = active === 'alle' ? gallery.allItems : (gallery.byCategory[active] ?? [])
 
   return (
-    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
+    <main className="px-8 pt-14 sm:px-14">
       <div className="mb-8">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{t.label}</p>
         <h1 className="mb-3 text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
@@ -81,13 +82,14 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease }}
-          className="columns-2 gap-3 sm:columns-3"
         >
-          {filtered.map((item, i) =>
-            item.src ? (
-              <div key={i} className={`relative mb-3 break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)] ${item.aspect ?? ''}`}>
+          <Masonry
+            items={filtered.filter((item) => item.src)}
+            ratio={(item) => aspectRatioOf(item.aspect)}
+            render={(item, i) => (
+              <div key={i} className={`relative overflow-hidden rounded-xl bg-[oklch(91%_0_0)] ${item.aspect ?? ''}`}>
                 <Image
-                  src={item.src}
+                  src={item.src!}
                   alt={item.alt ?? ''}
                   fill
                   sizes="(max-width: 640px) 50vw, 33vw"
@@ -95,8 +97,8 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
                   loading="lazy"
                 />
               </div>
-            ) : null
-          )}
+            )}
+          />
         </motion.div>
       </AnimatePresence>
     </main>

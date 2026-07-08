@@ -29,16 +29,42 @@ export const projectSchema = defineType({
     defineField({
       name: 'slug',
       title: 'URL (slug)',
+      description: 'Kun små bogstaver a-z, tal og bindestreg. Ændr den ikke uden grund: gamle links holder op med at virke.',
       type: 'slug',
       group: 'tekst',
-      options: { source: 'title', maxLength: 96 },
-      validation: r => r.required(),
+      options: {
+        source: 'title',
+        maxLength: 96,
+        slugify: (input: string) =>
+          input
+            .toLowerCase()
+            .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+            .normalize('NFD').replace(/[̀-ͯ]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 96),
+      },
+      validation: r =>
+        r.required().custom((slug: any) =>
+          !slug?.current || /^[a-z0-9-]+$/.test(slug.current)
+            ? true
+            : 'Ugyldig adresse: brug kun små bogstaver a-z, tal og bindestreg (ingen æ/ø/å, mellemrum eller store bogstaver)'
+        ),
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Kategorier',
+      description: 'Vælg én eller flere kategorier. Nye kategorier kan oprettes direkte herfra eller under "Projekt-kategorier".',
+      type: 'array',
+      group: 'tekst',
+      of: [{ type: 'reference', to: [{ type: 'projektKategori' }] }],
     }),
     defineField({
       name: 'category',
-      title: 'Kategori',
+      title: 'Kategori (gammel — bruges ikke længere)',
       type: 'string',
       group: 'tekst',
+      hidden: true,
       options: {
         list: [
           { title: 'Branding', value: 'branding' },
@@ -152,6 +178,22 @@ export const projectSchema = defineType({
                 ],
                 layout: 'radio',
                 direction: 'horizontal',
+              },
+            }),
+            defineField({
+              name: 'aspect',
+              title: 'Billedformat',
+              description: 'Beskæringen følger billedets hotspot.',
+              type: 'string',
+              initialValue: 'original',
+              options: {
+                list: [
+                  { title: 'Original (som uploadet)', value: 'original' },
+                  { title: 'Horisontalt (4:3)', value: 'horizontal' },
+                  { title: 'Vertikalt (3:4)', value: 'vertical' },
+                  { title: 'Kvadratisk (1:1)', value: 'square' },
+                ],
+                layout: 'radio',
               },
             }),
           ],

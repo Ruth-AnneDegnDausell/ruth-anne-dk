@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useLang } from '@/lib/lang-context'
+import { downloadCv } from '@/lib/cv-download'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const fadeUp = (delay = 0) => ({
@@ -58,12 +59,12 @@ function buildT(d: any) {
   }
 }
 
-export function KontaktClient({ sanityData }: { sanityData: any }) {
+export function KontaktClient({ sanityData, cvPdfUrl }: { sanityData: any; cvPdfUrl?: string | null }) {
   const { lang } = useLang()
   const t = sanityData ? buildT(sanityData)[lang] : DEFAULT[lang]
 
   return (
-    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
+    <main className="px-8 pt-14 sm:px-14">
       <div className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{t.label}</p>
         <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
@@ -94,6 +95,15 @@ export function KontaktClient({ sanityData }: { sanityData: any }) {
         <motion.div {...fadeUp(0.1)} className="mt-10">
           <p className="mb-2 text-[9px] font-medium tracking-[0.18em] uppercase text-text-3">{t.availabilityLabel}</p>
           <p className="text-[11px]/[1.75] text-text-2">{t.availability}</p>
+        </motion.div>
+
+        <motion.div {...fadeUp(0.14)} className="mt-10">
+          <button
+            onClick={() => downloadCv(cvPdfUrl)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[11px] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text"
+          >
+            {lang === 'en' ? 'Download CV (PDF) ↓' : 'Download CV (PDF) ↓'}
+          </button>
         </motion.div>
       </div>
     </main>

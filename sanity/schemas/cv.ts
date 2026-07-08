@@ -5,7 +5,7 @@ const expItem = {
   fields: [
     { name: 'role', title: 'Titel (DA)', type: 'string' },
     { name: 'roleEn', title: 'Title (EN)', type: 'string' },
-    { name: 'type', title: 'Type (DA) — Freelance, Praktik etc.', type: 'string' },
+    { name: 'type', title: 'Type (DA) · Freelance, Praktik etc.', type: 'string' },
     { name: 'typeEn', title: 'Type (EN)', type: 'string' },
     { name: 'place', title: 'Sted', type: 'string' },
     { name: 'period', title: 'Periode (DA)', type: 'string' },
@@ -38,6 +38,7 @@ const volItem = {
     { name: 'period', title: 'Periode (DA)', type: 'string' },
     { name: 'periodEn', title: 'Period (EN)', type: 'string' },
     { name: 'testimonialHref', title: 'Link til udtalelse', type: 'string' },
+    { name: 'projectHref', title: 'Link til projekt (fx /projekter/sportx)', type: 'string' },
   ],
   preview: { select: { title: 'role', subtitle: 'place' } },
 }
@@ -61,6 +62,7 @@ const awardItem = {
     { name: 'descEn', title: 'Description (EN)', type: 'string' },
     { name: 'year', title: 'År', type: 'string' },
     { name: 'testimonialHref', title: 'Link til udtalelse', type: 'string' },
+    { name: 'projectHref', title: 'Link til projekt', type: 'string' },
   ],
   preview: { select: { title: 'title', subtitle: 'year' } },
 }
@@ -72,15 +74,24 @@ export const cvSchema = defineType({
   groups: [
     { name: 'text', title: 'Tekst', default: true },
     { name: 'exp', title: 'Erfaring' },
-    { name: 'edu', title: 'Uddannelse' },
+    { name: 'edu', title: 'Uddannelse & kurser' },
     { name: 'vol', title: 'Frivilligt' },
     { name: 'skills', title: 'Færdigheder' },
   ],
   fields: [
     defineField({ name: 'intro', title: 'Intro (DA)', type: 'text', rows: 3, group: 'text' }),
     defineField({ name: 'introEn', title: 'Intro (EN)', type: 'text', rows: 3, group: 'text' }),
+    defineField({
+      name: 'pdfFile',
+      title: 'CV som PDF',
+      description: 'Upload dit CV som PDF. Der vises en "Download CV"-knap på siden, når filen er uploadet.',
+      type: 'file',
+      group: 'text',
+      options: { accept: 'application/pdf' },
+    }),
     defineField({ name: 'exp', title: 'Arbejdserfaring', type: 'array', group: 'exp', of: [expItem] }),
-    defineField({ name: 'edu', title: 'Uddannelse', type: 'array', group: 'edu', of: [eduItem] }),
+    defineField({ name: 'edu', title: 'Uddannelser', type: 'array', group: 'edu', of: [eduItem] }),
+    defineField({ name: 'kurser', title: 'Kurser', type: 'array', group: 'edu', of: [eduItem] }),
     defineField({ name: 'vol', title: 'Frivilligt arbejde', type: 'array', group: 'vol', of: [volItem] }),
     defineField({ name: 'skillGroups', title: 'Færdigheder', type: 'array', group: 'skills', of: [skillGroup] }),
     defineField({ name: 'awards', title: 'Udmærkelser', type: 'array', group: 'skills', of: [awardItem] }),

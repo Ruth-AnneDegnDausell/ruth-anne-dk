@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
 
@@ -24,8 +23,6 @@ const DEFAULT = {
       { title: 'Video & motion', desc: 'Kortere videoproduktioner og reklamecontent.' },
       { title: 'UX · UI design', desc: 'Interface design og prototyper klar til produktion.' },
     ],
-    clientsLabel: 'Erfaring fra',
-    clients: 'Flaneur, Vid&Sans (Aarhus Universitetsforlag), Videnskab.dk, BOOKLAB Forlag, KFUM&KFUK og dansk sportsernæringsbrand.',
     ctaLabel: 'Kontakt',
     ctaText: 'Tag fat i mig →',
   },
@@ -40,8 +37,6 @@ const DEFAULT = {
       { title: 'Video & motion', desc: 'Short video productions and advertising content.' },
       { title: 'UX · UI design', desc: 'Interface design and prototypes ready for production.' },
     ],
-    clientsLabel: 'Experience from',
-    clients: 'Flaneur, Vid&Sans (Aarhus University Press), Videnskab.dk, BOOKLAB Publishing, KFUM&KFUK, and a Danish sports nutrition brand.',
     ctaLabel: 'Contact',
     ctaText: 'Get in touch →',
   },
@@ -54,8 +49,6 @@ function buildT(d: any) {
       bio2: d.bio2 ?? DEFAULT.da.bio2,
       servicesLabel: DEFAULT.da.servicesLabel,
       services: d.services ?? DEFAULT.da.services,
-      clientsLabel: DEFAULT.da.clientsLabel,
-      clients: d.clients ?? DEFAULT.da.clients,
       ctaLabel: DEFAULT.da.ctaLabel,
       ctaText: DEFAULT.da.ctaText,
     },
@@ -64,8 +57,6 @@ function buildT(d: any) {
       bio2: d.bio2En ?? DEFAULT.en.bio2,
       servicesLabel: DEFAULT.en.servicesLabel,
       services: d.servicesEn ?? DEFAULT.en.services,
-      clientsLabel: DEFAULT.en.clientsLabel,
-      clients: d.clientsEn ?? DEFAULT.en.clients,
       ctaLabel: DEFAULT.en.ctaLabel,
       ctaText: DEFAULT.en.ctaText,
     },
@@ -77,9 +68,9 @@ export function ArbejdeClient({ sanityData }: { sanityData: any }) {
   const t = sanityData ? buildT(sanityData)[lang] : DEFAULT[lang]
 
   return (
-    <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
+    <div>
 
-      {/* ─── Left: text content ───────────────────────────── */}
+      {/* ─── Text content ─────────────────────────────────── */}
       <div>
         <motion.div {...fadeUp(0)} className="mb-10 max-w-md">
           <p className="text-[12px]/[1.85] text-text-2">{t.bio1}</p>
@@ -98,13 +89,6 @@ export function ArbejdeClient({ sanityData }: { sanityData: any }) {
               </li>
             ))}
           </ul>
-        </motion.div>
-
-        <motion.div {...fadeUp(0.1)} className="mt-10 max-w-sm">
-          <p className="mb-2 text-[9px] font-medium tracking-[0.18em] uppercase text-text-3">
-            {t.clientsLabel}
-          </p>
-          <p className="text-[11px]/[1.75] text-text-2">{t.clients}</p>
         </motion.div>
 
         <motion.div {...fadeUp(0.14)} className="mt-10">
@@ -128,24 +112,6 @@ export function ArbejdeClient({ sanityData }: { sanityData: any }) {
           </Link>
         </motion.div>
       </div>
-
-      {/* ─── Right: portrait ──────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.08, ease }}
-        className="order-first lg:order-last"
-      >
-        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
-          <Image
-            src="/mig/Arbejde.webp"
-            alt="Ruth-Anne Dausell"
-            fill
-            className="object-cover object-center"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </div>
-      </motion.div>
 
     </div>
   )

@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Download } from 'lucide-react'
 import { useLang } from '@/lib/lang-context'
+import { downloadCv, saveFile } from '@/lib/cv-download'
+import { PdfView } from './_pdf-view'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -22,14 +24,67 @@ type Doc = {
 }
 
 const T = {
-  da: { eyebrow: 'CV', heading: 'Udtalelser', backToCV: 'Gå til CV', of: 'af', downloadAll: 'Download alle udtalelser', downloadLabel: 'Download' },
-  en: { eyebrow: 'CV', heading: 'References', backToCV: 'Go to CV', of: 'of', downloadAll: 'Download all references', downloadLabel: 'Download' },
+  da: {
+    eyebrow: 'CV', heading: 'Udtalelser', backToCV: 'Gå til CV', of: 'af',
+    downloadAll: 'Download alle udtalelser', downloadAllBtn: 'Download alle ↓', downloadLabel: 'Download',
+    promptTitle: 'Vil du også downloade CV\'et?',
+    promptYes: 'Ja', promptNo: 'Nej', promptCancel: 'Annuller',
+    zipping: 'Pakker filer…',
+  },
+  en: {
+    eyebrow: 'CV', heading: 'References', backToCV: 'Go to CV', of: 'of',
+    downloadAll: 'Download all references', downloadAllBtn: 'Download all ↓', downloadLabel: 'Download',
+    promptTitle: 'Would you also like to download the CV?',
+    promptYes: 'Yes', promptNo: 'No', promptCancel: 'Cancel',
+    zipping: 'Preparing files…',
+  },
 }
 
-export function UdtalelserClient({ docs }: { docs: Doc[] }) {
+type Pending = { type: 'single'; doc: Doc } | { type: 'all' }
+
+export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: string | null }) {
   const { lang } = useLang()
   const t = T[lang]
   const [index, setIndex] = useState(0)
+  const [pending, setPending] = useState<Pending | null>(null)
+  const [zipping, setZipping] = useState(false)
+
+  const fileName = (d: Doc) => {
+    const ext = d.fileUrl.split('.').pop()?.split('?')[0] ?? 'pdf'
+    return `Udtalelse - ${d.source}.${ext}`
+  }
+
+  const downloadAllAsZip = async () => {
+    setZipping(true)
+    try {
+      const JSZip = (await import('jszip')).default
+      const zip = new JSZip()
+      await Promise.all(
+        docs.map(async (d) => {
+          const res = await fetch(d.fileUrl)
+          zip.file(fileName(d), await res.blob())
+        }),
+      )
+      const blob = await zip.generateAsync({ type: 'blob' })
+      const url = URL.createObjectURL(blob)
+      saveFile(url, 'Ruth-Anne-Dausell-udtalelser.zip')
+      URL.revokeObjectURL(url)
+    } catch {
+      // Fallback: enkeltvise downloads
+      docs.forEach((d) => saveFile(d.fileUrl, fileName(d)))
+    } finally {
+      setZipping(false)
+    }
+  }
+
+  const runPending = async (withCv: boolean) => {
+    const action = pending
+    setPending(null)
+    if (!action) return
+    if (action.type === 'single') saveFile(action.doc.fileUrl, fileName(action.doc))
+    else await downloadAllAsZip()
+    if (withCv) downloadCv(cvPdfUrl)
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -50,7 +105,7 @@ export function UdtalelserClient({ docs }: { docs: Doc[] }) {
   if (!doc) return null
 
   return (
-    <main className="min-h-screen px-4 pt-14 sm:px-8">
+    <main className="px-4 pt-14 sm:px-8">
 
       <div className="mb-8 px-2 sm:px-4">
         <Link
@@ -97,13 +152,7 @@ export function UdtalelserClient({ docs }: { docs: Doc[] }) {
               >
                 <div className="overflow-hidden rounded-2xl bg-white">
                   {doc.isPdf ? (
-                    <iframe
-                      key={doc.fileUrl}
-                      src={`${doc.fileUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-                      title={doc.source}
-                      className="block w-full"
-                      style={{ height: `${DOC_HEIGHT}vh`, minHeight: DOC_MIN, border: 'none', outline: 'none', display: 'block' }}
-                    />
+                    <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
                   ) : (
                     <Image
                       src={doc.fileUrl}
@@ -164,28 +213,72 @@ export function UdtalelserClient({ docs }: { docs: Doc[] }) {
       </div>
 
       <div className="mx-auto mt-16 max-w-xl">
-        <p className="mb-5 text-[9px] font-medium tracking-[0.18em] uppercase text-text-3">
-          {t.downloadAll}
-        </p>
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <p className="text-[9px] font-medium tracking-[0.18em] uppercase text-text-3">
+            {t.downloadAll}
+          </p>
+          <button
+            onClick={() => setPending({ type: 'all' })}
+            disabled={zipping}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[11px] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text disabled:opacity-40"
+          >
+            <Download size={11} strokeWidth={1.5} />
+            {zipping ? t.zipping : t.downloadAllBtn}
+          </button>
+        </div>
         <ul className="divide-y divide-border border-t border-border">
-          {docs.filter((d) => d.isPdf).map((d, i) => (
+          {docs.map((d, i) => (
             <li key={i} className="flex items-center justify-between gap-4 py-3">
               <div>
                 <p className="text-[11px] font-[450] text-text">{d.source}</p>
                 <p className="text-[10px] text-text-3">{d.author} · {d.year}</p>
               </div>
-              <a
-                href={d.fileUrl}
-                download
+              <button
+                onClick={() => setPending({ type: 'single', doc: d })}
                 className="flex items-center gap-1.5 text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50"
               >
                 <Download size={11} strokeWidth={1.5} />
                 {t.downloadLabel}
-              </a>
+              </button>
             </li>
           ))}
         </ul>
       </div>
+
+      {/* Popup: vil du også downloade CV'et? */}
+      {pending && (
+        <div
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/25 px-6 backdrop-blur-[2px]"
+          onClick={() => setPending(null)}
+        >
+          <div
+            className="w-full max-w-xs rounded-2xl border border-border bg-surface p-6 shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-[12px] font-[450] text-text">{t.promptTitle}</p>
+            <div className="mt-5 flex items-center gap-2">
+              <button
+                onClick={() => runPending(true)}
+                className="rounded-full bg-accent px-4 py-2 text-[11px] font-medium text-surface transition-opacity duration-150 hover:opacity-80"
+              >
+                {t.promptYes}
+              </button>
+              <button
+                onClick={() => runPending(false)}
+                className="rounded-full border border-border px-4 py-2 text-[11px] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text"
+              >
+                {t.promptNo}
+              </button>
+              <button
+                onClick={() => setPending(null)}
+                className="ml-auto px-2 py-2 text-[11px] text-text-3 transition-opacity duration-150 hover:opacity-50"
+              >
+                {t.promptCancel}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   )

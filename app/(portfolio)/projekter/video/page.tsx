@@ -1,9 +1,9 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useLang } from '@/lib/lang-context'
+import { ProjectVideo } from '@/components/project-video'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -17,25 +17,32 @@ type VideoEntry = {
 
 const VIDEOS: VideoEntry[] = [
   {
-    src: '/projekter/SUHN io/Video design Suhn IO_final.mp4',
-    title: 'SUHN IO · Video design',
-    titleEn: 'SUHN IO · Video design',
-    client: 'SUHN IO',
-    slug: 'suhn-io',
-  },
-  {
-    src: '/projekter/SUHN io/Visuel præsentation SUHN IO (1).mp4',
+    src: '/projekter/SUHN io/Visuel præsentation SUHN IO.mp4',
     title: 'SUHN IO · Visuel præsentation',
     titleEn: 'SUHN IO · Visual presentation',
     client: 'SUHN IO',
     slug: 'suhn-io',
   },
   {
-    src: '/projekter/Substrate/Færdig Mobile Video.mp4',
+    src: '/projekter/SUHN io/suhn-praesentation-1-web.mp4',
+    title: 'SUHN IO · Video design',
+    titleEn: 'SUHN IO · Video design',
+    client: 'SUHN IO',
+    slug: 'suhn-io',
+  },
+  {
+    src: '/projekter/Substrate/substrate-video-web.mp4',
     title: 'Substrate · Mobile video',
     titleEn: 'Substrate · Mobile video',
     client: 'Substrate',
     slug: 'substrate',
+  },
+  {
+    src: '/projekter/VeloMore Magazine/IMG_9487.mp4',
+    title: 'VeloMore · Video',
+    titleEn: 'VeloMore · Video',
+    client: 'VeloMore',
+    slug: 'velo-magazine',
   },
   {
     src: '/projekter/BookLab/download.mp4',
@@ -72,32 +79,6 @@ const T = {
 
 function VideoCard({ video, lang }: { video: VideoEntry; lang: 'da' | 'en' }) {
   const t = T[lang]
-  const ref = useRef<HTMLVideoElement>(null)
-  const [pinned, setPinned] = useState(false)
-
-  const handleMouseEnter = useCallback(() => {
-    if (!pinned) ref.current?.play().catch(() => {})
-  }, [pinned])
-
-  const handleMouseLeave = useCallback(() => {
-    if (!pinned && ref.current) {
-      ref.current.pause()
-      ref.current.currentTime = 0
-    }
-  }, [pinned])
-
-  const handleClick = useCallback(() => {
-    const video = ref.current
-    if (!video) return
-    if (pinned) {
-      setPinned(false)
-      video.pause()
-      video.currentTime = 0
-    } else {
-      setPinned(true)
-      video.play().catch(() => {})
-    }
-  }, [pinned])
 
   return (
     <motion.div
@@ -105,22 +86,10 @@ function VideoCard({ video, lang }: { video: VideoEntry; lang: 'da' | 'en' }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease }}
     >
-      <div
-        className="relative cursor-pointer overflow-hidden rounded-2xl border border-border bg-[oklch(91%_0_0)]"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
-        style={{ aspectRatio: '16/9' }}
-      >
-        <video
-          ref={ref}
-          src={encodeURI(video.src)}
-          muted
-          loop
-          playsInline
-          className="h-full w-full object-cover"
-        />
-      </div>
+      <ProjectVideo
+        src={video.src}
+        className="aspect-[16/9] rounded-2xl border border-border"
+      />
       <div className="mt-3 flex items-center justify-between gap-4">
         <p className="text-[11px] font-[430] text-text">
           {lang === 'en' ? video.titleEn : video.title}
@@ -141,7 +110,7 @@ export default function VideoPage() {
   const t = T[lang]
 
   return (
-    <main className="min-h-screen px-8 pt-14 sm:px-14">
+    <main className="px-8 pt-14 sm:px-14">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

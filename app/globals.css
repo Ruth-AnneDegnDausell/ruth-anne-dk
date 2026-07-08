@@ -72,7 +72,15 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
-    cursor: none;
+    /* Siden må aldrig kunne rokkes sidelæns */
+    overflow-x: clip;
+  }
+
+  /* Skjul kun systemmarkøren hvor den specialtegnede markør faktisk vises */
+  @media (pointer: fine) {
+    body {
+      cursor: none;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -107,5 +115,17 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Print: skjul navigation og footer så CV'et kan gemmes rent som PDF */
+@media print {
+  nav,
+  footer,
+  .print-hidden {
+    display: none !important;
+  }
+  .sm\:pl-12 {
+    padding-left: 0 !important;
   }
 }

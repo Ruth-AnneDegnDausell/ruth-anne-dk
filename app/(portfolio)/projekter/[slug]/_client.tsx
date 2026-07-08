@@ -5,8 +5,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
-import { useEffect, useRef, Suspense } from 'react'
+import { Suspense } from 'react'
 import { useLang } from '@/lib/lang-context'
+import { ProjectVideo } from '@/components/project-video'
 import type { Project } from '@/lib/projects'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
@@ -25,7 +26,6 @@ function ProjectContent({ project, prev, next }: {
   const from = searchParams.get('from')
   const { lang } = useLang()
   const t = T[lang]
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
   const title = lang === 'en' ? project.titleEn : project.title
   const categoryLabel = lang === 'en' ? project.categoryLabelEn : project.categoryLabel
@@ -34,27 +34,10 @@ function ProjectContent({ project, prev, next }: {
   const backHref = from === 'home' ? '/' : from === 'cv' ? '/cv' : '/projekter'
   const backLabel = from === 'home' ? t.backHome : from === 'cv' ? t.backCv : t.back
 
-  useEffect(() => {
-    const observers: IntersectionObserver[] = []
-    videoRefs.current.forEach((video) => {
-      if (!video) return
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) video.play().catch(() => {})
-          else { video.pause(); video.currentTime = 0 }
-        },
-        { threshold: 0.5 }
-      )
-      obs.observe(video)
-      observers.push(obs)
-    })
-    return () => observers.forEach((obs) => obs.disconnect())
-  }, [project.videos])
-
   const galleryImages = project.images?.filter((src) => src !== project.cover) ?? []
 
   return (
-    <main className="min-h-screen pt-14">
+    <main className="pt-14">
 
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -146,17 +129,14 @@ function ProjectContent({ project, prev, next }: {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1, ease }}
-          className="mb-10 space-y-4 px-8 sm:px-14"
+          className="mb-10 flex flex-wrap items-start gap-4 px-8 sm:px-14"
         >
           {project.videos!.map((src, i) => (
-            <video
+            <ProjectVideo
               key={i}
-              ref={(el) => { videoRefs.current[i] = el }}
-              src={encodeURI(src)}
-              loop
-              muted
-              playsInline
-              className="w-full rounded-xl bg-[oklch(91%_0_0)]"
+              src={src}
+              className="min-w-0 max-w-full"
+              videoClassName="block h-auto w-auto max-h-[420px] max-w-full"
             />
           ))}
         </motion.div>

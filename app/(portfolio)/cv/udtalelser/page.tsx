@@ -1,4 +1,4 @@
-import { getUdtalelser } from '@/lib/data'
+import { getUdtalelser, getCV } from '@/lib/data'
 import { UdtalelserClient } from './_client'
 
 const STATIC_DOCS = [
@@ -8,11 +8,11 @@ const STATIC_DOCS = [
   { source: 'Dahl Limited · Njordec', author: 'Kenneth Dahl', role: '', year: '2020', fileUrl: '/Til%20CV/Udtalelse_dahllimeted.pdf', isPdf: true },
   { source: 'Elev Ungdomsklub', author: 'Jacob Mohr Jensen', role: 'Klubleder', year: '2021', fileUrl: '/Til%20CV/euk-udtalelse.pdf', isPdf: true },
   { source: 'Dansk Wilton', author: 'Lone Ditmer', role: 'Marketing Manager', year: '2020', fileUrl: '/Til%20CV/Anbefaling_DanskWilton.pdf', isPdf: true },
-  { source: 'HK/Privats Ophavsretsfond', author: 'Legatudtalelse', role: 'Afgangsprojekt 2023', year: '2023', fileUrl: '/Til%20CV/Legat%20udtalelse.png', isPdf: false },
+  { source: 'HK/Privats Ophavsretsfond', author: 'Legatudtalelse', role: 'Afgangsprojekt 2023', year: '2023', fileUrl: '/Til%20CV/Legat%20udtalelse.webp', isPdf: false },
 ]
 
 export default async function UdtalelserPage() {
-  const sanityDocs = await getUdtalelser()
+  const [sanityDocs, cv] = await Promise.all([getUdtalelser(), getCV()])
 
   const docs = sanityDocs
     ? sanityDocs.map(d => ({
@@ -25,5 +25,5 @@ export default async function UdtalelserPage() {
       }))
     : STATIC_DOCS
 
-  return <UdtalelserClient docs={docs} />
+  return <UdtalelserClient docs={docs} cvPdfUrl={cv?.pdfUrl ?? null} />
 }

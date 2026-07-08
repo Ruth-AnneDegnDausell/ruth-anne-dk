@@ -66,7 +66,7 @@ export function PrivatClient({ sanityData }: { sanityData: any }) {
 
       {/* ─── Left: text ───────────────────────────────────── */}
       <div>
-        <motion.p {...fadeUp(0)} className="mb-8 max-w-sm text-[13px]/[1.65] font-[300] tracking-tight text-text">
+        <motion.p {...fadeUp(0)} className="mb-8 max-w-sm text-[12px]/[1.85] text-text-2">
           {t.intro}
         </motion.p>
 
@@ -97,11 +97,8 @@ export function PrivatClient({ sanityData }: { sanityData: any }) {
         transition={{ duration: 0.6, delay: 0.08, ease }}
         className="flex flex-col gap-4"
       >
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
-          <Image src="/mig/Privat.webp" alt="Ruth-Anne Dausell" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
-        </div>
-        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[oklch(93%_0_0)]">
-          <Image src="/mig/Privat2.webp" alt="Ruth-Anne Dausell" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
+        <div className="relative aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl bg-[oklch(91%_0_0)]">
+          <Image src={sanityData?.photoUrl ?? '/mig/Privat.webp'} alt="Ruth-Anne Dausell" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
         </div>
       </motion.div>
 

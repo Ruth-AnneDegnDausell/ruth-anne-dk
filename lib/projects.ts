@@ -6,6 +6,7 @@ export interface Project {
   category: Category
   categoryLabel: string
   categoryLabelEn: string
+  categories?: Array<{ id: string; da: string; en: string }>
   title: string
   titleEn: string
   year: string
@@ -168,7 +169,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 11,
-    slug: 'komunale-losninger',
+    slug: 'podcast-cover',
     category: 'branding',
     categoryLabel: 'Branding',
     categoryLabelEn: 'Branding',
@@ -244,6 +245,11 @@ export const PROJECTS: Project[] = [
       '/projekter/Aarhus Bornehojskole/Katalog-8.webp',
       '/projekter/Aarhus Bornehojskole/portfolio-1.webp',
     ],
+    testimonialRef: {
+      label: 'Se udtalelse fra Aarhus Børnehøjskole →',
+      labelEn: 'See reference from Aarhus Børnehøjskole →',
+      href: '/cv/udtalelser?i=2',
+    },
   },
   {
     id: 14,
@@ -307,6 +313,11 @@ export const PROJECTS: Project[] = [
     galleryLinks: [
       { label: 'Se illustrationer →', labelEn: 'See illustrations →', href: '/illustrationer?cat=vidsans' },
     ],
+    testimonialRef: {
+      label: 'Se udtalelse fra Vid&Sans →',
+      labelEn: 'See reference from Vid&Sans →',
+      href: '/cv/udtalelser?i=0',
+    },
   },
   {
     id: 18,
@@ -334,6 +345,9 @@ export const PROJECTS: Project[] = [
       '/projekter/KFUM-KFUK/DSCF9353.webp',
       '/projekter/KFUM-KFUK/portfolio-1.webp',
     ],
+    galleryLinks: [
+      { label: 'Se illustrationerne →', labelEn: 'See the illustrations →', href: '/illustrationer?cat=kfum' },
+    ],
   },
   {
     id: 21,
@@ -347,11 +361,11 @@ export const PROJECTS: Project[] = [
     desc: 'Visuel identitet for sportsbrandet RAMTT med fokus på kraft, bevægelse og atletisme.',
     descEn: 'Visual identity for the sports brand RAMTT focused on power, movement, and athleticism.',
     body: [
-      'RAMTT er et sportsbrand med en aggressiv, dynamisk visuel identitet. Opgaven var at skabe et logo og et farvesystem der kan bæres på tværs af discipliner — fra løb til kampsporten — og stadig fremstå sammenhængende og stærkt.',
+      'RAMTT er et sportsbrand med en aggressiv, dynamisk visuel identitet. Opgaven var at skabe et logo og et farvesystem der kan bæres på tværs af discipliner - fra løb til kampsporten - og stadig fremstå sammenhængende og stærkt.',
       'Logoet fungerer i en enkelt farve mod et monokromt fotografi såvel som i et system af farvevariantioner der giver fleksibilitet på tværs af beklædning, digitale flader og event-branding. Resultatet er en identitet der bærer sportens intensitet ind i det grafiske udtryk.',
     ],
     bodyEn: [
-      'RAMTT is a sports brand with an aggressive, dynamic visual identity. The task was to create a logo and colour system that could carry across disciplines — from running to combat sports — while remaining cohesive and powerful.',
+      'RAMTT is a sports brand with an aggressive, dynamic visual identity. The task was to create a logo and colour system that could carry across disciplines - from running to combat sports - while remaining cohesive and powerful.',
       'The logo works in a single colour against monochrome photography as well as in a system of colour variants that provides flexibility across apparel, digital surfaces, and event branding. The result is an identity that brings the intensity of sport into the graphic expression.',
     ],
     cover: '/projekter/RAMTT/Ramtt design (4).webp',
@@ -403,7 +417,7 @@ export const PROJECTS: Project[] = [
     ],
     videos: [
       '/projekter/SUHN io/Visuel præsentation SUHN IO.mp4',
-      '/projekter/SUHN io/Visuel præsentation SUHN IO (1).mp4',
+      '/projekter/SUHN io/suhn-praesentation-1-web.mp4',
     ],
   },
   {
@@ -494,7 +508,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 20,
-    slug: 'videnskab-podcast',
+    slug: 'huslaegens-bord-podcast',
     category: 'branding',
     categoryLabel: 'Illustration',
     categoryLabelEn: 'Illustration',
@@ -532,11 +546,11 @@ export const PROJECTS: Project[] = [
     descEn: 'Visual identity and digital presentation for Substrate. Logo design, brand guide, and mobile presentation.',
     body: [
       'Substrate er et digitalt produkt med en klar og minimalistisk visuel profil. Projektet omfattede udvikling af logo, brandguide og en komplet digital identitet tilpasset et moderne tech-udtryk.',
-      'Den visuelle præsentation er bygget op om klarhed og enkelhed — et udtryk der kommunikerer troværdighed og teknisk præcision. Den mobile præsentation demonstrerer identiteten i praksis på tværs af digitale platforme.',
+      'Den visuelle præsentation er bygget op om klarhed og enkelhed - et udtryk der kommunikerer troværdighed og teknisk præcision. Den mobile præsentation demonstrerer identiteten i praksis på tværs af digitale platforme.',
     ],
     bodyEn: [
       'Substrate is a digital product with a clear and minimalist visual profile. The project involved developing a logo, brand guide, and complete digital identity tailored to a modern tech aesthetic.',
-      'The visual presentation is built on clarity and simplicity — an expression that communicates credibility and technical precision. The mobile presentation demonstrates the identity in practice across digital platforms.',
+      'The visual presentation is built on clarity and simplicity - an expression that communicates credibility and technical precision. The mobile presentation demonstrates the identity in practice across digital platforms.',
     ],
     cover: '/projekter/Substrate/Substrate Delt Presentation (3).webp',
     images: [
@@ -549,7 +563,7 @@ export const PROJECTS: Project[] = [
       '/projekter/Substrate/sub.webp',
       '/projekter/Substrate/Substraete New Logo (1).webp',
     ],
-    videos: ['/projekter/Substrate/Færdig Mobile Video.mp4'],
+    videos: ['/projekter/Substrate/substrate-video-web.mp4'],
   },
   {
     id: 25,
@@ -564,11 +578,11 @@ export const PROJECTS: Project[] = [
     desc: 'Design af cykeltrøje med blomstermotiv til GOBIK. Illustration, mønsterdesign og mockup-fotografering.',
     descEn: 'Cycling jersey design with floral motif for GOBIK. Illustration, pattern design, and mockup photography.',
     body: [
-      'Designet af en cykeltrøje med et blomstermotiv — specifikt solsikker — som det bærende grafiske element. Illustrationen er tegnet til at omfavne trøjens form og følge kroppens bevægelse i sadlen.',
+      'Designet af en cykeltrøje med et blomstermotiv - specifikt solsikker - som det bærende grafiske element. Illustrationen er tegnet til at omfavne trøjens form og følge kroppens bevægelse i sadlen.',
       'Projektet dækkede hele processen fra idé og illustration til det færdige mockup, der viser trøjen på kroppen i realistisk kontekst. De AI-assisterede mockup-fotografier viser trøjedesignet fra forskellige vinkler og i bevægelse.',
     ],
     bodyEn: [
-      'Design of a cycling jersey with a floral motif — specifically sunflowers — as the central graphic element. The illustration is drawn to embrace the jersey\'s form and follow the body\'s movement in the saddle.',
+      'Design of a cycling jersey with a floral motif - specifically sunflowers - as the central graphic element. The illustration is drawn to embrace the jersey\'s form and follow the body\'s movement in the saddle.',
       'The project covered the entire process from concept and illustration to the finished mockup, showing the jersey on the body in a realistic context. The AI-assisted mockup photographs show the jersey design from different angles and in motion.',
     ],
     cover: '/projekter/GOBIK cykeltrøje/Person seated Jun 26 17.19.webp',
@@ -582,6 +596,9 @@ export const PROJECTS: Project[] = [
       '/projekter/GOBIK cykeltrøje/Shot_from_behind_with_a_202606261753.webp',
       '/projekter/GOBIK cykeltrøje/35mm Lens Capture Jun 26 17-19.webp',
       '/projekter/GOBIK cykeltrøje/lav_bukserne_sorte_202606261746.webp',
+    ],
+    galleryLinks: [
+      { label: 'Se flere cykel-illustrationer →', labelEn: 'See more cycling illustrations →', href: '/illustrationer?cat=cykel' },
     ],
   },
   {
@@ -609,5 +626,10 @@ export const PROJECTS: Project[] = [
     galleryLinks: [
       { label: 'Se fotografier →', labelEn: 'See photographs →', href: '/fotografier?cat=booklab' },
     ],
+    testimonialRef: {
+      label: 'Se udtalelse fra BOOKLAB →',
+      labelEn: 'See reference from BOOKLAB →',
+      href: '/cv/udtalelser?i=1',
+    },
   },
 ]

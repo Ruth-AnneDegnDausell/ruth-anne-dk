@@ -10,12 +10,12 @@ export default function OmMigLayout({ children }: { children: React.ReactNode })
   const { lang } = useLang()
 
   const tabs = [
-    { da: 'Arbejde', en: 'Work', href: '/om-mig/arbejde' },
     { da: 'Privat', en: 'Personal', href: '/om-mig/privat' },
+    { da: 'Arbejde', en: 'Work', href: '/om-mig/arbejde' },
   ]
 
   return (
-    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
+    <main className="px-8 pt-14 sm:px-14">
       <div className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">
           {lang === 'en' ? 'About' : 'Om mig'}

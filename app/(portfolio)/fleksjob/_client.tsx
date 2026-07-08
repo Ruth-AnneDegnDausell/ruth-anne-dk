@@ -74,38 +74,44 @@ export function FleksjobClient({ sanityData }: { sanityData: any }) {
   const t = sanityData ? buildT(sanityData)[lang] : DEFAULT[lang]
 
   return (
-    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
+    <main className="px-8 pt-14 sm:px-14">
       <motion.div {...fadeUp(0)} className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{t.eyebrow}</p>
         <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
       </motion.div>
 
-      <motion.div {...fadeUp(0.04)} className="mb-14 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-x-16">
-        <p className="text-[12px]/[1.9] text-text-2">{t.p1}</p>
-        <p className="text-[12px]/[1.9] text-text-2">{t.p2}</p>
-        <p className="text-[12px]/[1.9] text-text-2">{t.p3}</p>
-        <p className="text-[12px]/[1.9] text-text-2">{t.p4}</p>
-      </motion.div>
+      <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
 
-      <motion.div {...fadeUp(0.08)}>
-        <p className="mb-5 text-[9px] font-medium tracking-[0.18em] uppercase text-text-3">{t.factLabel}</p>
-        <ul className="divide-y divide-border border-t border-border">
-          {t.facts.map((f: any) => (
-            <li key={f.label} className="grid grid-cols-[160px_1fr] gap-4 py-3.5 sm:grid-cols-[200px_1fr]">
-              <span className="text-[11px] font-[450] text-text">{f.label}</span>
-              <span className="text-[11px]/[1.6] text-text-2">{f.value}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-8">
-          <Link
-            href="/fleksjob/ordningen"
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[11px] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text"
-          >
-            {t.linkLabel}
-          </Link>
-        </div>
-      </motion.div>
+        {/* ─── Left: text ─────────────────────────────────── */}
+        <motion.div {...fadeUp(0.04)} className="max-w-md space-y-4">
+          <p className="text-[12px]/[1.9] text-text-2">{t.p1}</p>
+          <p className="text-[12px]/[1.9] text-text-2">{t.p2}</p>
+          <p className="text-[12px]/[1.9] text-text-2">{t.p3}</p>
+          <p className="text-[12px]/[1.9] text-text-2">{t.p4}</p>
+        </motion.div>
+
+        {/* ─── Right: om ordningen ────────────────────────── */}
+        <motion.div {...fadeUp(0.08)}>
+          <p className="mb-5 text-[9px] font-medium tracking-[0.18em] uppercase text-text-3">{t.factLabel}</p>
+          <ul className="divide-y divide-border border-t border-border">
+            {t.facts.map((f: any) => (
+              <li key={f.label} className="grid grid-cols-[130px_1fr] gap-4 py-3.5 sm:grid-cols-[160px_1fr]">
+                <span className="text-[11px] font-[450] text-text">{f.label}</span>
+                <span className="text-[11px]/[1.6] text-text-2">{f.value}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8">
+            <Link
+              href="/fleksjob/ordningen"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[11px] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text"
+            >
+              {t.linkLabel}
+            </Link>
+          </div>
+        </motion.div>
+
+      </div>
     </main>
   )
 }

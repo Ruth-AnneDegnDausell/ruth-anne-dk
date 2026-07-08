@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { GalleryOrderInput } from '../components/gallery-order-input'
 
 const ROTATION_OPTIONS = [
   { title: '0°', value: 0 },
@@ -8,12 +9,12 @@ const ROTATION_OPTIONS = [
 ]
 
 const ASPECT_OPTIONS = [
-  { title: '2:3 (portræt — standard)', value: 'aspect-[2/3]' },
-  { title: '5:7 (portræt)', value: 'aspect-[5/7]' },
-  { title: '4:5 (portræt)', value: 'aspect-[4/5]' },
-  { title: '1:1 (kvadrat)', value: 'aspect-square' },
-  { title: '7:5 (bredformat)', value: 'aspect-[7/5]' },
-  { title: '4:3 (bredformat)', value: 'aspect-[4/3]' },
+  { title: 'Vertikalt · 2:3 (standard)', value: 'aspect-[2/3]' },
+  { title: 'Vertikalt · 5:7', value: 'aspect-[5/7]' },
+  { title: 'Vertikalt · 4:5 (næsten kvadratisk)', value: 'aspect-[4/5]' },
+  { title: 'Kvadratisk · 1:1', value: 'aspect-square' },
+  { title: 'Horisontalt · 7:5', value: 'aspect-[7/5]' },
+  { title: 'Horisontalt · 4:3', value: 'aspect-[4/3]' },
 ]
 
 export const illustrationerGallerySchema = defineType({
@@ -22,57 +23,52 @@ export const illustrationerGallerySchema = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'categories',
-      title: 'Kategorier',
-      description: 'Træk for at ændre kategoriernes rækkefølge i filteret.',
+      name: 'categoryOrder',
+      title: 'Kategori-rækkefølge (filterknapper)',
+      description: 'Træk for at ændre rækkefølgen af filterknapperne på siden. Opret nye kategorier direkte herfra.',
       type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'illKategori' }] }],
+    }),
+    defineField({
+      name: 'items',
+      title: 'Billeder (hele galleriet)',
+      description: 'Ét samlet gitter: skriv et nummer på et billede (eller træk) for at flytte det. Klik på et billede i listen nedenfor for at ændre format, kategorier og rotation.',
+      type: 'array',
+      components: { input: GalleryOrderInput },
       of: [{
         type: 'object',
-        name: 'illGalleriKategori',
+        name: 'illGalleriItem',
         preview: {
-          select: { label: 'label', items: 'items' },
-          prepare({ label, items }: any) {
-            return { title: label ?? '(uden navn)', subtitle: `${items?.length ?? 0} illustration(er)` }
+          select: { image: 'image', alt: 'alt' },
+          prepare({ image, alt }: any) {
+            return { title: alt ?? 'Illustration', media: image }
           },
         },
         fields: [
-          defineField({ name: 'slug', title: 'Slug (bruges i URL, fx "cykel")', type: 'string', validation: r => r.required() }),
-          defineField({ name: 'label', title: 'Navn (dansk)', type: 'string', validation: r => r.required() }),
-          defineField({ name: 'labelEn', title: 'Name (english)', type: 'string' }),
+          defineField({ name: 'image', title: 'Billede', type: 'image', options: { hotspot: true }, validation: r => r.required() }),
           defineField({
-            name: 'items',
-            title: 'Illustrationer',
-            description: 'Træk for at ændre rækkefølgen inden for kategorien.',
-            type: 'array',
-            of: [{
-              type: 'object',
-              name: 'illGalleriItem',
-              preview: {
-                select: { image: 'image', alt: 'alt' },
-                prepare({ image, alt }: any) {
-                  return { title: alt ?? 'Illustration', media: image }
-                },
-              },
-              fields: [
-                defineField({ name: 'image', title: 'Billede', type: 'image', options: { hotspot: true }, validation: r => r.required() }),
-                defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' }),
-                defineField({
-                  name: 'aspect',
-                  title: 'Billedformat',
-                  type: 'string',
-                  initialValue: 'aspect-[2/3]',
-                  options: { list: ASPECT_OPTIONS, layout: 'radio' },
-                }),
-                defineField({
-                  name: 'rotation',
-                  title: 'Rotation',
-                  type: 'number',
-                  initialValue: 0,
-                  options: { list: ROTATION_OPTIONS, layout: 'radio', direction: 'horizontal' },
-                }),
-              ],
-            }],
+            name: 'aspect',
+            title: 'Billedformat (vertikalt/horisontalt)',
+            description: 'Beskæringen følger billedets hotspot.',
+            type: 'string',
+            initialValue: 'aspect-[2/3]',
+            options: { list: ASPECT_OPTIONS, layout: 'radio' },
           }),
+          defineField({
+            name: 'rotation',
+            title: 'Rotation',
+            type: 'number',
+            initialValue: 0,
+            options: { list: ROTATION_OPTIONS, layout: 'radio', direction: 'horizontal' },
+          }),
+          defineField({
+            name: 'categories',
+            title: 'Kategorier',
+            description: 'Vælg én eller flere kategorier billedet skal vises under.',
+            type: 'array',
+            of: [{ type: 'reference', to: [{ type: 'illKategori' }] }],
+          }),
+          defineField({ name: 'alt', title: 'Alt-tekst', type: 'string' }),
         ],
       }],
     }),

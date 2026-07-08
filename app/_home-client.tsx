@@ -63,10 +63,21 @@ const T = {
   },
 }
 
-export function HomeClient({ featured }: { featured: Project[] }) {
+export function HomeClient({ featured, forside }: { featured: Project[]; forside?: any }) {
   const { lang } = useLang()
   const t = T[lang]
   const skills = SKILLS[lang]
+
+  // Sanity-indhold overstyrer defaults når det er udfyldt
+  const en = lang === 'en'
+  const c = {
+    tagline: (en ? forside?.taglineEn : forside?.tagline) ?? t.tagline,
+    intro: (en ? forside?.introEn : forside?.intro) ?? t.intro,
+    aboutHeading: (en ? forside?.aboutHeadingEn : forside?.aboutHeading) ?? t.aboutHeading,
+    aboutBody1: (en ? forside?.aboutBody1En : forside?.aboutBody1) ?? t.aboutBody1,
+    aboutBody2: (en ? forside?.aboutBody2En : forside?.aboutBody2) ?? t.aboutBody2,
+  }
+  const heroSrc = forside?.heroImageUrl ?? '/mig/Forside.webp'
 
   const heroRef = useRef<HTMLDivElement>(null)
   const [openSkill, setOpenSkill] = useState<number | null>(null)
@@ -79,12 +90,12 @@ export function HomeClient({ featured }: { featured: Project[] }) {
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
 
   return (
-    <main className="min-h-screen">
+    <main>
 
       {/* ─── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex min-h-screen flex-col justify-between overflow-hidden px-8 pb-10 pt-14 sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
+        className="relative flex flex-col justify-between overflow-hidden px-8 pb-10 pt-14 sm:min-h-screen sm:flex-row sm:items-stretch sm:px-14 sm:pb-14"
       >
         <motion.div
           style={{ opacity: heroOpacity }}
@@ -95,7 +106,7 @@ export function HomeClient({ featured }: { featured: Project[] }) {
               custom={0} variants={fadeUp} initial="hidden" animate="visible"
               className="mb-8 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3"
             >
-              {t.tagline}
+              {c.tagline}
             </motion.p>
 
             <motion.h1
@@ -109,7 +120,7 @@ export function HomeClient({ featured }: { featured: Project[] }) {
               custom={2} variants={fadeUp} initial="hidden" animate="visible"
               className="mt-5 max-w-[260px] text-[12px]/[1.75] text-text-2"
             >
-              {t.intro}
+              {c.intro}
             </motion.p>
           </div>
 
@@ -125,7 +136,7 @@ export function HomeClient({ featured }: { featured: Project[] }) {
               <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
             </a>
             <a
-              href="/om-mig/arbejde"
+              href="/om-mig/privat"
               className="inline-flex w-fit items-center gap-1 text-[11px] text-text-2 transition-opacity duration-150 hover:opacity-50"
             >
               {t.about} →
@@ -139,7 +150,7 @@ export function HomeClient({ featured }: { featured: Project[] }) {
         >
           <div className="relative h-full min-h-[60vw] overflow-hidden rounded-2xl bg-[oklch(91%_0_0)] sm:min-h-0">
             <Image
-              src="/mig/Forside.webp"
+              src={heroSrc}
               alt="Ruth-Anne Dausell"
               fill
               className="object-cover"
@@ -152,7 +163,7 @@ export function HomeClient({ featured }: { featured: Project[] }) {
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ delay: 1.6, duration: 0.6 }}
-          className="absolute bottom-10 left-8 flex items-center gap-2 sm:left-14"
+          className="absolute bottom-10 left-8 hidden items-center gap-2 sm:left-14 sm:flex"
         >
           <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}>
             <ArrowDown strokeWidth={1.5} size={12} className="text-text-3" />
@@ -215,12 +226,12 @@ export function HomeClient({ featured }: { featured: Project[] }) {
           <div>
             <p className="mb-3 text-[10px] font-medium tracking-[0.2em] uppercase text-text-3">{t.aboutLabel}</p>
             <h2 className="mb-5 text-[13px]/[1.5] font-[450] tracking-tight text-text">
-              {t.aboutHeading}
+              {c.aboutHeading}
             </h2>
-            <p className="max-w-sm text-[12px]/[1.8] text-text-2">{t.aboutBody1}</p>
-            <p className="mt-4 max-w-sm text-[12px]/[1.8] text-text-2">{t.aboutBody2}</p>
+            <p className="max-w-sm text-[12px]/[1.8] text-text-2">{c.aboutBody1}</p>
+            <p className="mt-4 max-w-sm text-[12px]/[1.8] text-text-2">{c.aboutBody2}</p>
             <a
-              href="/om-mig/arbejde"
+              href="/om-mig/privat"
               className="mt-7 inline-flex items-center gap-1.5 text-[11px] font-medium text-text transition-opacity duration-150 hover:opacity-50"
             >
               {t.readMore}
@@ -267,25 +278,6 @@ export function HomeClient({ featured }: { featured: Project[] }) {
 
         </div>
       </section>
-
-      {/* ─── Footer ──────────────────────────────────────────── */}
-      <footer className="border-t border-border px-8 py-8 sm:px-14">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[10px] text-text-3">© Ruth-Anne Dausell</p>
-          <div className="flex items-center gap-5">
-            <a
-              href="https://www.instagram.com/ruthannedausell"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50"
-            >
-              Instagram ↗
-            </a>
-            <a href="/cv" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">CV</a>
-            <a href="/kontakt" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">Kontakt</a>
-          </div>
-        </div>
-      </footer>
 
     </main>
   )

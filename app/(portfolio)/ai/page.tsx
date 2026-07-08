@@ -20,7 +20,6 @@ const IMAGES = [
   '/projekter/AI fotografier/Balenciaga Style Model (1).webp',
   '/projekter/AI fotografier/C Array Photograph from Midjourney.webp',
   '/projekter/AI fotografier/Candid Sports Photograph from Midjourney.webp',
-  '/projekter/AI fotografier/Cappuccino på udendørs bord (1).webp',
   '/projekter/AI fotografier/Close-up Portrait May 21 2023.webp',
   '/projekter/AI fotografier/Close-up Portrait of Formula 1 Driver.webp',
   '/projekter/AI fotografier/Copenhagen Rekkehus Sunset.webp',
@@ -98,13 +97,13 @@ const T = {
   da: {
     eyebrow: 'AI Fotografier',
     heading: 'AI-genererede billeder',
-    body: 'En samling kommercielle fotografier genereret med Midjourney og andre AI-modeller. Billederne udforsker kommerciel fotografiæstetik på tværs af sport, mad, mode og arkitektur — og viser mulighederne inden for AI-assisteret billedproduktion som del af den kreative proces.',
+    body: 'En samling fotografier genereret med Midjourney, Nano Banana, Google Flow og øvrige AI-modeller. Billederne udforsker muligheder, teknikker og æstetik på tværs af motiver og kompositioner, og viser mulighederne inden for AI-assisteret billedproduktion som del af den kreative proces. Samlingen giver eksempler på, hvad AI-indhold kan bidrage med i mange forskellige kontekster, for brands og på tværs af platforme. Jeg er personligt enormt optaget og fascineret af AI og bruger meget af min fritid på at holde mig opdateret, øve mig og lære nye værktøjer. Jeg tror grundlæggende på, at AI skaber endnu flere muligheder for at folde den kreative proces og de visuelle idéer endnu mere ud.',
     counter: (i: number, n: number) => `${i + 1} / ${n}`,
   },
   en: {
     eyebrow: 'AI Photography',
     heading: 'AI-generated images',
-    body: 'A collection of commercial photographs generated with Midjourney and other AI models. The images explore commercial photography aesthetics across sport, food, fashion, and architecture — demonstrating the possibilities of AI-assisted image production as part of the creative process.',
+    body: 'A collection of photographs generated with Midjourney, Nano Banana, Google Flow, and other AI models. The images explore possibilities, techniques, and aesthetics across subjects and compositions, showing the potential of AI-assisted image production as part of the creative process. The collection offers examples of what AI content can bring to many different contexts, brands, and platforms. I am personally deeply fascinated by AI and spend much of my spare time keeping up to date, practising, and learning new tools. I fundamentally believe that AI opens up even more ways to unfold the creative process and visual ideas.',
     counter: (i: number, n: number) => `${i + 1} / ${n}`,
   },
 }
@@ -149,19 +148,9 @@ export default function AiFotografierPage() {
     return () => window.removeEventListener('keydown', handler)
   }, [prev, next])
 
-  // Preload adjacent images
-  useEffect(() => {
-    const preload = (src: string) => {
-      const img = new window.Image()
-      img.src = src
-    }
-    preload(IMAGES[(idx + 1) % IMAGES.length])
-    preload(IMAGES[(idx - 1 + IMAGES.length) % IMAGES.length])
-    preload(IMAGES[(idx + 2) % IMAGES.length])
-  }, [idx])
-
   const prevIdx = (idx - 1 + IMAGES.length) % IMAGES.length
   const nextIdx = (idx + 1) % IMAGES.length
+  const nextIdx2 = (idx + 2) % IMAGES.length
 
   return (
     <main className="flex min-h-screen flex-col pt-14">
@@ -204,27 +193,44 @@ export default function AiFotografierPage() {
             />
           </button>
 
-          {/* Main card — natural aspect ratio per image */}
-          <div className="relative min-w-0 flex-1 overflow-hidden rounded-xl bg-[oklch(93%_0_0)]">
-            <AnimatePresence mode="wait" initial={false}>
+          {/* Main card — fast områdehøjde (siden hopper aldrig), men billedet ER kortet:
+              naturligt format, afrundede hjørner direkte på billedet, ingen kasse bagved */}
+          <div className="relative min-w-0 flex-1" style={{ height: 'min(66vh, 620px)' }}>
+            <AnimatePresence initial={false}>
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, x: dir * 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: dir * -40 }}
                 transition={{ duration: 0.32, ease }}
+                className="absolute inset-0 flex items-center justify-center"
               >
                 <Image
                   src={IMAGES[idx]}
                   width={0}
                   height={0}
                   alt={`AI billede ${idx + 1}`}
-                  className="h-auto w-full max-h-[82vh]"
+                  className="h-auto w-auto rounded-xl"
+                  style={{ maxHeight: 'min(66vh, 620px)', maxWidth: '100%' }}
                   sizes="(max-width: 640px) calc(100vw - 4rem), min(calc(100vw - 7rem - 168px), 48rem)"
                   priority
                 />
               </motion.div>
             </AnimatePresence>
+
+            {/* Usynlig forudindlæsning af nabo-billeder i præcis samme optimerede størrelse */}
+            <div aria-hidden className="pointer-events-none absolute inset-0 opacity-0">
+              {[nextIdx, prevIdx, nextIdx2].map((i) => (
+                <Image
+                  key={IMAGES[i]}
+                  src={IMAGES[i]}
+                  fill
+                  alt=""
+                  className="object-contain"
+                  sizes="(max-width: 640px) calc(100vw - 4rem), min(calc(100vw - 7rem - 168px), 48rem)"
+                />
+              ))}
+            </div>
 
             {/* Arrow buttons — always visible, overlaid */}
             <button
@@ -242,16 +248,6 @@ export default function AiFotografierPage() {
               <ArrowRight size={12} strokeWidth={1.5} />
             </button>
 
-            {/* Progress bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/20">
-              <motion.div
-                key={`bar-${idx}`}
-                className="h-full bg-white/60"
-                initial={{ width: '0%' }}
-                animate={{ width: '100%' }}
-                transition={{ duration: INTERVAL_MS / 1000, ease: 'linear' }}
-              />
-            </div>
           </div>
 
           {/* Next thumbnail */}
@@ -273,8 +269,17 @@ export default function AiFotografierPage() {
         </div>
       </motion.div>
 
-      {/* Counter */}
-      <div className="mt-4 flex justify-center">
+      {/* Tidslinje + tæller — fast bredde, kan aldrig flyde ud over billedet */}
+      <div className="mt-4 flex flex-col items-center gap-2">
+        <div className="h-[2px] w-24 overflow-hidden rounded-full bg-border">
+          <motion.div
+            key={`bar-${idx}`}
+            className="h-full bg-text-3"
+            initial={{ width: '0%' }}
+            animate={{ width: '100%' }}
+            transition={{ duration: INTERVAL_MS / 1000, ease: 'linear' }}
+          />
+        </div>
         <p className="text-[10px] tabular-nums text-text-3">
           {t.counter(idx, IMAGES.length)}
         </p>

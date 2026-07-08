@@ -20,18 +20,39 @@ export default defineConfig({
         S.list()
           .title('Indhold')
           .items([
+            singleton(S, 'forside', 'Forside', 'forside'),
+            S.divider(),
             S.listItem()
               .title('Projekter')
               .child(S.documentTypeList('project').title('Projekter')),
+            singleton(S, 'projekterIndex', 'Projekter · Rækkefølge & forside', 'projekterIndex'),
+            S.listItem()
+              .title('Projekt-kategorier')
+              .child(S.documentTypeList('projektKategori').title('Projekt-kategorier')),
             S.divider(),
             singleton(S, 'fotografierGallery', 'Fotografier · Galleri', 'fotografierGallery'),
             singleton(S, 'illustrationerGallery', 'Illustrationer · Galleri', 'illustrationerGallery'),
+            S.listItem()
+              .title('Galleri-kategorier')
+              .child(
+                S.list()
+                  .title('Galleri-kategorier')
+                  .items([
+                    S.listItem()
+                      .title('Fotografi-kategorier')
+                      .child(S.documentTypeList('fotoKategori').title('Fotografi-kategorier')),
+                    S.listItem()
+                      .title('Illustration-kategorier')
+                      .child(S.documentTypeList('illKategori').title('Illustration-kategorier')),
+                  ])
+              ),
             S.divider(),
             singleton(S, 'about-arbejde', 'Om mig · Arbejde', 'aboutArbejde'),
             singleton(S, 'about-privat', 'Om mig · Privat', 'aboutPrivat'),
             S.divider(),
             singleton(S, 'kontakt', 'Kontakt', 'kontakt'),
             singleton(S, 'fleksjob', 'Fleksjob', 'fleksjob'),
+            singleton(S, 'ordningen', 'Fleksjob · Om ordningen', 'ordningen'),
             singleton(S, 'cv', 'CV', 'cv'),
             singleton(S, 'udtalelser', 'Udtalelser', 'udtalelser'),
           ]),

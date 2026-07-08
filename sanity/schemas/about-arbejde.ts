@@ -7,7 +7,6 @@ export const aboutArbejdeSchema = defineType({
   groups: [
     { name: 'da', title: 'Dansk', default: true },
     { name: 'en', title: 'English' },
-    { name: 'billeder', title: 'Billeder' },
   ],
   fields: [
     defineField({
@@ -41,12 +40,6 @@ export const aboutArbejdeSchema = defineType({
       ],
     }),
     defineField({
-      name: 'clients',
-      title: 'Erfaring fra (DA)',
-      type: 'string',
-      group: 'da',
-    }),
-    defineField({
       name: 'bio1En',
       title: 'Intro paragraph (EN)',
       type: 'text',
@@ -75,20 +68,6 @@ export const aboutArbejdeSchema = defineType({
           preview: { select: { title: 'title', subtitle: 'desc' } },
         },
       ],
-    }),
-    defineField({
-      name: 'clientsEn',
-      title: 'Experience from (EN)',
-      type: 'string',
-      group: 'en',
-    }),
-    defineField({
-      name: 'portrait',
-      title: 'Portræt',
-      description: 'Portræt · anbefalet min. 1200 × 1600 px',
-      type: 'image',
-      group: 'billeder',
-      options: { hotspot: true },
     }),
   ],
   preview: { select: { title: 'bio1' }, prepare: () => ({ title: 'Om mig · Arbejde' }) },

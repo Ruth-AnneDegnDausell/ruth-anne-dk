@@ -67,7 +67,7 @@ export const aboutPrivatSchema = defineType({
     defineField({
       name: 'photo',
       title: 'Personligt billede',
-      description: 'Personligt billede · anbefalet min. 1200 × 900 px',
+      description: 'Personligt billede · vises i højformat (3:4) · anbefalet min. 1200 × 1600 px',
       type: 'image',
       group: 'billeder',
       options: { hotspot: true },

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '@/lib/lang-context'
@@ -8,39 +9,43 @@ import type { Project } from '@/lib/projects'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
-const CATEGORIES = {
-  da: [
-    { id: 'alle', label: 'Alle' },
-    { id: 'branding', label: 'Branding' },
-    { id: 'illustration', label: 'Illustration' },
-    { id: 'ux-ui', label: 'UX · UI' },
-  ],
-  en: [
-    { id: 'alle', label: 'All' },
-    { id: 'branding', label: 'Branding' },
-    { id: 'illustration', label: 'Illustration' },
-    { id: 'ux-ui', label: 'UX · UI' },
-  ],
+const T = {
+  da: { label: 'Arbejder', heading: 'Udvalgte projekter', all: 'Alle' },
+  en: { label: 'Work', heading: 'Selected projects', all: 'All' },
 }
 
-const T = {
-  da: { label: 'Arbejder', heading: 'Udvalgte projekter' },
-  en: { label: 'Work', heading: 'Selected projects' },
-}
+// Kategorier på et projekt: nye multi-kategorier med fallback til den gamle enkelt-kategori
+const catsOf = (p: Project) => (p.categories?.length ? p.categories.map(c => c.id) : [p.category])
 
 export function ProjekterClient({ projects }: { projects: Project[] }) {
   const { lang } = useLang()
   const t = T[lang]
-  const cats = CATEGORIES[lang]
-  const [active, setActive] = useState('alle')
+  const searchParams = useSearchParams()
+  // /projekter?cat=branding åbner siden med filteret valgt (bruges af menuen)
+  const [active, setActive] = useState(() => {
+    const cat = searchParams.get('cat')
+    return cat && projects.some(p => catsOf(p).includes(cat)) ? cat : 'alle'
+  })
+
+  // Filterknapper bygges af de kategorier projekterne faktisk bruger
+  const seen = new Map<string, { id: string; label: string }>()
+  for (const p of projects) {
+    for (const c of p.categories ?? []) {
+      if (!seen.has(c.id)) seen.set(c.id, { id: c.id, label: lang === 'en' ? c.en : c.da })
+    }
+    if (!p.categories?.length && !seen.has(p.category)) {
+      seen.set(p.category, { id: p.category, label: lang === 'en' ? p.categoryLabelEn : p.categoryLabel })
+    }
+  }
+  const cats = [{ id: 'alle', label: t.all }, ...seen.values()]
 
   const filtered =
     active === 'alle'
       ? projects
-      : projects.filter(p => p.category === active)
+      : projects.filter(p => catsOf(p).includes(active))
 
   return (
-    <main className="min-h-screen px-8 pb-20 pt-14 sm:px-14">
+    <main className="px-8 pt-14 sm:px-14">
       <div className="mb-12">
         <p className="mb-3 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{t.label}</p>
         <h1 className="mb-8 text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>

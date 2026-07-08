@@ -4,10 +4,10 @@ import { PROJECTS } from './projects'
 import type { Project } from './projects'
 import { FOTOGRAFIER, ILLUSTRATIONER, type GalleryItem } from './gallery'
 
-// Maps rotation degrees to EXIF orientation for Sanity CDN
-function rotationToOrientation(deg: number): number {
-  const map: Record<number, number> = { 0: 1, 90: 6, 180: 3, 270: 8 }
-  return map[deg] ?? 1
+// Sanity CDN's 'or'-parameter tager grader direkte (0/90/180/270)
+const VALID_ROTATIONS = [90, 180, 270]
+function withRotation(b: any, deg: unknown) {
+  return VALID_ROTATIONS.includes(deg as number) ? b.orientation(deg as number) : b
 }
 
 function extractBody(blocks: unknown[]): string[] {
@@ -18,14 +18,20 @@ function extractBody(blocks: unknown[]): string[] {
 }
 
 function fromSanity(raw: any): Project {
-  const catLabel = raw.category === 'ux-ui' ? 'UX · UI' : raw.category === 'illustration' ? 'Illustration' : 'Branding'
+  const legacyLabel = raw.category === 'ux-ui' ? 'UX · UI' : raw.category === 'illustration' ? 'Illustration' : 'Branding'
+  // Nye kategori-referencer har forrang; gammel streng-kategori som fallback
+  const cats: Array<{ id: string; da: string; en: string }> = (raw.cats ?? [])
+    .filter((c: any) => c?.id)
+    .map((c: any) => ({ id: c.id, da: c.da ?? c.id, en: c.en ?? c.da ?? c.id }))
+  if (!cats.length && raw.category) cats.push({ id: raw.category, da: legacyLabel, en: legacyLabel })
   const sanityImage = raw.cover ?? null
   return {
     id: raw.sortOrder ?? 0,
     slug: raw.slug,
-    category: raw.category ?? 'branding',
-    categoryLabel: catLabel,
-    categoryLabelEn: catLabel,
+    category: raw.category ?? cats[0]?.id ?? 'branding',
+    categories: cats,
+    categoryLabel: cats[0]?.da ?? legacyLabel,
+    categoryLabelEn: cats[0]?.en ?? legacyLabel,
     title: raw.title ?? '',
     titleEn: raw.titleEn ?? raw.title ?? '',
     year: raw.year ?? '',
@@ -61,6 +67,7 @@ const slugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
   title, titleEn,
   "slug": slug.current,
   category, year,
+  "cats": categories[]->{ "id": slug, "da": label, "en": labelEn },
   body, bodyEn,
   "cover": select(defined(cover.asset->) => cover{ asset, hotspot, crop }, null),
   coverPath,
@@ -69,7 +76,8 @@ const slugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
     _key, _type,
     path,
     image{ asset, hotspot, crop },
-    rotation
+    rotation,
+    aspect
   },
   externalLink,
   sortOrder,
@@ -79,6 +87,7 @@ const allQuery = groq`*[_type == "project"] | order(sortOrder asc){
   title, titleEn,
   "slug": slug.current,
   category, year,
+  "cats": categories[]->{ "id": slug, "da": label, "en": labelEn },
   desc, descEn,
   featured,
   "cover": select(defined(cover.asset->) => cover{ asset, hotspot, crop }, null),
@@ -94,17 +103,21 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       const sanityGalleryItems = (raw.gallery ?? []).map((item: any) => {
         if (item.image?.asset) {
           let b = urlFor(item.image)
-          if (item.rotation) b = b.orientation(rotationToOrientation(item.rotation) as any)
+          // Valgfrit format: beskær fysisk via CDN så hotspottet respekteres
+          if (item.aspect === 'horizontal') b = b.width(1600).height(1200).fit('crop')
+          else if (item.aspect === 'vertical') b = b.width(1200).height(1600).fit('crop')
+          else if (item.aspect === 'square') b = b.width(1400).height(1400).fit('crop')
+          else b = b.width(1600)
+          b = withRotation(b, item.rotation)
           return b.url()
         }
         if (item.path) return item.path as string
         return null
       }).filter(Boolean) as string[]
 
-      // Append static images not already covered by the Sanity gallery
-      const sanityPaths = new Set(raw.gallery?.map((i: any) => i.path).filter(Boolean) ?? [])
-      const extraStatic = (staticProject?.images ?? []).filter(p => !sanityPaths.has(p))
-      const galleryImages = [...sanityGalleryItems, ...extraStatic]
+      // Sanity-galleriet er eneste sandhed: slettes et billede i Studio, forsvinder det
+      // fra sitet. Statiske billeder bruges kun hvis projektet slet intet galleri har i Sanity.
+      const galleryImages = raw.gallery?.length ? sanityGalleryItems : (staticProject?.images ?? [])
 
       const sanityImage = raw.cover ?? null
       return {
@@ -124,10 +137,72 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
 export async function getAllProjects(): Promise<Project[]> {
   try {
-    const items = await sanityClient.fetch(allQuery, {}, { next: { revalidate: 60 } })
-    if (items?.length) return items.map(fromSanity)
+    const [items, index] = await Promise.all([
+      sanityClient.fetch(allQuery, {}, { next: { revalidate: 60 } }),
+      sanityClient.fetch(
+        groq`*[_id == "projekterIndex"][0]{
+          "order": order[]->slug.current,
+          "featured": featured[]->slug.current,
+        }`,
+        {},
+        { next: { revalidate: 60 } },
+      ),
+    ])
+    if (items?.length) {
+      let projects: Project[] = items.map(fromSanity)
+
+      // Rækkefølge styret fra "Projekter · Rækkefølge & forside"
+      const order: string[] = index?.order ?? []
+      if (order.length) {
+        projects = [...projects].sort((a, b) => {
+          const ia = order.indexOf(a.slug)
+          const ib = order.indexOf(b.slug)
+          return (ia === -1 ? order.length : ia) - (ib === -1 ? order.length : ib)
+        })
+      }
+
+      // Forside-valg styret samme sted (fallback: featured-flag på projektet)
+      const featured: string[] = index?.featured ?? []
+      if (featured.length) {
+        projects = projects.map(p => ({ ...p, featured: featured.includes(p.slug) }))
+      }
+
+      return projects
+    }
   } catch {}
   return PROJECTS
+}
+
+// Forside-projekter i den valgte rækkefølge
+export async function getFeaturedProjects(): Promise<Project[]> {
+  const projects = await getAllProjects()
+  try {
+    const index = await sanityClient.fetch(
+      groq`*[_id == "projekterIndex"][0]{ "featured": featured[]->slug.current }`,
+      {},
+      { next: { revalidate: 60 } },
+    )
+    const featured: string[] = index?.featured ?? []
+    if (featured.length) {
+      return featured
+        .map(slug => projects.find(p => p.slug === slug))
+        .filter(Boolean) as Project[]
+    }
+  } catch {}
+  return projects.filter(p => p.featured).slice(0, 3)
+}
+
+// ── Forside ───────────────────────────────────────────────────────────────────
+
+export async function getForside() {
+  const raw = await fetchSingleton<any>('forside')
+  if (!raw) return null
+  return {
+    ...raw,
+    heroImageUrl: raw.heroImage?.asset
+      ? urlFor(raw.heroImage).width(1400).url()
+      : null,
+  }
 }
 
 // ── About ─────────────────────────────────────────────────────────────────────
@@ -137,7 +212,12 @@ export async function getAboutArbejde() {
 }
 
 export async function getAboutPrivat() {
-  return fetchSingleton<any>('about-privat')
+  const raw = await fetchSingleton<any>('about-privat')
+  if (!raw) return null
+  return {
+    ...raw,
+    photoUrl: raw.photo?.asset ? urlFor(raw.photo).width(1200).height(1600).fit('crop').url() : null,
+  }
 }
 
 // ── Kontakt ───────────────────────────────────────────────────────────────────
@@ -152,10 +232,24 @@ export async function getFleksjob() {
   return fetchSingleton<any>('fleksjob')
 }
 
+export async function getOrdningen() {
+  return fetchSingleton<any>('ordningen')
+}
+
 // ── CV ────────────────────────────────────────────────────────────────────────
 
 export async function getCV() {
-  return fetchSingleton<any>('cv')
+  const raw = await fetchSingleton<any>('cv')
+  if (!raw) return null
+  // file-<hash>-pdf → https://cdn.sanity.io/files/<projekt>/<dataset>/<hash>.pdf
+  const ref: string | undefined = raw.pdfFile?.asset?._ref
+  const m = ref?.match(/^file-([a-f0-9]+)-(\w+)$/)
+  return {
+    ...raw,
+    pdfUrl: m
+      ? `https://cdn.sanity.io/files/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'}/${m[1]}.${m[2]}`
+      : null,
+  }
 }
 
 // ── Udtalelser ────────────────────────────────────────────────────────────────
@@ -192,48 +286,60 @@ export type GalleryData = {
   allItems: GalleryItem[]
 }
 
+// Aspect-klasse → CDN-beskæringsmål, så hotspottet styrer udsnittet
+const ASPECT_DIMS: Record<string, [number, number]> = {
+  'aspect-[4/3]': [1600, 1200],
+  'aspect-[3/2]': [1600, 1067],
+  'aspect-[16/9]': [1600, 900],
+  'aspect-[7/5]': [1600, 1143],
+  'aspect-square': [1400, 1400],
+  'aspect-[4/5]': [1200, 1500],
+  'aspect-[2/3]': [1200, 1800],
+  'aspect-[5/7]': [1200, 1680],
+}
+
 function sanityGalleryItemToItem(raw: any, defaultAspect: string): GalleryItem {
   const imageAsset = raw.image ?? raw.imageAsset
   let src = raw.src as string | undefined
+  const aspect = raw.aspect ?? defaultAspect
   if (imageAsset?.asset) {
     let b = urlFor(imageAsset)
-    if (raw.rotation) b = b.orientation(rotationToOrientation(raw.rotation) as any)
+    const dims = ASPECT_DIMS[aspect]
+    if (dims) b = b.width(dims[0]).height(dims[1]).fit('crop')
+    else b = b.width(1600)
+    b = withRotation(b, raw.rotation)
     src = b.url()
   }
   return {
     src,
-    aspect: raw.aspect ?? defaultAspect,
+    aspect,
     alt: raw.alt || undefined,
   }
 }
 
 function buildGalleryData(
-  sanityCategories: any[] | null,
+  raw: { categories?: any[]; items?: any[] } | null,
   staticItems: GalleryItem[],
   staticCats: GalleryCategory[],
   defaultAspect: string,
 ): GalleryData {
-  if (sanityCategories?.length) {
-    const byCategory: Record<string, GalleryItem[]> = {}
-    const seenKeys = new Set<string>()
+  // Flad liste: items-rækkefølgen ER gitteret; kategorier er kun filter-tags
+  if (raw?.items?.length) {
     const allItems: GalleryItem[] = []
+    const byCategory: Record<string, GalleryItem[]> = {}
+    const cats = (raw.categories ?? []).filter((c: any) => c?.slug)
+    for (const cat of cats) byCategory[cat.slug] = []
 
-    for (const cat of sanityCategories) {
-      const catItems: GalleryItem[] = []
-      for (const item of cat.items ?? []) {
-        const gi = sanityGalleryItemToItem(item, defaultAspect)
-        catItems.push(gi)
-        const key = item._key ?? gi.src ?? ''
-        if (!seenKeys.has(key)) {
-          seenKeys.add(key)
-          allItems.push(gi)
-        }
+    for (const item of raw.items) {
+      const gi = sanityGalleryItemToItem(item, defaultAspect)
+      allItems.push(gi)
+      for (const slug of item.cats ?? []) {
+        if (byCategory[slug]) byCategory[slug].push(gi)
       }
-      byCategory[cat.slug] = catItems
     }
 
     return {
-      categories: sanityCategories.map(c => ({ id: c.slug, da: c.label ?? c.slug, en: c.labelEn ?? c.label ?? c.slug })),
+      categories: cats.map((c: any) => ({ id: c.slug, da: c.label ?? c.slug, en: c.labelEn ?? c.label ?? c.slug })),
       byCategory,
       allItems,
     }
@@ -267,10 +373,8 @@ const ILL_CATS: GalleryCategory[] = [
 ]
 
 const gallerySingletonQuery = groq`
-  categories[]{
-    slug, label, labelEn,
-    items[]{ _key, image{ asset, hotspot, crop }, aspect, alt, rotation }
-  }
+  "categories": categoryOrder[]->{ slug, label, labelEn },
+  items[]{ _key, image{ asset, hotspot, crop }, aspect, alt, rotation, "cats": categories[]->slug }
 `
 
 export async function getFotografierGallery(): Promise<GalleryData> {
@@ -280,7 +384,7 @@ export async function getFotografierGallery(): Promise<GalleryData> {
       {},
       { next: { revalidate: 60 } },
     )
-    return buildGalleryData(raw?.categories ?? null, FOTOGRAFIER, FOTO_CATS, 'aspect-[4/3]')
+    return buildGalleryData(raw ?? null, FOTOGRAFIER, FOTO_CATS, 'aspect-[4/3]')
   } catch {}
   return buildGalleryData(null, FOTOGRAFIER, FOTO_CATS, 'aspect-[4/3]')
 }
@@ -292,7 +396,7 @@ export async function getIllustrationerGallery(): Promise<GalleryData> {
       {},
       { next: { revalidate: 60 } },
     )
-    return buildGalleryData(raw?.categories ?? null, ILLUSTRATIONER, ILL_CATS, 'aspect-[2/3]')
+    return buildGalleryData(raw ?? null, ILLUSTRATIONER, ILL_CATS, 'aspect-[2/3]')
   } catch {}
   return buildGalleryData(null, ILLUSTRATIONER, ILL_CATS, 'aspect-[2/3]')
 }

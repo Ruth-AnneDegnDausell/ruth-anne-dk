@@ -5,8 +5,15 @@ import { useEffect, useRef, useState } from 'react'
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null)
   const [hovering, setHovering] = useState(false)
+  const [enabled, setEnabled] = useState(false)
+
+  // Kun på enheder med en rigtig mus - på touch ville prikken sidde fast i hjørnet
+  useEffect(() => {
+    setEnabled(window.matchMedia('(pointer: fine)').matches)
+  }, [])
 
   useEffect(() => {
+    if (!enabled) return
     const cursor = cursorRef.current
     if (!cursor) return
 
@@ -39,7 +46,9 @@ export function CustomCursor() {
       document.removeEventListener('mouseover', handleMouseOver)
       cancelAnimationFrame(raf)
     }
-  }, [])
+  }, [enabled])
+
+  if (!enabled) return null
 
   return (
     <div
