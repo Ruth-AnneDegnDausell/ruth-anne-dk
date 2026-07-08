@@ -40,6 +40,21 @@ function ProjectContent({ project, prev, next }: {
     .map((src, i) => ({ src, full: project.imagesFull?.[i] ?? src }))
     .filter((p) => p.src !== project.cover)
   const galleryImages = galleryPairs.map((p) => p.src)
+
+  // Projekter hvor videoerne ligger inde i selve galleriet i stedet for øverst
+  const videosInGallery = ['piba', 'flaneur'].includes(project.slug)
+  type GalleryEntry = { type: 'image'; src: string; imageIndex: number } | { type: 'video'; src: string }
+  const galleryEntries: GalleryEntry[] = galleryImages.map((src, i) => ({ type: 'image', src, imageIndex: i }))
+  if (videosInGallery && project.videos?.length) {
+    // Fordel videoerne jævnt i galleriet
+    project.videos.forEach((v, k) => {
+      const pos = Math.min(
+        galleryEntries.length,
+        Math.round(((k + 1) / (project.videos!.length + 1)) * galleryEntries.length),
+      )
+      galleryEntries.splice(pos, 0, { type: 'video', src: v })
+    })
+  }
   // Coveret er nr. 1 i lightboxen, derefter galleriets billeder
   const lightboxItems = [
     ...(project.cover ? [{ src: project.cover, full: project.cover, aspect: '' }] : []),
@@ -139,7 +154,7 @@ function ProjectContent({ project, prev, next }: {
         )}
       </motion.div>
 
-      {(project.videos?.length ?? 0) > 0 && (
+      {!videosInGallery && (project.videos?.length ?? 0) > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -158,30 +173,39 @@ function ProjectContent({ project, prev, next }: {
         </motion.div>
       )}
 
-      {galleryImages.length > 0 && (
+      {galleryEntries.length > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.12, ease }}
           className="mb-20 columns-2 gap-3 px-8 sm:px-14"
         >
-          {galleryImages.map((src, i) => (
-            <div
-              key={i}
-              onClick={() => setLightboxIndex(i + galleryOffset)}
-              className="mb-3 cursor-zoom-in break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
-            >
-              <Image
-                src={src}
-                alt={`${title} ${i + 1}`}
-                width={0}
-                height={0}
-                sizes="(max-width: 640px) 50vw, 40vw"
-                className="h-auto w-full block"
-                loading="lazy"
+          {galleryEntries.map((entry, i) =>
+            entry.type === 'video' ? (
+              <ProjectVideo
+                key={`v-${i}`}
+                src={entry.src}
+                className="mb-3 break-inside-avoid"
+                videoClassName="block h-auto w-full"
               />
-            </div>
-          ))}
+            ) : (
+              <div
+                key={i}
+                onClick={() => setLightboxIndex(entry.imageIndex + galleryOffset)}
+                className="mb-3 cursor-zoom-in break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
+              >
+                <Image
+                  src={entry.src}
+                  alt={`${title} ${entry.imageIndex + 1}`}
+                  width={0}
+                  height={0}
+                  sizes="(max-width: 640px) 50vw, 40vw"
+                  className="h-auto w-full block"
+                  loading="lazy"
+                />
+              </div>
+            )
+          )}
         </motion.div>
       )}
 
