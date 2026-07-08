@@ -36,7 +36,7 @@ const SKILLS = {
 
 const T = {
   da: {
-    tagline: 'Designer · Illustratør',
+    tagline: 'Designer · Illustrator',
     intro: 'Kreativt arbejde, gennemtænkt design og projekter der efterlader et varigt indtryk.',
     seeProjects: 'Se projekter',
     about: 'Om mig',

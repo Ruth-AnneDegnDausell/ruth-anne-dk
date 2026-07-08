@@ -27,13 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const shareImage = await getShareImage()
   return {
     metadataBase: new URL('https://ruth-anne.dk'),
-    title: { default: 'Ruth-Anne Dausell · Designer & Illustratør', template: '%s · Ruth-Anne Dausell' },
+    title: { default: 'Ruth-Anne Dausell · Designer & Illustrator', template: '%s · Ruth-Anne Dausell' },
     description: 'Portfolio: visuel identitet, illustration, UX · UI og art direction. Uddannet fra Designskolen Kolding.',
     openGraph: {
       type: 'website',
       siteName: 'Ruth-Anne Dausell',
       locale: 'da_DK',
-      title: 'Ruth-Anne Dausell · Designer & Illustratør',
+      title: 'Ruth-Anne Dausell · Designer & Illustrator',
       description: 'Portfolio: visuel identitet, illustration, UX · UI og art direction.',
       images: [{ url: shareImage, width: 1200, height: 630, alt: 'Ruth-Anne Dausell' }],
     },
