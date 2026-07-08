@@ -151,7 +151,8 @@ function ProjectContent({ project, prev, next }: {
               key={i}
               src={src}
               className="min-w-0 max-w-full"
-              videoClassName="block h-auto w-auto max-h-[420px] max-w-full"
+              videoClassName="block h-auto w-auto max-w-full"
+              sizeByOrientation
             />
           ))}
         </motion.div>

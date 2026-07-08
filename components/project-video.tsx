@@ -11,14 +11,18 @@ export function ProjectVideo({
   src,
   className = '',
   videoClassName = 'h-full w-full object-cover',
+  sizeByOrientation = false,
 }: {
   src: string
   className?: string
   videoClassName?: string
+  /** Vertikale videoer får samme højde som høje billeder, horisontale holdes lavere */
+  sizeByOrientation?: boolean
 }) {
   const ref = useRef<HTMLVideoElement>(null)
   const [pinned, setPinned] = useState(false)
   const [muted, setMuted] = useState(true)
+  const [portrait, setPortrait] = useState(false)
 
   const onEnter = useCallback(() => {
     if (!pinned) ref.current?.play().catch(() => {})
@@ -59,7 +63,12 @@ export function ProjectVideo({
         loop
         playsInline
         preload="metadata"
+        onLoadedMetadata={(e) => {
+          const v = e.currentTarget
+          setPortrait(v.videoHeight > v.videoWidth)
+        }}
         className={videoClassName}
+        style={sizeByOrientation ? { maxHeight: portrait ? 'min(78vh, 760px)' : 420 } : undefined}
       />
       <button
         onClick={toggleMute}

@@ -187,10 +187,14 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
 
       {/* ─── Udvalgte projekter ────────────────────────────────── */}
       <section className="px-8 py-28 sm:px-14">
-        <div className="mb-10 flex items-center justify-between border-b border-border pb-5">
+        <div className="mb-10 border-b border-border pb-5">
           <h2 className="text-[10px] font-[500] tracking-[0.18em] uppercase text-text-3">{t.selectedWork}</h2>
-          <a href="/projekter" className="text-[10px] text-text-3 transition-opacity duration-150 hover:opacity-50">
-            {t.seeAll}
+          <a
+            href="/projekter"
+            className="group mt-2 inline-flex items-center gap-1.5 text-[11px] font-medium text-text-2 transition-colors duration-150 hover:text-text"
+          >
+            {t.allProjects}
+            <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
           </a>
         </div>
 
@@ -231,22 +235,6 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
           ))}
         </div>
 
-        {/* Tydelig indgang til hele projektgalleriet - de tre ovenfor er kun et udvalg */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.5, ease }}
-          className="mt-12 flex justify-center"
-        >
-          <a
-            href="/projekter"
-            className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface px-6 py-3 text-[12px] font-medium text-text shadow-sm transition-all duration-200 hover:border-border-2 hover:shadow-[0_2px_10px_rgba(0,0,0,0.06)]"
-          >
-            {t.allProjects}
-            <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
-          </a>
-        </motion.div>
       </section>
 
       {/* ─── Om mig ───────────────────────────────────────────── */}
