@@ -17,6 +17,13 @@ type VideoEntry = {
 
 const VIDEOS: VideoEntry[] = [
   {
+    src: '/projekter/Flaneur/flaneur-reklame-web.mp4',
+    title: 'Flaneur · Reklamevideo',
+    titleEn: 'Flaneur · Commercial',
+    client: 'Flaneur',
+    slug: 'flaneur',
+  },
+  {
     src: '/projekter/Flaneur/flaneur-video-web.mp4',
     title: 'Flaneur · Video',
     titleEn: 'Flaneur · Video',

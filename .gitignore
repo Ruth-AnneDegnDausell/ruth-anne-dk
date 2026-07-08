@@ -43,3 +43,9 @@ next-env.d.ts
 # large design files
 *.psd
 *.ai
+
+# Store original-videoer - kun web-versionerne versioneres
+public/projekter/Substrate/Færdig Mobile Video.mp4
+public/projekter/SUHN io/1 Visuel præsentation SUHN IO.mp4
+public/projekter/SUHN io/2 Visuel præsentation SUHN IO.mp4
+public/projekter/Flaneur/flaneur.mp4

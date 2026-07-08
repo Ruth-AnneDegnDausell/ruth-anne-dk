@@ -14,9 +14,9 @@ async function getShareImage(): Promise<string> {
   try {
     const { sanityClient, urlFor } = await import('@/lib/sanity')
     const cover = await sanityClient.fetch(
-      `*[_type == "project" && slug.current == "flaneur"][0].cover`,
+      `*[_type == "project" && slug.current == "flaneur"][0]{cover}.cover`,
       {},
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 300 } },
     )
     if (cover?.asset) return urlFor(cover).width(1200).height(630).fit('crop').url()
   } catch {}

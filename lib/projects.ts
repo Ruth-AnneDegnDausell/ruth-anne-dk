@@ -64,7 +64,10 @@ export const PROJECTS: Project[] = [
       '/projekter/Flaneur/4.webp',
       '/projekter/Flaneur/6.webp',
     ],
-    videos: ['/projekter/Flaneur/flaneur-video-web.mp4'],
+    videos: [
+      '/projekter/Flaneur/flaneur-reklame-web.mp4',
+      '/projekter/Flaneur/flaneur-video-web.mp4',
+    ],
     galleryLinks: [
       { label: 'Se fotografier →', labelEn: 'See photographs →', href: '/fotografier?cat=flaneur' },
       { label: 'Se illustrationer →', labelEn: 'See illustrations →', href: '/illustrationer' },
