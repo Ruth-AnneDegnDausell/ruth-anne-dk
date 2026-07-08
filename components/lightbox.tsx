@@ -57,35 +57,44 @@ export function Lightbox({
   const prevItem = items[(index! - 1 + items.length) % items.length]
   const nextItem = items[(index! + 1) % items.length]
 
-  // Sidekolonne: nabo-card med pil lige under - fast forankret, så venstre
-  // og højre side altid står præcis spejlet over for hinanden
-  const sideColumn = (target: GalleryItem, go: () => void, label: string, ArrowIcon: typeof ArrowLeft, sideClass: string) => (
-    <div className={`absolute top-1/2 hidden -translate-y-1/2 flex-col items-center gap-3 sm:flex ${sideClass}`}>
-      {target.src && (
-        <button
-          onClick={(e) => { e.stopPropagation(); go() }}
-          aria-label={label}
-          className="relative overflow-hidden rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.10)]"
-          style={{ width: 160, height: 120 }}
-        >
-          <Image
-            src={target.src}
-            fill
-            alt=""
-            className="object-cover opacity-55 transition-opacity duration-150 hover:opacity-90"
-            sizes="160px"
-          />
-        </button>
-      )}
+  // Sideelement: nabo-card (stort, tættest på hovedbilledet) med pilen ved
+  // siden af, yderst - fast forankret og spejlet, så siderne står lige overfor
+  const sideColumn = (target: GalleryItem, go: () => void, label: string, ArrowIcon: typeof ArrowLeft, sideClass: string, arrowFirst: boolean) => {
+    const arrow = (
       <button
+        key="arrow"
         onClick={(e) => { e.stopPropagation(); go() }}
         aria-label={label}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text"
       >
         <ArrowIcon size={13} strokeWidth={1.5} />
       </button>
-    </div>
-  )
+    )
+    const thumb = target.src ? (
+      <button
+        key="thumb"
+        onClick={(e) => { e.stopPropagation(); go() }}
+        aria-label={label}
+        className="relative shrink-0 overflow-hidden rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.10)]"
+        style={{ width: 240, height: 180 }}
+      >
+        <Image
+          src={target.src}
+          fill
+          alt=""
+          className="object-cover opacity-55 transition-opacity duration-150 hover:opacity-90"
+          sizes="240px"
+        />
+      </button>
+    ) : (
+      <div key="thumb" className="shrink-0" style={{ width: 240 }} />
+    )
+    return (
+      <div className={`absolute top-1/2 hidden -translate-y-1/2 items-center gap-3 lg:flex ${sideClass}`}>
+        {arrowFirst ? [arrow, thumb] : [thumb, arrow]}
+      </div>
+    )
+  }
 
   return (
     <AnimatePresence>
@@ -100,7 +109,7 @@ export function Lightbox({
         onClick={onClose}
       >
         {/* Selve billedet - kun billedet stopper luk-klikket */}
-        <div className="flex h-full w-full items-center justify-center px-4 sm:px-56">
+        <div className="flex h-full w-full items-center justify-center px-4 lg:px-[340px]">
           <motion.div
             key={src}
             initial={{ opacity: 0, scale: 0.985 }}
@@ -124,9 +133,9 @@ export function Lightbox({
           </motion.div>
         </div>
 
-        {/* Nabo-cards + pile, spejlet i hver side */}
-        {sideColumn(prevItem, prev, 'Forrige billede', ArrowLeft, 'left-6 lg:left-10')}
-        {sideColumn(nextItem, next, 'Næste billede', ArrowRight, 'right-6 lg:right-10')}
+        {/* Nabo-cards + pile, spejlet i hver side: pil yderst, card tættest på billedet */}
+        {sideColumn(prevItem, prev, 'Forrige billede', ArrowLeft, 'left-5 xl:left-8', true)}
+        {sideColumn(nextItem, next, 'Næste billede', ArrowRight, 'right-5 xl:right-8', false)}
 
         {/* Usynlig forudindlæsning af naboernes fulde versioner */}
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-0">
@@ -150,14 +159,14 @@ export function Lightbox({
         <button
           onClick={(e) => { e.stopPropagation(); prev() }}
           aria-label="Forrige"
-          className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text sm:hidden"
+          className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text lg:hidden"
         >
           <ArrowLeft size={13} strokeWidth={1.5} />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); next() }}
           aria-label="Næste"
-          className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text sm:hidden"
+          className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text lg:hidden"
         >
           <ArrowRight size={13} strokeWidth={1.5} />
         </button>
