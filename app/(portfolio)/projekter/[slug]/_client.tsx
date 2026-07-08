@@ -68,13 +68,13 @@ function ProjectContent({ project, prev, next }: {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   return (
-    <main className="pt-14">
+    <main className="overflow-x-clip pt-14">
 
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease }}
-        className="mb-10 px-8 sm:px-14"
+        className="mb-6 flex flex-wrap items-center gap-5 px-8 sm:mb-10 sm:px-14"
       >
         <Link
           href={backHref}
@@ -83,13 +83,22 @@ function ProjectContent({ project, prev, next }: {
           <ArrowLeft size={11} strokeWidth={1.5} />
           {backLabel}
         </Link>
+        {backHref !== '/projekter' && (
+          <Link
+            href="/projekter"
+            className="inline-flex items-center gap-1.5 text-[11px] text-text-3 transition-colors duration-150 hover:text-text"
+          >
+            <ArrowLeft size={11} strokeWidth={1.5} />
+            {lang === 'en' ? 'All projects' : 'Se alle projekter'}
+          </Link>
+        )}
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.05, ease }}
-        className="mb-16 grid grid-cols-1 gap-10 px-8 sm:px-14 lg:grid-cols-[1fr_44%]"
+        className="mb-6 grid grid-cols-1 gap-6 px-8 sm:mb-16 sm:gap-10 sm:px-14 lg:grid-cols-[1fr_44%]"
       >
         <div className="flex flex-col justify-between">
           <div>
@@ -214,6 +223,7 @@ function ProjectContent({ project, prev, next }: {
       )}
 
       <Lightbox
+        backLabel={lang === 'en' ? 'Back to the project' : 'Tilbage til projektet'}
         items={lightboxItems}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}

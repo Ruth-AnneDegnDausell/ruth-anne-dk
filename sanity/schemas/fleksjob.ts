@@ -37,11 +37,25 @@ export const fleksjobSchema = defineType({
       }],
     }),
     // English
+    defineField({
+      name: 'worksBest',
+      title: 'Jeg arbejder bedst med · punkter (DA)',
+      type: 'array',
+      group: 'da',
+      of: [{ type: 'string' }],
+    }),
     defineField({ name: 'headingEn', title: 'Heading (EN)', type: 'string', group: 'en' }),
     defineField({ name: 'p1En', title: 'Paragraph 1 (EN)', type: 'text', rows: 3, group: 'en' }),
     defineField({ name: 'p2En', title: 'Paragraph 2 (EN)', type: 'text', rows: 5, group: 'en' }),
     defineField({ name: 'p3En', title: 'Paragraph 3 (EN)', type: 'text', rows: 4, group: 'en' }),
     defineField({ name: 'p4En', title: 'Paragraph 4 (EN)', type: 'text', rows: 4, group: 'en' }),
+    defineField({
+      name: 'worksBestEn',
+      title: 'I work best with · items (EN)',
+      type: 'array',
+      group: 'en',
+      of: [{ type: 'string' }],
+    }),
     defineField({
       name: 'factsEn',
       title: 'Fact table (EN)',

@@ -20,6 +20,16 @@ const DEFAULT = {
     p3: 'Kombinationen betyder, at min arbejdskapacitet ikke er konstant. Fleksjobordningen giver mig mulighed for at arbejde i et tempo og en struktur der er tilpasset netop det. Jeg arbejder færre timer end fuld tid, men med fuld professionel dedikation til de opgaver jeg varetager.',
     p4: 'Som designer trækker jeg faktisk på begge diagnoser som ressourcer: ADHD bidrager til en stærk kreativ og associativ tankegang, og de energirige faser forbundet med bipolar type 2 kan give ekstraordinært fokus og produktivitet. Fleksjob sikrer, at jeg aldrig presses ud over min kapacitet og dermed kan levere stabilt arbejde over tid.',
     linkLabel: 'Om fleksjob-ordningen generelt →',
+    worksBestLabel: 'Jeg arbejder bedst med',
+    worksBest: [
+      'Klare briefinger og tydelige prioriteringer',
+      'Afgrænsede opgaver med realistiske deadlines',
+      'Skriftlig kommunikation og faste check-ins',
+      'Mulighed for hjemmearbejde og ro til fordybelse',
+      'Opgaver hvor kvalitet, æstetik og struktur vægtes højt',
+    ],
+    ctaHeading: 'Interessant for dig?',
+    ctaLink: 'Kontakt mig →',
     factLabel: 'Om ordningen',
     facts: [
       { label: 'Ordning', value: 'Fleksjob (dansk beskæftigelsesordning)' },
@@ -36,6 +46,16 @@ const DEFAULT = {
     p3: 'The combination means my work capacity is not constant. The flex job arrangement gives me the opportunity to work at a pace and in a structure adapted to exactly that. I work fewer hours than full-time, but with full professional dedication to the tasks I carry out.',
     p4: 'As a designer, I actually draw on both diagnoses as resources: ADHD contributes to a strong creative and associative way of thinking, and the high-energy phases associated with bipolar type 2 can bring extraordinary focus and productivity. Flex employment ensures I am never pushed beyond my capacity and can therefore deliver consistent work over time.',
     linkLabel: 'About the flex job scheme in general →',
+    worksBestLabel: 'I work best with',
+    worksBest: [
+      'Clear briefs and distinct priorities',
+      'Well-defined tasks with realistic deadlines',
+      'Written communication and regular check-ins',
+      'The option to work from home and space for deep focus',
+      'Tasks where quality, aesthetics, and structure matter',
+    ],
+    ctaHeading: 'Sound interesting?',
+    ctaLink: 'Contact me →',
     factLabel: 'About the scheme',
     facts: [
       { label: 'Scheme', value: 'Flex job (Danish employment scheme)' },
@@ -56,6 +76,7 @@ function buildT(d: any) {
       p3: d.p3 ?? DEFAULT.da.p3,
       p4: d.p4 ?? DEFAULT.da.p4,
       facts: d.facts ?? DEFAULT.da.facts,
+      worksBest: d.worksBest?.length ? d.worksBest : DEFAULT.da.worksBest,
     },
     en: {
       ...DEFAULT.en,
@@ -65,6 +86,7 @@ function buildT(d: any) {
       p3: d.p3En ?? DEFAULT.en.p3,
       p4: d.p4En ?? DEFAULT.en.p4,
       facts: d.factsEn ?? DEFAULT.en.facts,
+      worksBest: d.worksBestEn?.length ? d.worksBestEn : DEFAULT.en.worksBest,
     },
   }
 }

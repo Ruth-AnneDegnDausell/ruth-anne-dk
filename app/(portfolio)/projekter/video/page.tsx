@@ -13,20 +13,15 @@ type VideoEntry = {
   titleEn: string
   client: string
   slug: string
+  vertical?: boolean
 }
 
+// Horisontale videoer først, de vertikale samlet nederst
 const VIDEOS: VideoEntry[] = [
   {
     src: '/projekter/Flaneur/flaneur-reklame-web.mp4',
     title: 'Flaneur · Reklamevideo',
     titleEn: 'Flaneur · Commercial',
-    client: 'Flaneur',
-    slug: 'flaneur',
-  },
-  {
-    src: '/projekter/Flaneur/flaneur-video-web.mp4',
-    title: 'Flaneur · Video',
-    titleEn: 'Flaneur · Video',
     client: 'Flaneur',
     slug: 'flaneur',
   },
@@ -45,18 +40,27 @@ const VIDEOS: VideoEntry[] = [
     slug: 'suhn-io',
   },
   {
+    src: '/projekter/piba/Video design.mp4',
+    title: 'PIBA · Video design',
+    titleEn: 'PIBA · Video design',
+    client: 'PIBA',
+    slug: 'piba',
+  },
+  {
+    src: '/projekter/Flaneur/flaneur-video-web.mp4',
+    title: 'Flaneur · Video',
+    titleEn: 'Flaneur · Video',
+    client: 'Flaneur',
+    slug: 'flaneur',
+    vertical: true,
+  },
+  {
     src: '/projekter/Substrate/substrate-video-web.mp4',
     title: 'Substrate · Mobile video',
     titleEn: 'Substrate · Mobile video',
     client: 'Substrate',
     slug: 'substrate',
-  },
-  {
-    src: '/projekter/VeloMore Magazine/IMG_9487.mp4',
-    title: 'VeloMore · Video',
-    titleEn: 'VeloMore · Video',
-    client: 'VeloMore',
-    slug: 'velo-magazine',
+    vertical: true,
   },
   {
     src: '/projekter/BookLab/download.mp4',
@@ -64,13 +68,7 @@ const VIDEOS: VideoEntry[] = [
     titleEn: 'BookLab · Book photography',
     client: 'BookLab',
     slug: 'booklab',
-  },
-  {
-    src: '/projekter/piba/Video design.mp4',
-    title: 'PIBA · Video design',
-    titleEn: 'PIBA · Video design',
-    client: 'PIBA',
-    slug: 'piba',
+    vertical: true,
   },
 ]
 
@@ -102,7 +100,7 @@ function VideoCard({ video, lang }: { video: VideoEntry; lang: 'da' | 'en' }) {
     >
       <ProjectVideo
         src={video.src}
-        className="aspect-[16/9] rounded-2xl border border-border"
+        className={`${video.vertical ? 'mx-auto aspect-[9/16] max-w-[320px]' : 'aspect-[16/9]'} rounded-2xl border border-border`}
       />
       <div className="mt-3 flex items-center justify-between gap-4">
         <p className="text-[11px] font-[430] text-text">

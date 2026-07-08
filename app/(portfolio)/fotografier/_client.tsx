@@ -113,6 +113,7 @@ export function FotografierContent({ gallery }: { gallery: GalleryData }) {
       </AnimatePresence>
 
       <Lightbox
+        backLabel={lang === 'en' ? 'Back to photography' : 'Tilbage til fotografier'}
         items={visible}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}

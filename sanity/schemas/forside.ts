@@ -55,6 +55,20 @@ export const forsideSchema = defineType({
     defineField({ name: 'aboutBody1En', title: 'About · Paragraph 1 (EN)', type: 'text', rows: 4, group: 'en' }),
     defineField({ name: 'aboutBody2En', title: 'About · Paragraph 2 (EN)', type: 'text', rows: 4, group: 'en' }),
     defineField({
+      name: 'contrib',
+      title: 'Hvad kan jeg bidrage med · punkter (DA)',
+      type: 'array',
+      group: 'da',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
+      name: 'contribEn',
+      title: 'What I can contribute · items (EN)',
+      type: 'array',
+      group: 'en',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'skillsEn',
       title: 'Skills · right side (EN)',
       type: 'array',

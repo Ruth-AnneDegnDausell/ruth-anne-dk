@@ -38,6 +38,8 @@ const T = {
       { label: 'Læs mere om fleksjobordningen →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Fleksjob-loentilskud-for-foertidspensionister-revalidering/hvem-kan-faa-fleksjob' },
     ],
     myStoryLink: '← Mit fleksjob',
+    ctaHeading: 'Interessant for dig?',
+    ctaLink: 'Kontakt mig →',
   },
   en: {
     eyebrow: 'Flex job',
@@ -57,6 +59,8 @@ const T = {
       { label: 'Read more about the flex job scheme →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Fleksjob-loentilskud-for-foertidspensionister-revalidering/hvem-kan-faa-fleksjob' },
     ],
     myStoryLink: '← My flex job',
+    ctaHeading: 'Sound interesting?',
+    ctaLink: 'Contact me →',
   },
 }
 
@@ -125,6 +129,16 @@ export function OrdningenClient({ sanityData }: { sanityData: any }) {
           </motion.div>
         ))}
       </div>
+
+      <motion.div {...fadeUp(0.25)} className="mt-12 max-w-3xl border-t border-border pt-8">
+        <p className="mb-3 text-[12px] font-[450] text-text">{t.ctaHeading}</p>
+        <Link
+          href="/kontakt"
+          className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[12px] font-medium text-surface transition-opacity duration-150 hover:opacity-80"
+        >
+          {t.ctaLink}
+        </Link>
+      </motion.div>
 
       <motion.div {...fadeUp(0.3)} className="mt-12 flex flex-col gap-3">
         {t.links.map((l: { label: string; href: string }) => (

@@ -110,6 +110,7 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
       </AnimatePresence>
 
       <Lightbox
+        backLabel={lang === 'en' ? 'Back to illustrations' : 'Tilbage til illustrationer'}
         items={visible}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}

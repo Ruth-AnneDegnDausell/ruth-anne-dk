@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLang } from '@/lib/lang-context'
 
 const IMAGES = [
@@ -148,6 +148,8 @@ export default function AiFotografierPage() {
     return () => window.removeEventListener('keydown', handler)
   }, [prev, next])
 
+  const touchX = useRef<number | null>(null)
+
   const prevIdx = (idx - 1 + IMAGES.length) % IMAGES.length
   const nextIdx = (idx + 1) % IMAGES.length
   const nextIdx2 = (idx + 2) % IMAGES.length
@@ -195,7 +197,16 @@ export default function AiFotografierPage() {
 
           {/* Main card — fast områdehøjde (siden hopper aldrig), men billedet ER kortet:
               naturligt format, afrundede hjørner direkte på billedet, ingen kasse bagved */}
-          <div className="relative min-w-0 flex-1" style={{ height: 'min(66vh, 620px)' }}>
+          <div
+            className="relative min-w-0 flex-1 h-[48vh] sm:h-[min(66vh,620px)]"
+            onTouchStart={(e) => { touchX.current = e.touches[0].clientX }}
+            onTouchEnd={(e) => {
+              if (touchX.current === null) return
+              const dx = e.changedTouches[0].clientX - touchX.current
+              touchX.current = null
+              if (Math.abs(dx) > 50) (dx < 0 ? next() : prev())
+            }}
+          >
             <AnimatePresence initial={false}>
               <motion.div
                 key={idx}
@@ -236,16 +247,23 @@ export default function AiFotografierPage() {
             <button
               onClick={prev}
               aria-label="Forrige"
-              className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/25 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/40"
+              className="absolute left-3 top-1/2 -translate-y-1/2 hidden h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/25 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/40 sm:flex"
             >
               <ArrowLeft size={12} strokeWidth={1.5} />
             </button>
             <button
               onClick={next}
               aria-label="Næste"
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/25 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/40"
+              className="absolute right-3 top-1/2 -translate-y-1/2 hidden h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-black/25 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/40 sm:flex"
             >
               <ArrowRight size={12} strokeWidth={1.5} />
+            </button>
+            {/* Rene chevrons på mobil */}
+            <button onClick={prev} aria-label="Forrige" className="absolute left-0 top-1/2 -translate-y-1/2 p-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)] sm:hidden">
+              <ChevronLeft size={28} strokeWidth={1.5} />
+            </button>
+            <button onClick={next} aria-label="Næste" className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)] sm:hidden">
+              <ChevronRight size={28} strokeWidth={1.5} />
             </button>
 
           </div>
@@ -270,7 +288,7 @@ export default function AiFotografierPage() {
       </motion.div>
 
       {/* Tidslinje + tæller — fast bredde, kan aldrig flyde ud over billedet */}
-      <div className="mt-4 flex flex-col items-center gap-2">
+      <div className="mt-3 flex flex-col items-center gap-2 sm:mt-4">
         <div className="h-[2px] w-24 overflow-hidden rounded-full bg-border">
           <motion.div
             key={`bar-${idx}`}
@@ -290,7 +308,7 @@ export default function AiFotografierPage() {
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.14, ease }}
-        className="mt-14 max-w-xl px-8 sm:px-14"
+        className="mt-8 max-w-xl px-8 sm:mt-14 sm:px-14"
       >
         <p className="text-[12px]/[1.85] text-text-2">{t.body}</p>
       </motion.div>

@@ -177,6 +177,10 @@ export function CVClient({ sanityData }: { sanityData: any }) {
       <div className="mb-12">
         <p className="mb-2 text-[10px] font-medium tracking-[0.22em] uppercase text-text-3">{lang === 'da' ? 'CV' : 'CV'}</p>
         <h1 className="mb-5 text-[13px] font-[450] tracking-tight text-text">Ruth-Anne Dausell</h1>
+        {/* Vises kun i PDF/print: aktivt link til hjemmesiden */}
+        <a href="https://ruth-anne.dk" className="cv-keep mb-4 hidden text-[11px] text-text-2 underline underline-offset-2 print:block">
+          ruth-anne.dk
+        </a>
         <p className="max-w-md text-[12px]/[1.85] text-text-2">{t.intro}</p>
         <button
           onClick={() => (sanityData?.pdfUrl ? downloadCv(sanityData.pdfUrl) : window.print())}

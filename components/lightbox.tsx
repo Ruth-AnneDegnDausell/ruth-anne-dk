@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GalleryItem } from '@/lib/gallery'
 
 // Lightbox i samme stil som AI-karrusellen: lys, sløret baggrund så galleriet
@@ -14,13 +14,17 @@ export function Lightbox({
   index,
   onClose,
   onIndexChange,
+  backLabel = 'Tilbage',
 }: {
   items: GalleryItem[]
   index: number | null
   onClose: () => void
   onIndexChange: (i: number) => void
+  /** Tekst på mobil-tilbageknappen, fx 'Tilbage til projektet' */
+  backLabel?: string
 }) {
   const open = index !== null && items[index] != null
+  const touchStartX = useRef<number | null>(null)
 
   const prev = useCallback(() => {
     if (index === null) return
@@ -107,6 +111,13 @@ export function Lightbox({
         className="fixed inset-0 z-[300] flex items-center justify-center backdrop-blur-md"
         style={{ background: 'rgba(246, 245, 243, 0.78)' }}
         onClick={onClose}
+        onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX }}
+        onTouchEnd={(e) => {
+          if (touchStartX.current === null) return
+          const dx = e.changedTouches[0].clientX - touchStartX.current
+          touchStartX.current = null
+          if (Math.abs(dx) > 50) (dx < 0 ? next : prev)()
+        }}
       >
         {/* Selve billedet - kun billedet stopper luk-klikket */}
         <div className="flex h-full w-full items-center justify-center px-4 lg:px-[340px]">
@@ -155,20 +166,29 @@ export function Lightbox({
           <X size={14} strokeWidth={1.5} />
         </button>
 
-        {/* Pile på mobil (hvor sidekolonnerne er skjult) */}
+        {/* Tilbage-knap øverst på mobil */}
+        <button
+          onClick={onClose}
+          className="absolute left-4 top-4 flex items-center gap-1.5 text-[12px] font-medium text-text-2 lg:hidden"
+        >
+          <ArrowLeft size={13} strokeWidth={1.5} />
+          {backLabel}
+        </button>
+
+        {/* Rene chevron-pile på mobil (uden baggrund) */}
         <button
           onClick={(e) => { e.stopPropagation(); prev() }}
           aria-label="Forrige"
-          className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text lg:hidden"
+          className="absolute left-1 top-1/2 -translate-y-1/2 p-2 text-text lg:hidden"
         >
-          <ArrowLeft size={13} strokeWidth={1.5} />
+          <ChevronLeft size={30} strokeWidth={1.5} />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); next() }}
           aria-label="Næste"
-          className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text lg:hidden"
+          className="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-text lg:hidden"
         >
-          <ArrowRight size={13} strokeWidth={1.5} />
+          <ChevronRight size={30} strokeWidth={1.5} />
         </button>
 
         {/* Tæller */}

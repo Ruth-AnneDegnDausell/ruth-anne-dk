@@ -48,6 +48,16 @@ const T = {
     aboutBody1: 'Uddannet fra Designskolen Kolding med speciale i visuel kommunikation. Har arbejdet med visuel identitet, illustration og videoproduktion for kunder inden for sport, kultur og livsstil.',
     aboutBody2: 'Baseret nord for Aarhus, arbejder jeg tæt med kunder fra første brief til færdigt produkt. Med to designuddannelser bag mig er min tilgang præcis og konceptdrevet.',
     readMore: 'Læs mere →',
+    contribLabel: 'Hvad kan jeg bidrage med hos dig',
+    contrib: [
+      'Visuel identitet og branding',
+      'Grafisk opsætning og layout',
+      'Content til hjemmeside og sociale medier',
+      'Tekst, tone of voice og formidling',
+      'Research og strukturering af komplekst materiale',
+      'Præsentationer, moodboards og visuelle oplæg',
+      'Kreativ sparring og idéudvikling',
+    ],
   },
   en: {
     tagline: 'Designer · Illustrator',
@@ -62,6 +72,16 @@ const T = {
     aboutBody1: 'Graduated from Designskolen Kolding with a specialisation in visual communication. Has worked on visual identity, illustration, and video production for clients in sports, culture, and lifestyle.',
     aboutBody2: 'Based north of Aarhus, I work closely with clients from first brief to finished product. With two design degrees behind me, my approach is precise and concept-driven.',
     readMore: 'Read more →',
+    contribLabel: 'What I can contribute at your workplace',
+    contrib: [
+      'Visual identity and branding',
+      'Graphic layout and typesetting',
+      'Content for websites and social media',
+      'Copy, tone of voice, and communication',
+      'Research and structuring of complex material',
+      'Presentations, moodboards, and visual pitches',
+      'Creative sparring and idea development',
+    ],
   },
 }
 
@@ -91,6 +111,9 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
     aboutBody2: (en ? forside?.aboutBody2En : forside?.aboutBody2) ?? t.aboutBody2,
   }
   const heroSrc = forside?.heroImageUrl ?? '/mig/Forside.webp'
+  const contribItems: string[] = (en ? forside?.contribEn : forside?.contrib)?.length
+    ? (en ? forside.contribEn : forside.contrib)
+    : t.contrib
 
   const heroRef = useRef<HTMLDivElement>(null)
   const [openSkill, setOpenSkill] = useState<number | null>(null)
@@ -186,7 +209,7 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
       </section>
 
       {/* ─── Udvalgte projekter ────────────────────────────────── */}
-      <section className="px-8 py-28 sm:px-14">
+      <section className="px-8 py-12 sm:px-14 sm:py-28">
         <div className="mb-10 border-b border-border pb-5">
           <h2 className="text-[10px] font-[500] tracking-[0.18em] uppercase text-text-3">{t.selectedWork}</h2>
           <a
@@ -238,7 +261,7 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
       </section>
 
       {/* ─── Om mig ───────────────────────────────────────────── */}
-      <section className="border-t border-border px-8 py-28 sm:px-14">
+      <section className="border-t border-border px-8 py-12 sm:px-14 sm:py-28">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
 
           <div>
@@ -295,6 +318,19 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
           </div>
 
         </div>
+      </section>
+
+      {/* ─── Hvad kan jeg bidrage med ─────────────────────────── */}
+      <section className="border-t border-border px-8 py-12 sm:px-14 sm:py-24">
+        <p className="mb-6 text-[10px] font-medium tracking-[0.2em] uppercase text-text-3">{t.contribLabel}</p>
+        <ul className="max-w-md space-y-2.5">
+          {contribItems.map((item) => (
+            <li key={item} className="flex items-center gap-2.5 text-[12px]/[1.7] text-text-2">
+              <span className="h-1 w-1 shrink-0 rounded-full bg-text-3" />
+              {item}
+            </li>
+          ))}
+        </ul>
       </section>
 
     </main>

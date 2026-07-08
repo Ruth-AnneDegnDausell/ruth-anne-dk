@@ -50,9 +50,7 @@ const NAV: NavItem[] = [
     href: '/projekter',
     icon: <FolderOpen strokeWidth={1.5} size={16} />,
     sub: [
-      { label: 'Projekter', labelEn: 'Projects', href: '/projekter' },
-      { label: 'Branding', labelEn: 'Branding', href: '/projekter?cat=branding' },
-      { label: 'UX · UI', labelEn: 'UX · UI', href: '/projekter?cat=ux-ui' },
+      { label: 'Alle projekter', labelEn: 'All projects', href: '/projekter' },
       { label: 'Video', labelEn: 'Video', href: '/projekter/video' },
       { label: 'AI Fotografier', labelEn: 'AI Photography', href: '/ai' },
     ],
@@ -157,9 +155,9 @@ function MobileNav() {
                   (item.sub?.some((s) => pathname.startsWith(s.href)) ?? false)
                 return (
                   <li key={item.label} className="mb-1">
-                    <Link
+                    {/* Almindeligt <a> så navigation altid virker på touch */}
+                    <a
                       href={item.href}
-                      onClick={() => setOpen(false)}
                       className={cn(
                         'flex items-center gap-3 py-2.5 text-[14px]',
                         isActive ? 'text-text' : 'text-text-2'
@@ -167,7 +165,7 @@ function MobileNav() {
                     >
                       <span className="text-text-3">{item.icon}</span>
                       {getLabel(item)}
-                    </Link>
+                    </a>
                     {item.sub && (
                       <ul className="mb-2 ml-[29px] border-l border-border pl-4">
                         {item.sub.map((sub) => (

@@ -61,6 +61,8 @@
   html {
     hanging-punctuation: first last;
     scroll-behavior: smooth;
+    /* Siden må aldrig kunne rokkes sidelæns - også på touch */
+    overflow-x: clip;
   }
 
   body {
@@ -132,5 +134,9 @@
   .cv-print a,
   .cv-print button {
     display: none !important;
+  }
+  /* ...men behold link til hjemmesiden */
+  .cv-print a.cv-keep {
+    display: block !important;
   }
 }
