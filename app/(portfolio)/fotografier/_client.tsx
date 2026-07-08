@@ -52,7 +52,7 @@ export function FotografierContent({ gallery }: { gallery: GalleryData }) {
             onClick={() => setActive('alle')}
             className={
               active === 'alle'
-                ? 'rounded-full bg-wine px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-butter transition-colors duration-150'
+                ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
                 : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
             }
           >
@@ -64,7 +64,7 @@ export function FotografierContent({ gallery }: { gallery: GalleryData }) {
               onClick={() => setActive(cat.id)}
               className={
                 active === cat.id
-                  ? 'rounded-full bg-wine px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-butter transition-colors duration-150'
+                  ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
                   : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
               }
             >
