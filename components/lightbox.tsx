@@ -57,25 +57,35 @@ export function Lightbox({
   const prevItem = items[(index! - 1 + items.length) % items.length]
   const nextItem = items[(index! + 1) % items.length]
 
-  const thumbBtn = (target: GalleryItem, go: () => void, label: string) =>
-    target.src ? (
+  // Sidekolonne: nabo-card med pil lige under - fast forankret, så venstre
+  // og højre side altid står præcis spejlet over for hinanden
+  const sideColumn = (target: GalleryItem, go: () => void, label: string, ArrowIcon: typeof ArrowLeft, sideClass: string) => (
+    <div className={`absolute top-1/2 hidden -translate-y-1/2 flex-col items-center gap-3 sm:flex ${sideClass}`}>
+      {target.src && (
+        <button
+          onClick={(e) => { e.stopPropagation(); go() }}
+          aria-label={label}
+          className="relative overflow-hidden rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.10)]"
+          style={{ width: 160, height: 120 }}
+        >
+          <Image
+            src={target.src}
+            fill
+            alt=""
+            className="object-cover opacity-55 transition-opacity duration-150 hover:opacity-90"
+            sizes="160px"
+          />
+        </button>
+      )}
       <button
         onClick={(e) => { e.stopPropagation(); go() }}
         aria-label={label}
-        className="relative hidden shrink-0 overflow-hidden rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.08)] sm:block"
-        style={{ width: 120, height: 90 }}
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text"
       >
-        <Image
-          src={target.src}
-          fill
-          alt=""
-          className="object-cover opacity-55 transition-opacity duration-150 hover:opacity-90"
-          sizes="120px"
-        />
+        <ArrowIcon size={13} strokeWidth={1.5} />
       </button>
-    ) : (
-      <div className="hidden shrink-0 sm:block" style={{ width: 120 }} />
-    )
+    </div>
+  )
 
   return (
     <AnimatePresence>
@@ -85,43 +95,38 @@ export function Lightbox({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.18 }}
-        className="fixed inset-0 z-[300] flex items-center justify-center px-4 backdrop-blur-md sm:px-6"
+        className="fixed inset-0 z-[300] flex items-center justify-center backdrop-blur-md"
         style={{ background: 'rgba(246, 245, 243, 0.78)' }}
         onClick={onClose}
       >
-        <div className="flex w-full max-w-6xl items-center justify-center gap-4 sm:gap-6">
-
-          {/* Forrige billede som lille card */}
-          {thumbBtn(prevItem, prev, 'Forrige billede')}
-
-          {/* Selve billedet - kun billedet stopper luk-klikket */}
-          <div className="flex min-w-0 flex-1 items-center justify-center">
-            <motion.div
-              key={src}
-              initial={{ opacity: 0, scale: 0.985 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.22 }}
-              className="max-w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {src && (
-                <Image
-                  src={src}
-                  alt={item.alt ?? ''}
-                  width={0}
-                  height={0}
-                  className="h-auto w-auto rounded-xl shadow-[0_10px_50px_rgba(0,0,0,0.18)]"
-                  style={{ maxHeight: 'calc(100vh - 7rem)', maxWidth: '100%' }}
-                  sizes="90vw"
-                  priority
-                />
-              )}
-            </motion.div>
-          </div>
-
-          {/* Næste billede som lille card */}
-          {thumbBtn(nextItem, next, 'Næste billede')}
+        {/* Selve billedet - kun billedet stopper luk-klikket */}
+        <div className="flex h-full w-full items-center justify-center px-4 sm:px-56">
+          <motion.div
+            key={src}
+            initial={{ opacity: 0, scale: 0.985 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.22 }}
+            className="max-w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {src && (
+              <Image
+                src={src}
+                alt={item.alt ?? ''}
+                width={0}
+                height={0}
+                className="h-auto w-auto rounded-xl shadow-[0_10px_50px_rgba(0,0,0,0.18)]"
+                style={{ maxHeight: 'calc(100vh - 7rem)', maxWidth: '100%' }}
+                sizes="90vw"
+                priority
+              />
+            )}
+          </motion.div>
         </div>
+
+        {/* Nabo-cards + pile, spejlet i hver side */}
+        {sideColumn(prevItem, prev, 'Forrige billede', ArrowLeft, 'left-6 lg:left-10')}
+        {sideColumn(nextItem, next, 'Næste billede', ArrowRight, 'right-6 lg:right-10')}
 
         {/* Usynlig forudindlæsning af naboernes fulde versioner */}
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-0">
@@ -141,18 +146,18 @@ export function Lightbox({
           <X size={14} strokeWidth={1.5} />
         </button>
 
-        {/* Diskrete pile */}
+        {/* Pile på mobil (hvor sidekolonnerne er skjult) */}
         <button
           onClick={(e) => { e.stopPropagation(); prev() }}
           aria-label="Forrige"
-          className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text sm:left-5"
+          className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text sm:hidden"
         >
           <ArrowLeft size={13} strokeWidth={1.5} />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); next() }}
           aria-label="Næste"
-          className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text sm:right-5"
+          className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-border bg-surface/90 text-text-2 shadow-sm transition-colors duration-150 hover:border-border-2 hover:text-text sm:hidden"
         >
           <ArrowRight size={13} strokeWidth={1.5} />
         </button>
