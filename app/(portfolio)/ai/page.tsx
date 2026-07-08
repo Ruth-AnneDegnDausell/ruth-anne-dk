@@ -182,14 +182,14 @@ export default function AiFotografierPage() {
             onClick={prev}
             aria-label="Forrige"
             className="relative hidden shrink-0 overflow-hidden rounded-lg sm:block"
-            style={{ width: 72, height: 54 }}
+            style={{ width: 120, height: 90 }}
           >
             <Image
               src={IMAGES[prevIdx]}
               fill
               alt="Forrige billede"
               className="object-cover opacity-50 transition-opacity duration-150 hover:opacity-80"
-              sizes="72px"
+              sizes="120px"
             />
           </button>
 
@@ -255,14 +255,14 @@ export default function AiFotografierPage() {
             onClick={next}
             aria-label="Næste"
             className="relative hidden shrink-0 overflow-hidden rounded-lg sm:block"
-            style={{ width: 72, height: 54 }}
+            style={{ width: 120, height: 90 }}
           >
             <Image
               src={IMAGES[nextIdx]}
               fill
               alt="Næste billede"
               className="object-cover opacity-50 transition-opacity duration-150 hover:opacity-80"
-              sizes="72px"
+              sizes="120px"
             />
           </button>
 

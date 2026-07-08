@@ -63,18 +63,18 @@ export function Lightbox({
         onClick={(e) => { e.stopPropagation(); go() }}
         aria-label={label}
         className="relative hidden shrink-0 overflow-hidden rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.08)] sm:block"
-        style={{ width: 72, height: 54 }}
+        style={{ width: 120, height: 90 }}
       >
         <Image
           src={target.src}
           fill
           alt=""
           className="object-cover opacity-55 transition-opacity duration-150 hover:opacity-90"
-          sizes="72px"
+          sizes="120px"
         />
       </button>
     ) : (
-      <div className="hidden shrink-0 sm:block" style={{ width: 72 }} />
+      <div className="hidden shrink-0 sm:block" style={{ width: 120 }} />
     )
 
   return (
