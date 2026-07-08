@@ -35,7 +35,7 @@ const T = {
       },
     ] as Section[],
     links: [
-      { label: 'Læs mere om fleksjobordningen →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Beskaeftigelse-og-integration/Fleksjob' },
+      { label: 'Læs mere om fleksjobordningen →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Fleksjob-loentilskud-for-foertidspensionister-revalidering/hvem-kan-faa-fleksjob' },
     ],
     myStoryLink: '← Mit fleksjob',
   },
@@ -54,7 +54,7 @@ const T = {
       },
     ] as Section[],
     links: [
-      { label: 'Read more about the flex job scheme →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Beskaeftigelse-og-integration/Fleksjob' },
+      { label: 'Read more about the flex job scheme →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Fleksjob-loentilskud-for-foertidspensionister-revalidering/hvem-kan-faa-fleksjob' },
     ],
     myStoryLink: '← My flex job',
   },

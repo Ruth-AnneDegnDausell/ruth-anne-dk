@@ -1,5 +1,7 @@
 export interface GalleryItem {
   src?: string
+  /** Ubeskåret version i fuld størrelse - bruges i lightbox */
+  full?: string
   aspect: string
   alt?: string
   category?: string | string[]

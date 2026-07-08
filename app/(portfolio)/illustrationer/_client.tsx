@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
 import type { GalleryData } from '@/lib/data'
 import { Masonry, aspectRatioOf } from '@/components/masonry'
+import { Lightbox } from '@/components/lightbox'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -32,6 +33,8 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
   })
 
   const filtered = active === 'alle' ? gallery.allItems : (gallery.byCategory[active] ?? [])
+  const visible = filtered.filter((item) => item.src)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   return (
     <main className="px-8 pt-14 sm:px-14">
@@ -84,10 +87,14 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
           transition={{ duration: 0.2, ease }}
         >
           <Masonry
-            items={filtered.filter((item) => item.src)}
+            items={visible}
             ratio={(item) => aspectRatioOf(item.aspect)}
             render={(item, i) => (
-              <div key={i} className={`relative overflow-hidden rounded-xl bg-[oklch(91%_0_0)] ${item.aspect ?? ''}`}>
+              <div
+                key={i}
+                onClick={() => setLightboxIndex(i)}
+                className={`relative cursor-zoom-in overflow-hidden rounded-xl bg-[oklch(91%_0_0)] ${item.aspect ?? ''}`}
+              >
                 <Image
                   src={item.src!}
                   alt={item.alt ?? ''}
@@ -101,6 +108,13 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
           />
         </motion.div>
       </AnimatePresence>
+
+      <Lightbox
+        items={visible}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
+      />
     </main>
   )
 }

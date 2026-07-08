@@ -33,7 +33,7 @@ async function run() {
         section('da-1', 'Vil du vide mere?', 'Jeg fortæller gerne mere om, hvordan det fungerer i praksis - og det samme gør min jobkonsulent ved Jobcenter Aarhus, som kan svare på det formelle omkring ordning, tilskud og aftale.'),
       ],
       links: [
-        { _key: 'lda-0', _type: 'object', label: 'Læs mere om fleksjobordningen →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Beskaeftigelse-og-integration/Fleksjob' },
+        { _key: 'lda-0', _type: 'object', label: 'Læs mere om fleksjobordningen →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Fleksjob-loentilskud-for-foertidspensionister-revalidering/hvem-kan-faa-fleksjob' },
       ],
       headingEn: 'About the scheme',
       introEn: 'The flex job scheme is a subsidised employment arrangement for people with permanently reduced work capacity. It makes it possible to stay connected to the labour market even when working full-time or at full pace is not an option.',
@@ -42,7 +42,7 @@ async function run() {
         section('en-1', 'Want to know more?', 'I am happy to explain how it works in practice - and so is my job consultant at Jobcenter Aarhus, who can answer the formal questions about the scheme, the supplement, and the agreement.'),
       ],
       linksEn: [
-        { _key: 'len-0', _type: 'object', label: 'Read more about the flex job scheme →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Beskaeftigelse-og-integration/Fleksjob' },
+        { _key: 'len-0', _type: 'object', label: 'Read more about the flex job scheme →', href: 'https://www.borger.dk/arbejde-dagpenge-ferie/Fleksjob-loentilskud-for-foertidspensionister-revalidering/hvem-kan-faa-fleksjob' },
       ],
     })
     .delete('drafts.ordningen')

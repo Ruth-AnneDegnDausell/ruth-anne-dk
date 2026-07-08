@@ -301,6 +301,7 @@ const ASPECT_DIMS: Record<string, [number, number]> = {
 function sanityGalleryItemToItem(raw: any, defaultAspect: string): GalleryItem {
   const imageAsset = raw.image ?? raw.imageAsset
   let src = raw.src as string | undefined
+  let full = src
   const aspect = raw.aspect ?? defaultAspect
   if (imageAsset?.asset) {
     let b = urlFor(imageAsset)
@@ -309,9 +310,12 @@ function sanityGalleryItemToItem(raw: any, defaultAspect: string): GalleryItem {
     else b = b.width(1600)
     b = withRotation(b, raw.rotation)
     src = b.url()
+    // Ubeskåret fuld version til lightbox
+    full = withRotation(urlFor(imageAsset).width(2000), raw.rotation).url()
   }
   return {
     src,
+    full,
     aspect,
     alt: raw.alt || undefined,
   }
