@@ -42,6 +42,7 @@ const T = {
     about: 'Om mig',
     selectedWork: 'Udvalgte projekter',
     seeAll: 'Se alle →',
+    allProjects: 'Vis alle projekter',
     aboutLabel: 'Om mig',
     aboutHeading: 'Designer med øje for detaljen og passion for det håndgjorte udtryk.',
     aboutBody1: 'Uddannet fra Designskolen Kolding med speciale i visuel kommunikation. Har arbejdet med visuel identitet, illustration og videoproduktion for kunder inden for sport, kultur og livsstil.',
@@ -55,6 +56,7 @@ const T = {
     about: 'About',
     selectedWork: 'Selected projects',
     seeAll: 'See all →',
+    allProjects: 'View all projects',
     aboutLabel: 'About',
     aboutHeading: 'Designer with an eye for detail and a passion for handcrafted expression.',
     aboutBody1: 'Graduated from Designskolen Kolding with a specialisation in visual communication. Has worked on visual identity, illustration, and video production for clients in sports, culture, and lifestyle.',
@@ -228,6 +230,23 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
             </motion.a>
           ))}
         </div>
+
+        {/* Tydelig indgang til hele projektgalleriet - de tre ovenfor er kun et udvalg */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, ease }}
+          className="mt-12 flex justify-center"
+        >
+          <a
+            href="/projekter"
+            className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface px-6 py-3 text-[12px] font-medium text-text shadow-sm transition-all duration-200 hover:border-border-2 hover:shadow-[0_2px_10px_rgba(0,0,0,0.06)]"
+          >
+            {t.allProjects}
+            <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
+          </a>
+        </motion.div>
       </section>
 
       {/* ─── Om mig ───────────────────────────────────────────── */}

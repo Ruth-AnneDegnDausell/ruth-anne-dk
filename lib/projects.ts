@@ -418,8 +418,8 @@ export const PROJECTS: Project[] = [
       '/projekter/SUHN io/Refill_plastic_container_with_pump_202605200308.webp',
     ],
     videos: [
-      '/projekter/SUHN io/Visuel præsentation SUHN IO.mp4',
-      '/projekter/SUHN io/suhn-praesentation-1-web.mp4',
+      '/projekter/SUHN io/suhn-video-1-web.mp4',
+      '/projekter/SUHN io/suhn-video-2-web.mp4',
     ],
   },
   {

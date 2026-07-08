@@ -17,16 +17,16 @@ type VideoEntry = {
 
 const VIDEOS: VideoEntry[] = [
   {
-    src: '/projekter/SUHN io/Visuel præsentation SUHN IO.mp4',
-    title: 'SUHN IO · Visuel præsentation',
-    titleEn: 'SUHN IO · Visual presentation',
+    src: '/projekter/SUHN io/suhn-video-1-web.mp4',
+    title: 'SUHN IO · Visuel præsentation 1',
+    titleEn: 'SUHN IO · Visual presentation 1',
     client: 'SUHN IO',
     slug: 'suhn-io',
   },
   {
-    src: '/projekter/SUHN io/suhn-praesentation-1-web.mp4',
-    title: 'SUHN IO · Video design',
-    titleEn: 'SUHN IO · Video design',
+    src: '/projekter/SUHN io/suhn-video-2-web.mp4',
+    title: 'SUHN IO · Visuel præsentation 2',
+    titleEn: 'SUHN IO · Visual presentation 2',
     client: 'SUHN IO',
     slug: 'suhn-io',
   },

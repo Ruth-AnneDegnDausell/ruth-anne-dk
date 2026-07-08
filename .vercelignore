@@ -3,6 +3,7 @@
 *.ai
 public/projekter/Tour Tegninger/*.pdf
 public/illustrationer/Cykel/*.pdf
-# Large videos excluded from deployment (91MB + 44MB — too big for Vercel Hobby)
+# Store original-videoer holdes ude af deployet - web-versionerne bruges i stedet
 public/projekter/Substrate/Færdig Mobile Video.mp4
-public/projekter/SUHN io/Visuel præsentation SUHN IO (1).mp4
+public/projekter/SUHN io/1 Visuel præsentation SUHN IO.mp4
+public/projekter/SUHN io/2 Visuel præsentation SUHN IO.mp4
