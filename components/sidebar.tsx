@@ -316,7 +316,7 @@ function DesktopSidebar() {
                   onClick={close}
                   className={cn(
                     'flex h-9 items-center gap-2.5 px-4 transition-colors duration-150',
-                    isActive ? 'text-text' : 'text-text-2 hover:text-text'
+                    isActive ? 'text-text' : 'text-text-2 hover:text-wine'
                   )}
                 >
                   <span className="shrink-0">{item.icon}</span>
@@ -344,7 +344,7 @@ function DesktopSidebar() {
                             onClick={close}
                             className={cn(
                               'block py-1.5 pl-[42px] pr-4 text-[12px] transition-colors duration-150',
-                              pathname === sub.href ? 'text-text' : 'text-text-2 hover:text-text'
+                              pathname === sub.href ? 'text-text' : 'text-text-2 hover:text-wine'
                             )}
                           >
                             {getLabel(sub)}
@@ -365,7 +365,7 @@ function DesktopSidebar() {
                 onClick={close}
                 className={cn(
                   'flex h-9 items-center gap-2.5 px-4 transition-colors duration-150',
-                  isActive ? 'text-text' : 'text-text-2 hover:text-text'
+                  isActive ? 'text-text' : 'text-text-2 hover:text-wine'
                 )}
               >
                 <span className="shrink-0">{item.icon}</span>
@@ -391,7 +391,7 @@ function DesktopSidebar() {
             onClick={() => setLang('da')}
             className={cn(
               'text-[9px] tracking-[0.14em] uppercase transition-colors duration-150',
-              lang === 'da' ? 'text-text' : 'text-text-3 hover:text-text-2'
+              lang === 'da' ? 'text-text' : 'text-text-3 hover:text-wine'
             )}
           >
             DA
@@ -401,7 +401,7 @@ function DesktopSidebar() {
             onClick={() => setLang('en')}
             className={cn(
               'text-[9px] tracking-[0.14em] uppercase transition-colors duration-150',
-              lang === 'en' ? 'text-text' : 'text-text-3 hover:text-text-2'
+              lang === 'en' ? 'text-text' : 'text-text-3 hover:text-wine'
             )}
           >
             EN

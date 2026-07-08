@@ -193,7 +193,7 @@ export function ProjectVideo({
         <div className="absolute bottom-[5px] left-2 right-2 h-[2px] rounded-full bg-white/30">
           <div className="h-full rounded-full bg-butter" style={{ width: `${progress * 100}%` }} />
           <span
-            className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-butter shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
+            className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-wine shadow-[0_1px_4px_rgba(0,0,0,0.35)] ring-1 ring-white/60"
             style={{ left: `${progress * 100}%` }}
           />
         </div>

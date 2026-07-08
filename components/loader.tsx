@@ -28,7 +28,7 @@ export function Loader() {
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[9998] flex items-center justify-center bg-bg"
         >
-          <div className="flex" style={{ letterSpacing: '0.3em' }}>
+          <div className="flex text-wine" style={{ letterSpacing: '0.3em' }}>
             {LETTERS.map((letter, i) => (
               <motion.span
                 key={i}

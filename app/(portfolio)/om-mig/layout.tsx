@@ -35,7 +35,7 @@ export default function OmMigLayout({ children }: { children: React.ReactNode })
                   '-mb-px pb-3 text-[11px] transition-colors duration-150',
                   active
                     ? 'border-b border-text text-text'
-                    : 'text-text-3 hover:text-text-2'
+                    : 'text-text-3 hover:text-wine'
                 )}
               >
                 {lang === 'en' ? tab.en : tab.da}

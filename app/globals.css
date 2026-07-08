@@ -68,6 +68,21 @@
     color: var(--color-wine);
   }
 
+  /* Vinrød linje der tegner sig selv under tekstlinks ved hover.
+     Rammer kun rene tekstlinks - ikke billeder, videoer, piller og kort. */
+  @media (hover: hover) {
+    main a:not(:has(img)):not(:has(video)):not([class*="rounded-"]):not([class*="cursor-zoom"]) {
+      background-image: linear-gradient(var(--color-wine), var(--color-wine));
+      background-size: 0% 1px;
+      background-repeat: no-repeat;
+      background-position: 0 100%;
+      transition: background-size 0.25s ease;
+    }
+    main a:not(:has(img)):not(:has(video)):not([class*="rounded-"]):not([class*="cursor-zoom"]):hover {
+      background-size: 100% 1px;
+    }
+  }
+
   html {
     hanging-punctuation: first last;
     scroll-behavior: smooth;

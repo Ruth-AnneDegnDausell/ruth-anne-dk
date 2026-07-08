@@ -134,7 +134,7 @@ export function OrdningenClient({ sanityData }: { sanityData: any }) {
         <p className="mb-3 text-[12px] font-[450] text-text">{t.ctaHeading}</p>
         <Link
           href="/kontakt"
-          className="inline-flex items-center gap-1.5 rounded-full bg-wine px-5 py-2.5 text-[12px] font-medium text-butter transition-opacity duration-150 hover:opacity-85"
+          className="inline-flex items-center gap-1.5 rounded-full border border-border px-5 py-2.5 text-[12px] font-medium text-text transition-colors duration-150 hover:border-border-2 hover:text-wine"
         >
           {t.ctaLink}
         </Link>

@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
+import * as React from 'react'
 import './globals.css'
+
+// ViewTransition findes i Nexts React-canary, men mangler endnu i typerne
+const ViewTransition = (React as any).ViewTransition as React.ComponentType<{ children: React.ReactNode }>
 import { LangProvider } from '@/lib/lang-context'
 import { CustomCursor } from '@/components/custom-cursor'
 import { Loader } from '@/components/loader'
@@ -52,7 +56,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Sidebar />
           <div className="flex min-h-screen flex-col sm:pl-12">
             {/* pb-24 = fast, ens afstand mellem indhold og footer på alle sider */}
-            <div className="flex-1 pb-24">{children}</div>
+            <ViewTransition>
+              <div className="flex-1 pb-24">{children}</div>
+            </ViewTransition>
             <Footer />
           </div>
           <Analytics />
