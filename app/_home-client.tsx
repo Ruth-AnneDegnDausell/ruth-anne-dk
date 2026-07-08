@@ -66,7 +66,18 @@ const T = {
 export function HomeClient({ featured, forside }: { featured: Project[]; forside?: any }) {
   const { lang } = useLang()
   const t = T[lang]
-  const skills = SKILLS[lang]
+
+  // Skills fra Sanity (numre sættes automatisk efter rækkefølgen), fallback til koden
+  const sanitySkills = (lang === 'en' ? forside?.skillsEn : forside?.skills) as
+    | Array<{ title?: string; desc?: string }>
+    | undefined
+  const skills = sanitySkills?.length
+    ? sanitySkills.map((s, i) => ({
+        title: s.title ?? '',
+        desc: s.desc ?? '',
+        num: String(i + 1).padStart(2, '0'),
+      }))
+    : SKILLS[lang]
 
   // Sanity-indhold overstyrer defaults når det er udfyldt
   const en = lang === 'en'
