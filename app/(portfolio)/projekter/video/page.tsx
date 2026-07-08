@@ -17,6 +17,13 @@ type VideoEntry = {
 
 const VIDEOS: VideoEntry[] = [
   {
+    src: '/projekter/Flaneur/flaneur-video-web.mp4',
+    title: 'Flaneur · Video',
+    titleEn: 'Flaneur · Video',
+    client: 'Flaneur',
+    slug: 'flaneur',
+  },
+  {
     src: '/projekter/SUHN io/suhn-video-1-web.mp4',
     title: 'SUHN IO · Visuel præsentation 1',
     titleEn: 'SUHN IO · Visual presentation 1',
