@@ -137,7 +137,7 @@ export function FleksjobClient({ sanityData }: { sanityData: any }) {
             <ul className="space-y-2.5">
               {t.worksBest.map((item: string) => (
                 <li key={item} className="flex items-center gap-2.5 text-[12px]/[1.7] text-text-2">
-                  <span className="h-1 w-1 shrink-0 rounded-full bg-text-3" />
+                  <span className="h-1 w-1 shrink-0 rounded-full bg-wine" />
                   {item}
                 </li>
               ))}
@@ -148,7 +148,7 @@ export function FleksjobClient({ sanityData }: { sanityData: any }) {
             <p className="mb-3 text-[12px] font-[450] text-text">{t.ctaHeading}</p>
             <Link
               href="/kontakt"
-              className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[12px] font-medium text-surface transition-opacity duration-150 hover:opacity-80"
+              className="inline-flex items-center gap-1.5 rounded-full bg-wine px-5 py-2.5 text-[12px] font-medium text-butter transition-opacity duration-150 hover:opacity-85"
             >
               {t.ctaLink}
             </Link>

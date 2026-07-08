@@ -9,6 +9,7 @@ import { useLang } from '@/lib/lang-context'
 import type { GalleryData } from '@/lib/data'
 import { Masonry, aspectRatioOf } from '@/components/masonry'
 import { Lightbox } from '@/components/lightbox'
+import { Reveal } from '@/components/reveal'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -48,7 +49,7 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
             onClick={() => setActive('alle')}
             className={
               active === 'alle'
-                ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
+                ? 'rounded-full bg-wine px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-butter transition-colors duration-150'
                 : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
             }
           >
@@ -60,7 +61,7 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
               onClick={() => setActive(cat.id)}
               className={
                 active === cat.id
-                  ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
+                  ? 'rounded-full bg-wine px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-butter transition-colors duration-150'
                   : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
               }
             >
@@ -90,8 +91,8 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
             items={visible}
             ratio={(item) => aspectRatioOf(item.aspect)}
             render={(item, i) => (
+              <Reveal key={i}>
               <div
-                key={i}
                 onClick={() => setLightboxIndex(i)}
                 className={`relative cursor-zoom-in overflow-hidden rounded-xl bg-[oklch(91%_0_0)] ${item.aspect ?? ''}`}
               >
@@ -104,6 +105,7 @@ export function IllustrationerContent({ gallery }: { gallery: GalleryData }) {
                   loading="lazy"
                 />
               </div>
+              </Reveal>
             )}
           />
         </motion.div>

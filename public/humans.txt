@@ -1,0 +1,16 @@
+/* TEAM */
+Designer, illustrator & udvikler: Ruth-Anne Dausell
+Sted: Nye, nord for Aarhus, Danmark
+Kontakt: annedegndausell [at] gmail.com
+
+/* SITE */
+Håndkodet - ingen skabeloner, ingen sidebyggere.
+Stack: Next.js, TypeScript, Tailwind CSS, Framer Motion
+Indhold: Sanity CMS
+Data: Supabase (Stockholm)
+Hosting: Vercel
+Skrift: Satoshi
+Farver: off-white, næsten-sort, smørgul (#F6D98A) og mørk vinrød (#4A1220)
+
+/* TAK */
+Bygget med hjælp fra Claude Code.

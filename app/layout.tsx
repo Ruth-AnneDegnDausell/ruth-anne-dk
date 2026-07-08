@@ -8,6 +8,7 @@ import { Footer } from '@/components/footer'
 import { Analytics } from '@vercel/analytics/next'
 import { VisitTracker } from '@/components/visit-tracker'
 import { BackToTop } from '@/components/back-to-top'
+import { DevSignature } from '@/components/dev-signature'
 
 // Delings-billedet (og:image) er Flaneur-projektets coverbillede fra Sanity.
 // Ændres coveret på Flaneur i Studio, følger delings-billedet automatisk med.
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Analytics />
           <VisitTracker />
           <BackToTop />
+          <DevSignature />
         </LangProvider>
       </body>
     </html>

@@ -228,7 +228,7 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
               href={`/projekter/${project.slug}?from=home`}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
+              viewport={{ once: false, margin: '0px 0px -50px 0px' }}
               transition={{ duration: 0.55, delay: i * 0.08, ease }}
               className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05),0_6px_20px_rgba(0,0,0,0.04)]"
             >
@@ -289,7 +289,7 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
                 >
                   <span className="text-[12px] text-text">{skill.title}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-[9px] tracking-[0.14em] text-text-3">{skill.num}</span>
+                    <span className="text-[9px] tracking-[0.14em] text-wine">{skill.num}</span>
                     <ChevronDown
                       size={11}
                       strokeWidth={1.5}
@@ -326,7 +326,7 @@ export function HomeClient({ featured, forside }: { featured: Project[]; forside
         <ul className="max-w-md space-y-2.5">
           {contribItems.map((item) => (
             <li key={item} className="flex items-center gap-2.5 text-[12px]/[1.7] text-text-2">
-              <span className="h-1 w-1 shrink-0 rounded-full bg-text-3" />
+              <span className="h-1 w-1 shrink-0 rounded-full bg-wine" />
               {item}
             </li>
           ))}

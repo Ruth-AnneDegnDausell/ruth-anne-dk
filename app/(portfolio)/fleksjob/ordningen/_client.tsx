@@ -116,7 +116,7 @@ export function OrdningenClient({ sanityData }: { sanityData: any }) {
               <ul className="mt-4 space-y-2">
                 {s.list.map((item) => (
                   <li key={item} className="flex gap-2.5 text-[12px]/[1.75] text-text-2">
-                    <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-text-3" />
+                    <span className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-wine" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -134,7 +134,7 @@ export function OrdningenClient({ sanityData }: { sanityData: any }) {
         <p className="mb-3 text-[12px] font-[450] text-text">{t.ctaHeading}</p>
         <Link
           href="/kontakt"
-          className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[12px] font-medium text-surface transition-opacity duration-150 hover:opacity-80"
+          className="inline-flex items-center gap-1.5 rounded-full bg-wine px-5 py-2.5 text-[12px] font-medium text-butter transition-opacity duration-150 hover:opacity-85"
         >
           {t.ctaLink}
         </Link>

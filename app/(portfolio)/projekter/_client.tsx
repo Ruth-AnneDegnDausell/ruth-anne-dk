@@ -57,7 +57,7 @@ export function ProjekterClient({ projects }: { projects: Project[] }) {
               onClick={() => setActive(cat.id)}
               className={
                 active === cat.id
-                  ? 'rounded-full bg-accent px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-surface transition-colors duration-150'
+                  ? 'rounded-full bg-wine px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-butter transition-colors duration-150'
                   : 'rounded-full border border-border bg-surface px-3 py-1.5 text-[10px] font-medium tracking-[0.06em] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text'
               }
             >
@@ -81,8 +81,9 @@ export function ProjekterClient({ projects }: { projects: Project[] }) {
               key={project.slug}
               href={`/projekter/${project.slug}`}
               initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.06, ease }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, margin: '0px 0px -50px 0px' }}
+              transition={{ duration: 0.4, delay: (i % 3) * 0.06, ease }}
               className="group block overflow-hidden rounded-2xl border border-border bg-surface transition-shadow duration-300 hover:shadow-[0_2px_6px_rgba(0,0,0,0.05),0_6px_20px_rgba(0,0,0,0.04)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden">

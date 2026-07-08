@@ -290,7 +290,7 @@ function DesktopSidebar() {
         <Link
           href="/"
           onClick={close}
-          className="whitespace-nowrap text-[10px] font-[500] tracking-[0.18em] uppercase text-text-2 transition-colors duration-150 hover:text-text"
+          className="whitespace-nowrap text-[10px] font-[500] tracking-[0.18em] uppercase text-text-2 transition-colors duration-150 hover:text-wine"
           style={labelStyle}
         >
           Ruth-Anne

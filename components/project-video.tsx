@@ -191,9 +191,9 @@ export function ProjectVideo({
         className="absolute bottom-0 left-0 right-0 h-4 cursor-ew-resize touch-none"
       >
         <div className="absolute bottom-[5px] left-2 right-2 h-[2px] rounded-full bg-white/30">
-          <div className="h-full rounded-full bg-white/80" style={{ width: `${progress * 100}%` }} />
+          <div className="h-full rounded-full bg-butter" style={{ width: `${progress * 100}%` }} />
           <span
-            className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
+            className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-butter shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
             style={{ left: `${progress * 100}%` }}
           />
         </div>

@@ -82,7 +82,7 @@ export function PrivatClient({ sanityData }: { sanityData: any }) {
           <ul className="space-y-2">
             {t.inspirations.map((item: string, i: number) => (
               <li key={i} className="flex items-center gap-2.5 text-[11px] text-text-2">
-                <span className="h-1 w-1 shrink-0 rounded-full bg-text-3" />
+                <span className="h-1 w-1 shrink-0 rounded-full bg-wine" />
                 {item}
               </li>
             ))}

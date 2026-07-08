@@ -17,6 +17,10 @@
   --color-border:      oklch(87% 0 0);
   --color-border-2:    oklch(78% 0 0);
 
+  /* Signaturfarver - smørgul og mørk vinrød, bruges som små detaljer */
+  --color-butter:      #F6D98A;
+  --color-wine:        #4A1220;
+
   /* Accent — near-black */
   --color-accent:      oklch(18% 0 0);
   --color-accent-2:    oklch(35% 0 0);
@@ -58,6 +62,12 @@
 
 /* ─── Base ─────────────────────────────────────────────── */
 @layer base {
+  /* Markeret tekst i signaturfarverne - en lille håndkodet detalje */
+  ::selection {
+    background: var(--color-butter);
+    color: var(--color-wine);
+  }
+
   html {
     hanging-punctuation: first last;
     scroll-behavior: smooth;

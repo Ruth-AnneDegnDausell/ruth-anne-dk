@@ -9,6 +9,7 @@ import { Suspense, useState } from 'react'
 import { useLang } from '@/lib/lang-context'
 import { ProjectVideo } from '@/components/project-video'
 import { Lightbox } from '@/components/lightbox'
+import { Reveal } from '@/components/reveal'
 import type { Project } from '@/lib/projects'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
@@ -195,17 +196,17 @@ function ProjectContent({ project, prev, next }: {
         >
           {galleryEntries.map((entry, i) =>
             entry.type === 'video' ? (
-              <ProjectVideo
-                key={`v-${i}`}
-                src={entry.src}
-                className="mb-3 break-inside-avoid"
-                videoClassName="block h-auto w-full"
-              />
+              <Reveal key={`v-${i}`} className="mb-3 break-inside-avoid">
+                <ProjectVideo
+                  src={entry.src}
+                  videoClassName="block h-auto w-full"
+                />
+              </Reveal>
             ) : (
+              <Reveal key={i} className="mb-3 break-inside-avoid">
               <div
-                key={i}
                 onClick={() => setLightboxIndex(entry.imageIndex + galleryOffset)}
-                className="mb-3 cursor-zoom-in break-inside-avoid overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
+                className="cursor-zoom-in overflow-hidden rounded-xl bg-[oklch(91%_0_0)]"
               >
                 <Image
                   src={entry.src}
@@ -217,6 +218,7 @@ function ProjectContent({ project, prev, next }: {
                   loading="lazy"
                 />
               </div>
+              </Reveal>
             )
           )}
         </motion.div>

@@ -292,7 +292,7 @@ export default function AiFotografierPage() {
         <div className="h-[2px] w-24 overflow-hidden rounded-full bg-border">
           <motion.div
             key={`bar-${idx}`}
-            className="h-full bg-text-3"
+            className="h-full bg-wine"
             initial={{ width: '0%' }}
             animate={{ width: '100%' }}
             transition={{ duration: INTERVAL_MS / 1000, ease: 'linear' }}
