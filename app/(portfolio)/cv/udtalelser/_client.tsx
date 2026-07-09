@@ -25,14 +25,16 @@ type Doc = {
 
 const T = {
   da: {
-    eyebrow: 'CV', heading: 'Udtalelser', backToCV: 'Gå til CV', of: 'af',
+    eyebrow: 'CV', heading: 'Udtalelser', backToCV: 'Gå til CV', of: 'af', item: 'Udtalelse',
+    browseHint: (n: number) => `${n} udtalelser · bladr med pilene`,
     downloadAll: 'Download alle udtalelser', downloadAllBtn: 'Download alle ↓', downloadLabel: 'Download',
     promptTitle: 'Vil du også downloade CV\'et?',
     promptYes: 'Ja', promptNo: 'Nej', promptCancel: 'Annuller',
     zipping: 'Pakker filer…',
   },
   en: {
-    eyebrow: 'CV', heading: 'References', backToCV: 'Go to CV', of: 'of',
+    eyebrow: 'CV', heading: 'References', backToCV: 'Go to CV', of: 'of', item: 'Reference',
+    browseHint: (n: number) => `${n} references · browse with the arrows`,
     downloadAll: 'Download all references', downloadAllBtn: 'Download all ↓', downloadLabel: 'Download',
     promptTitle: 'Would you also like to download the CV?',
     promptYes: 'Yes', promptNo: 'No', promptCancel: 'Cancel',
@@ -101,15 +103,6 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
     return () => window.removeEventListener('keydown', handler)
   }, [docs.length])
 
-  // Auto-skift hvert 5. sekund (samme interval som AI-foto-karrusellen), i ring
-  useEffect(() => {
-    if (docs.length <= 1) return
-    const timer = setInterval(() => {
-      setIndex(i => (i + 1) % docs.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [docs.length, index])
-
   const doc = docs[index]
   if (!doc) return null
 
@@ -131,6 +124,9 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
           {t.eyebrow}
         </p>
         <h1 className="text-[13px] font-[450] tracking-tight text-text">{t.heading}</h1>
+        {docs.length > 1 && (
+          <p className="mt-2 text-[11px] text-text-3">{t.browseHint(docs.length)}</p>
+        )}
       </div>
 
       <div className="mx-auto max-w-xl">
@@ -159,19 +155,28 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2, ease }}
               >
-                <div className="overflow-hidden rounded-2xl bg-white">
-                  {doc.isPdf ? (
-                    <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
-                  ) : (
-                    <Image
-                      src={doc.fileUrl}
-                      alt={doc.source}
-                      width={900}
-                      height={1200}
-                      className="h-auto w-full"
-                      unoptimized
-                    />
+                <div className="relative">
+                  {/* Stak af papirer bagved - viser at der er flere udtalelser */}
+                  {docs.length > 1 && (
+                    <>
+                      <div className="pointer-events-none absolute inset-0 translate-x-[11px] translate-y-[11px] rounded-2xl border border-border bg-[oklch(98%_0_0)]" />
+                      <div className="pointer-events-none absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-2xl border border-border bg-white" />
+                    </>
                   )}
+                  <div className="relative overflow-hidden rounded-2xl border border-border bg-white">
+                    {doc.isPdf ? (
+                      <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
+                    ) : (
+                      <Image
+                        src={doc.fileUrl}
+                        alt={doc.source}
+                        width={900}
+                        height={1200}
+                        className="h-auto w-full"
+                        unoptimized
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <div className="mt-4 px-1">
@@ -215,8 +220,8 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
               />
             ))}
           </div>
-          <p className="text-[10px] text-text-3">
-            {index + 1} {t.of} {docs.length}
+          <p className="text-[10px] tabular-nums text-text-3">
+            {t.item} {index + 1} {t.of} {docs.length}
           </p>
         </div>
       </div>
