@@ -166,7 +166,7 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
           </div>
 
           <div
-            className="relative min-w-0 flex-1"
+            className="min-w-0 flex-1"
             onTouchStart={(e) => { touchX.current = e.touches[0].clientX }}
             onTouchEnd={(e) => {
               if (touchX.current === null) return
@@ -175,13 +175,6 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
               if (Math.abs(dx) > 50) (dx < 0 ? next : prev)()
             }}
           >
-            {/* Stak af papirer bagved - viser at der er flere udtalelser (bliver stående) */}
-            {docs.length > 1 && (
-              <>
-                <div className="pointer-events-none absolute left-0 right-0 top-0 translate-x-[11px] translate-y-[11px] rounded-2xl border border-border bg-[oklch(98%_0_0)]" style={{ minHeight: DOC_MIN, height: '100%' }} />
-                <div className="pointer-events-none absolute left-0 right-0 top-0 translate-x-[6px] translate-y-[6px] rounded-2xl border border-border bg-white" style={{ minHeight: DOC_MIN, height: '100%' }} />
-              </>
-            )}
             <AnimatePresence mode="popLayout" custom={dir} initial={false}>
               <motion.div
                 key={index}
@@ -191,21 +184,29 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.42, ease }}
-                className="relative"
               >
-                <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]" style={{ minHeight: DOC_MIN }}>
-                  {doc.isPdf ? (
-                    <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
-                  ) : (
-                    <Image
-                      src={doc.fileUrl}
-                      alt={doc.source}
-                      width={900}
-                      height={1200}
-                      className="h-auto w-full"
-                      unoptimized
-                    />
+                {/* Dokument med stak af papirer bagved - viser at der er flere udtalelser */}
+                <div className="relative">
+                  {docs.length > 1 && (
+                    <>
+                      <div className="pointer-events-none absolute inset-0 translate-x-[11px] translate-y-[11px] rounded-2xl border border-border bg-[oklch(98%_0_0)]" />
+                      <div className="pointer-events-none absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-2xl border border-border bg-white" />
+                    </>
                   )}
+                  <div className="relative overflow-hidden rounded-2xl border border-border bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]" style={{ minHeight: DOC_MIN }}>
+                    {doc.isPdf ? (
+                      <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
+                    ) : (
+                      <Image
+                        src={doc.fileUrl}
+                        alt={doc.source}
+                        width={900}
+                        height={1200}
+                        className="h-auto w-full"
+                        unoptimized
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <div className="mt-4 px-1">
