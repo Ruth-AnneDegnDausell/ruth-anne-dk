@@ -101,6 +101,15 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
     return () => window.removeEventListener('keydown', handler)
   }, [docs.length])
 
+  // Auto-skift hvert 5. sekund (samme interval som AI-foto-karrusellen), i ring
+  useEffect(() => {
+    if (docs.length <= 1) return
+    const timer = setInterval(() => {
+      setIndex(i => (i + 1) % docs.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [docs.length, index])
+
   const doc = docs[index]
   if (!doc) return null
 
