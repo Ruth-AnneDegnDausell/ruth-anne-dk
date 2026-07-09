@@ -100,7 +100,7 @@ function VideoCard({ video, lang }: { video: VideoEntry; lang: 'da' | 'en' }) {
     >
       <ProjectVideo
         src={video.src}
-        className={`${video.vertical ? 'mx-auto aspect-[9/16] max-w-[320px]' : 'aspect-[16/9]'} rounded-2xl border border-border`}
+        className={`${video.vertical ? 'aspect-[9/16]' : 'aspect-[16/9]'} rounded-2xl border border-border`}
       />
       <div className="mt-3 flex items-center justify-between gap-4">
         <p className="text-[11px] font-[430] text-text">
