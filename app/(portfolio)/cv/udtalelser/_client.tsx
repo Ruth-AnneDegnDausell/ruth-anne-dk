@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -48,8 +48,20 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
   const { lang } = useLang()
   const t = T[lang]
   const [index, setIndex] = useState(0)
+  const [dir, setDir] = useState(0)
+  const touchX = useRef<number | null>(null)
   const [pending, setPending] = useState<Pending | null>(null)
   const [zipping, setZipping] = useState(false)
+
+  // Skift til en bestemt udtalelse og husk retningen (til bladre-animationen)
+  const goTo = (target: number) => {
+    const clamped = Math.max(0, Math.min(docs.length - 1, target))
+    if (clamped === index) return
+    setDir(clamped > index ? 1 : -1)
+    setIndex(clamped)
+  }
+  const prev = () => goTo(index - 1)
+  const next = () => goTo(index + 1)
 
   const fileName = (d: Doc) => {
     const ext = d.fileUrl.split('.').pop()?.split('?')[0] ?? 'pdf'
@@ -96,12 +108,19 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') setIndex(i => Math.max(0, i - 1))
-      else if (e.key === 'ArrowRight') setIndex(i => Math.min(docs.length - 1, i + 1))
+      if (e.key === 'ArrowLeft') prev()
+      else if (e.key === 'ArrowRight') next()
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [docs.length])
+  }, [index, docs.length])
+
+  // Retningsbevidste varianter: arket løftes af stakken og glider væk til siden
+  const pageVariants = {
+    enter: (d: number) => ({ opacity: 0, x: d >= 0 ? 44 : -44, scale: 0.97, rotate: d >= 0 ? 1.2 : -1.2 }),
+    center: { opacity: 1, x: 0, scale: 1, rotate: 0 },
+    exit: (d: number) => ({ opacity: 0, x: d >= 0 ? -52 : 52, scale: 0.97, rotate: d >= 0 ? -1.6 : 1.6 }),
+  }
 
   const doc = docs[index]
   if (!doc) return null
@@ -137,7 +156,7 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
             style={{ height: `${DOC_HEIGHT}vh`, minHeight: DOC_MIN }}
           >
             <button
-              onClick={() => setIndex((i) => Math.max(0, i - 1))}
+              onClick={prev}
               disabled={index === 0}
               aria-label="Forrige"
               className="flex h-9 w-9 items-center justify-center rounded-xl border border-border text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text disabled:cursor-default disabled:opacity-20"
@@ -146,37 +165,47 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
             </button>
           </div>
 
-          <div className="min-w-0 flex-1">
-            <AnimatePresence mode="wait">
+          <div
+            className="relative min-w-0 flex-1"
+            onTouchStart={(e) => { touchX.current = e.touches[0].clientX }}
+            onTouchEnd={(e) => {
+              if (touchX.current === null) return
+              const dx = e.changedTouches[0].clientX - touchX.current
+              touchX.current = null
+              if (Math.abs(dx) > 50) (dx < 0 ? next : prev)()
+            }}
+          >
+            {/* Stak af papirer bagved - viser at der er flere udtalelser (bliver stående) */}
+            {docs.length > 1 && (
+              <>
+                <div className="pointer-events-none absolute left-0 right-0 top-0 translate-x-[11px] translate-y-[11px] rounded-2xl border border-border bg-[oklch(98%_0_0)]" style={{ minHeight: DOC_MIN, height: '100%' }} />
+                <div className="pointer-events-none absolute left-0 right-0 top-0 translate-x-[6px] translate-y-[6px] rounded-2xl border border-border bg-white" style={{ minHeight: DOC_MIN, height: '100%' }} />
+              </>
+            )}
+            <AnimatePresence mode="popLayout" custom={dir} initial={false}>
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.2, ease }}
+                custom={dir}
+                variants={pageVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.42, ease }}
+                className="relative"
               >
-                <div className="relative">
-                  {/* Stak af papirer bagved - viser at der er flere udtalelser */}
-                  {docs.length > 1 && (
-                    <>
-                      <div className="pointer-events-none absolute inset-0 translate-x-[11px] translate-y-[11px] rounded-2xl border border-border bg-[oklch(98%_0_0)]" />
-                      <div className="pointer-events-none absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-2xl border border-border bg-white" />
-                    </>
+                <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]" style={{ minHeight: DOC_MIN }}>
+                  {doc.isPdf ? (
+                    <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
+                  ) : (
+                    <Image
+                      src={doc.fileUrl}
+                      alt={doc.source}
+                      width={900}
+                      height={1200}
+                      className="h-auto w-full"
+                      unoptimized
+                    />
                   )}
-                  <div className="relative overflow-hidden rounded-2xl border border-border bg-white">
-                    {doc.isPdf ? (
-                      <PdfView key={doc.fileUrl} fileUrl={doc.fileUrl} title={doc.source} />
-                    ) : (
-                      <Image
-                        src={doc.fileUrl}
-                        alt={doc.source}
-                        width={900}
-                        height={1200}
-                        className="h-auto w-full"
-                        unoptimized
-                      />
-                    )}
-                  </div>
                 </div>
 
                 <div className="mt-4 px-1">
@@ -197,7 +226,7 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
             style={{ height: `${DOC_HEIGHT}vh`, minHeight: DOC_MIN }}
           >
             <button
-              onClick={() => setIndex((i) => Math.min(docs.length - 1, i + 1))}
+              onClick={next}
               disabled={index === docs.length - 1}
               aria-label="Næste"
               className="flex h-9 w-9 items-center justify-center rounded-xl border border-border text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text disabled:cursor-default disabled:opacity-20"
@@ -212,7 +241,7 @@ export function UdtalelserClient({ docs, cvPdfUrl }: { docs: Doc[]; cvPdfUrl?: s
             {docs.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setIndex(i)}
+                onClick={() => goTo(i)}
                 aria-label={docs[i].source}
                 className={`h-1.5 rounded-full transition-all duration-200 ${
                   i === index ? 'w-4 bg-text-2' : 'w-1.5 bg-border-2 hover:bg-text-3'
