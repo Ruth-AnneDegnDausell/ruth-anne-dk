@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import { isOwnerVisit } from '@/lib/owner-flag'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -17,6 +18,7 @@ function sessionId(): string {
 
 function send(row: Record<string, unknown>, keepalive = false) {
   if (!SUPABASE_URL || !SUPABASE_KEY) return
+  if (isOwnerVisit()) return
   fetch(`${SUPABASE_URL}/rest/v1/page_views`, {
     method: 'POST',
     keepalive,
