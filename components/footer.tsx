@@ -1,6 +1,7 @@
 'use client'
 
 import { useLang } from '@/lib/lang-context'
+import { track } from '@/lib/track'
 
 const T = {
   da: {
@@ -26,6 +27,7 @@ export function Footer() {
         <div className="flex items-center gap-5">
           <a
             href="https://www.instagram.com/ruthannedausell"
+            onClick={() => track('eksternt-link', 'instagram')}
             target="_blank"
             rel="noopener noreferrer"
             className="text-[10px] text-text-3 transition-colors duration-150 hover:text-wine"

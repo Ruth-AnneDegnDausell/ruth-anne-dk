@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { GalleryItem } from '@/lib/gallery'
+import { track } from '@/lib/track'
 
 // Lightbox i samme stil som AI-karrusellen: lys, sløret baggrund så galleriet
 // anes bagved, billedet som card med runde hjørner, små nabo-cards i siderne.
@@ -35,6 +36,14 @@ export function Lightbox({
     if (index === null) return
     onIndexChange((index + 1) % items.length)
   }, [index, items.length, onIndexChange])
+
+  // Logger hvert billede der ses i stor visning (åbning og bladring)
+  useEffect(() => {
+    if (index === null) return
+    const it = items[index]
+    if (!it) return
+    track('lightbox', it.alt ?? (it.full ?? it.src)?.split('/').pop())
+  }, [index, items])
 
   // Piletaster + Esc
   useEffect(() => {

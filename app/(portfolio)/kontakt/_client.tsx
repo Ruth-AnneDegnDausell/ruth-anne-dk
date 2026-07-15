@@ -1,8 +1,10 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useLang } from '@/lib/lang-context'
 import { downloadCv } from '@/lib/cv-download'
+import { track } from '@/lib/track'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const fadeUp = (delay = 0) => ({
@@ -63,6 +65,17 @@ export function KontaktClient({ sanityData, cvPdfUrl }: { sanityData: any; cvPdf
   const { lang } = useLang()
   const t = sanityData ? buildT(sanityData)[lang] : DEFAULT[lang]
 
+  // Logger når nogen kopierer kontaktoplysninger (mail/telefon) fra siden
+  useEffect(() => {
+    const onCopy = () => {
+      const text = window.getSelection()?.toString() ?? ''
+      if (text.includes('@')) track('kontakt-kopier', 'mail')
+      else if (/\d{2}\s?\d{2}/.test(text)) track('kontakt-kopier', 'telefon')
+    }
+    document.addEventListener('copy', onCopy)
+    return () => document.removeEventListener('copy', onCopy)
+  }, [])
+
   return (
     <main className="px-8 pt-14 sm:px-14">
       <div className="mb-12">
@@ -81,6 +94,7 @@ export function KontaktClient({ sanityData, cvPdfUrl }: { sanityData: any; cvPdf
                 <span className="w-[100px] shrink-0 text-[11px] text-text-3">{ch.title}</span>
                 <a
                   href={ch.href}
+                  onClick={() => track('kontakt-klik', ch.title)}
                   target={ch.href?.startsWith('mailto') ? undefined : '_blank'}
                   rel="noopener noreferrer"
                   className="text-[12px] font-[450] text-text transition-opacity duration-150 hover:opacity-50"

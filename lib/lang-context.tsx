@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { track } from '@/lib/track'
 
 export type Lang = 'da' | 'en'
 
@@ -20,6 +21,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const update = (l: Lang) => {
+    if (l !== lang) track('sprogskift', l)
     setLang(l)
     localStorage.setItem('site-lang', l)
   }

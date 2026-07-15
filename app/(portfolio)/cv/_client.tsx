@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useLang } from '@/lib/lang-context'
 import { downloadCv } from '@/lib/cv-download'
+import { track } from '@/lib/track'
 
 const ease = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const fadeUp = (delay = 0) => ({
@@ -183,7 +184,13 @@ export function CVClient({ sanityData }: { sanityData: any }) {
         </a>
         <p className="max-w-md text-[12px]/[1.85] text-text-2">{t.intro}</p>
         <button
-          onClick={() => (sanityData?.pdfUrl ? downloadCv(sanityData.pdfUrl) : window.print())}
+          onClick={() => {
+            if (sanityData?.pdfUrl) downloadCv(sanityData.pdfUrl)
+            else {
+              track('cv-download', 'print')
+              window.print()
+            }
+          }}
           className="print-hidden mt-5 inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[11px] text-text-2 transition-colors duration-150 hover:border-border-2 hover:text-text"
         >
           {t.downloadCv}
